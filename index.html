@@ -65,7 +65,6 @@
     }
     html, body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
-      font-size: 14px;
       height: 100%;
       width: 100%;
       margin: 0;
@@ -75,18 +74,47 @@
     * {
       box-sizing: border-box;
     }
-    .tint-primary {
-      background-color: color-mix(in srgb, var(--primary) 12%, transparent);
+
+    /* Study-optimized scalable typography (defaults to comfortable Large 'lg') */
+    body[data-font="md"] {
+      --fs-micro: 13px;
+      --fs-ui: 14px;
+      --fs-body: 15px;
+      --fs-lead: 16.5px;
+      --fs-title: 18px;
+      --fs-hero: 21px;
+      --fs-code: 14px;
     }
-    .tint-success {
-      background-color: color-mix(in srgb, var(--success) 13%, transparent);
+    body[data-font="lg"] {
+      --fs-micro: 13.5px;
+      --fs-ui: 14.5px;
+      --fs-body: 16px;
+      --fs-lead: 17.5px;
+      --fs-title: 20px;
+      --fs-hero: 23px;
+      --fs-code: 15px;
     }
-    .tint-warning {
-      background-color: color-mix(in srgb, var(--warning) 14%, transparent);
+    body[data-font="xl"] {
+      --fs-micro: 14.5px;
+      --fs-ui: 15.5px;
+      --fs-body: 17.5px;
+      --fs-lead: 19px;
+      --fs-title: 22px;
+      --fs-hero: 25px;
+      --fs-code: 16px;
     }
-    .tint-error {
-      background-color: color-mix(in srgb, var(--error) 12%, transparent);
-    }
+
+    .t-micro { font-size: var(--fs-micro); line-height: 1.45; }
+    .t-ui    { font-size: var(--fs-ui);    line-height: 1.45; }
+    .t-body  { font-size: var(--fs-body);  line-height: 1.65; }
+    .t-lead  { font-size: var(--fs-lead);  line-height: 1.65; }
+    .t-title { font-size: var(--fs-title); line-height: 1.35; }
+    .t-hero  { font-size: var(--fs-hero);  line-height: 1.45; }
+
+    .tint-primary { background-color: color-mix(in srgb, var(--primary) 12%, transparent); }
+    .tint-success { background-color: color-mix(in srgb, var(--success) 13%, transparent); }
+    .tint-warning { background-color: color-mix(in srgb, var(--warning) 14%, transparent); }
+    .tint-error   { background-color: color-mix(in srgb, var(--error) 12%, transparent); }
     .tint-c1 { background-color: color-mix(in srgb, var(--chart-1) 14%, transparent); }
     .tint-c2 { background-color: color-mix(in srgb, var(--chart-2) 14%, transparent); }
     .tint-c3 { background-color: color-mix(in srgb, var(--chart-3) 14%, transparent); }
@@ -102,14 +130,14 @@
     }
     .dag-node {
       cursor: pointer;
-      transition: opacity 180ms ease, transform 180ms ease;
+      transition: opacity 180ms ease;
     }
     .dag-edge {
       transition: opacity 180ms ease, stroke-width 180ms ease;
     }
     .kbd-chip {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 12px;
+      font-size: 12.5px;
       padding: 1px 6px;
       border-radius: 4px;
       border: 1px solid var(--border);
@@ -118,8 +146,8 @@
     }
     .code-block {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 12px;
-      line-height: 1.5;
+      font-size: var(--fs-code);
+      line-height: 1.65;
       white-space: pre-wrap;
       word-break: break-word;
     }
@@ -137,52 +165,54 @@
     }
   </style>
 </head>
-<body class="h-screen w-screen overflow-hidden bg-[var(--background)] text-[var(--foreground)] antialiased flex flex-col select-none">
+<body data-font="lg" class="h-screen w-screen overflow-hidden bg-[var(--background)] text-[var(--foreground)] antialiased flex flex-col select-none">
 
   <!-- TOP NAVIGATION BAR -->
-  <header class="h-12 shrink-0 border-b border-[var(--border)] bg-[var(--sidebar)] px-3 flex items-center justify-between gap-2">
-    <div class="flex items-center gap-2 min-w-0">
-      <div class="w-7 h-7 rounded-md bg-[var(--primary)] text-[var(--primary-foreground)] flex items-center justify-center font-bold text-xs shrink-0">
+  <header class="h-14 shrink-0 border-b border-[var(--border)] bg-[var(--sidebar)] px-4 flex items-center justify-between gap-2.5">
+    <div class="flex items-center gap-2.5 min-w-0">
+      <div class="w-8 h-8 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] flex items-center justify-center font-bold text-sm shrink-0">
         AZ
       </div>
       <div class="flex items-baseline gap-2 min-w-0">
-        <h1 class="text-sm font-semibold tracking-tight text-[var(--foreground)] truncate">AZ-400 DevOps 知識中樞</h1>
-        <span class="hidden xl:inline-block text-xs text-[var(--muted-foreground)] shrink-0">10 章節 · 32 主題 · 零捲動</span>
+        <h1 class="text-base font-bold tracking-tight text-[var(--foreground)] truncate">AZ-400 DevOps 知識中樞</h1>
       </div>
     </div>
 
     <!-- 5 PRIMARY MODE SWITCHERS -->
     <nav id="main-nav" aria-label="主要視圖切換" class="flex items-center gap-1 bg-[var(--background)] p-1 rounded-lg border border-[var(--border)] shrink-0">
-      <button data-view="stages" class="nav-btn px-2 py-1 rounded-md text-xs font-medium transition-colors flex items-center gap-1">
+      <button data-view="stages" class="nav-btn px-3 py-1.5 rounded-md t-ui font-medium transition-colors flex items-center gap-1.5">
         <span>1</span><span>階段地圖</span>
       </button>
-      <button data-view="chapters" class="nav-btn px-2 py-1 rounded-md text-xs font-medium transition-colors flex items-center gap-1">
-        <span>2</span><span>章節知識</span>
+      <button data-view="chapters" class="nav-btn px-3 py-1.5 rounded-md t-ui font-medium transition-colors flex items-center gap-1.5">
+        <span>2</span><span>章節學習</span>
       </button>
-      <button data-view="dag" class="nav-btn px-2 py-1 rounded-md text-xs font-medium transition-colors flex items-center gap-1">
+      <button data-view="dag" class="nav-btn px-3 py-1.5 rounded-md t-ui font-medium transition-colors flex items-center gap-1.5">
         <span>3</span><span>相依拓撲</span>
       </button>
-      <button data-view="reference" class="nav-btn px-2 py-1 rounded-md text-xs font-medium transition-colors flex items-center gap-1">
+      <button data-view="reference" class="nav-btn px-3 py-1.5 rounded-md t-ui font-medium transition-colors flex items-center gap-1.5">
         <span>4</span><span>速查解剖</span>
       </button>
-      <button data-view="quiz" class="nav-btn px-2 py-1 rounded-md text-xs font-medium transition-colors flex items-center gap-1">
+      <button data-view="quiz" class="nav-btn px-3 py-1.5 rounded-md t-ui font-medium transition-colors flex items-center gap-1.5">
         <span>5</span><span>考題測驗</span>
       </button>
     </nav>
 
-    <!-- RIGHT ACTIONS & PERSISTENT PROGRESS INDICATOR -->
-    <div class="flex items-center gap-1.5 shrink-0">
-      <button id="btn-header-progress" title="檢視全課程學習進度與勾選矩陣" class="px-2.5 py-1 rounded-md border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--secondary)] text-xs flex items-center gap-2 transition-colors cursor-pointer">
-        <span id="header-progress-text" class="font-mono font-medium text-[var(--foreground)]">0/32</span>
-        <span class="w-12 h-1.5 rounded-full bg-[var(--secondary)] overflow-hidden hidden sm:inline-block">
+    <!-- RIGHT ACTIONS: FONT SIZE, PROGRESS, CD SHORTCUT & SEARCH -->
+    <div class="flex items-center gap-2 shrink-0">
+      <button id="btn-font-size" title="切換閱讀字體大小（標準 / 大 / 特大）" class="px-2.5 py-1.5 rounded-md border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--secondary)] t-ui font-medium text-[var(--foreground)] transition-colors cursor-pointer">
+        字級：大
+      </button>
+      <button id="btn-header-progress" title="檢視全課程學習進度與勾選矩陣" class="px-2.5 py-1.5 rounded-md border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--secondary)] t-ui flex items-center gap-2 transition-colors cursor-pointer">
+        <span id="header-progress-text" class="font-mono font-semibold text-[var(--foreground)]">0/32</span>
+        <span class="w-12 h-2 rounded-full bg-[var(--secondary)] overflow-hidden hidden sm:inline-block">
           <span id="header-progress-bar" class="block h-full rounded-full transition-all" style="width: 0%; background-color: var(--success);"></span>
         </span>
       </button>
-      <button id="btn-jump-cd" class="hidden md:inline-flex px-2 py-1 rounded-md border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--secondary)] text-xs font-medium text-[var(--foreground)] transition-colors cursor-pointer">
+      <button id="btn-jump-cd" class="hidden xl:inline-flex px-2.5 py-1.5 rounded-md border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--secondary)] t-ui font-medium text-[var(--foreground)] transition-colors cursor-pointer">
         直達 CD
       </button>
-      <button id="btn-toggle-theme" title="切換淺色 / 深色主題" class="px-2 py-1 rounded-md border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--secondary)] text-xs font-medium text-[var(--foreground)] transition-colors cursor-pointer">深色</button>
-      <button id="btn-open-search" class="px-2 py-1 rounded-md border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--secondary)] text-xs text-[var(--muted-foreground)] flex items-center gap-1.5 transition-colors cursor-pointer">
+      <button id="btn-toggle-theme" title="切換淺色 / 深色主題" class="px-2.5 py-1.5 rounded-md border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--secondary)] t-ui font-medium text-[var(--foreground)] transition-colors cursor-pointer">深色</button>
+      <button id="btn-open-search" class="px-2.5 py-1.5 rounded-md border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--secondary)] t-ui text-[var(--muted-foreground)] flex items-center gap-1.5 transition-colors cursor-pointer">
         <span class="hidden lg:inline">搜尋</span>
         <span class="kbd-chip">/</span>
       </button>
@@ -190,37 +220,37 @@
   </header>
 
   <!-- MAIN ZERO-SCROLL WORKSPACE -->
-  <main id="workspace" class="flex-1 min-h-0 overflow-hidden p-3 flex flex-col">
+  <main id="workspace" class="flex-1 min-h-0 overflow-hidden p-3.5 flex flex-col">
     <!-- Rendered dynamically by view -->
   </main>
 
   <!-- COMPACT KEYBOARD & STATUS FOOTER -->
-  <footer class="h-7 shrink-0 border-t border-[var(--border)] bg-[var(--sidebar)] px-3.5 flex items-center justify-between text-xs text-[var(--muted-foreground)]">
-    <div class="flex items-center gap-2.5 truncate">
+  <footer class="h-8 shrink-0 border-t border-[var(--border)] bg-[var(--sidebar)] px-4 flex items-center justify-between t-micro text-[var(--muted-foreground)]">
+    <div class="flex items-center gap-3 truncate">
       <span><span class="kbd-chip">1</span>-<span class="kbd-chip">5</span> 視圖</span>
       <span class="hidden sm:inline"><span class="kbd-chip">↑</span><span class="kbd-chip">↓</span> 章節</span>
-      <span class="hidden sm:inline"><span class="kbd-chip">←</span><span class="kbd-chip">→</span> 切換</span>
+      <span class="hidden sm:inline"><span class="kbd-chip">←</span><span class="kbd-chip">→</span> 翻頁</span>
       <span class="hidden md:inline"><span class="kbd-chip">Space</span> 勾選/翻卡</span>
       <span class="hidden lg:inline"><span class="kbd-chip">A</span>-<span class="kbd-chip">D</span> 作答</span>
       <span><span class="kbd-chip">/</span> 搜尋</span>
     </div>
-    <div id="status-readout" class="truncate text-right font-mono text-xs text-[var(--muted-foreground)]">
-      零捲動單屏模式 · 就緒
+    <div id="status-readout" class="truncate text-right font-mono t-micro text-[var(--muted-foreground)]">
+      零捲動學習模式 · 就緒
     </div>
   </footer>
 
   <!-- QUICK SEARCH MODAL (ZERO-SCROLL OVERLAY) -->
   <div id="search-modal" class="hidden fixed inset-0 z-50 flex items-start justify-center pt-16 px-4" style="background-color: color-mix(in srgb, var(--background) 78%, transparent); backdrop-filter: blur(4px);">
-    <div class="w-full max-w-2xl bg-[var(--card)] border border-[var(--border)] rounded-xl shadow-xl overflow-hidden flex flex-col">
-      <div class="p-3 border-b border-[var(--border)] flex items-center gap-2.5">
-        <span class="text-xs font-semibold text-[var(--muted-foreground)]">搜尋</span>
-        <input id="search-input" type="text" placeholder="輸入關鍵字，例如：Bicep、Release Gate、SonarCloud、Slot、YAML、Key Vault、Lab 23..." class="flex-1 bg-transparent text-sm text-[var(--foreground)] placeholder:text-[var(--placeholder)] outline-none select-text" />
+    <div class="w-full max-w-3xl bg-[var(--card)] border border-[var(--border)] rounded-xl shadow-xl overflow-hidden flex flex-col">
+      <div class="p-3.5 border-b border-[var(--border)] flex items-center gap-3">
+        <span class="t-ui font-semibold text-[var(--muted-foreground)]">搜尋</span>
+        <input id="search-input" type="text" placeholder="輸入關鍵字，例如：Bicep、Release Gate、SonarCloud、Slot、YAML、Key Vault、Lab 23..." class="flex-1 bg-transparent t-body text-[var(--foreground)] placeholder:text-[var(--placeholder)] outline-none select-text" />
         <button id="btn-close-search" class="kbd-chip cursor-pointer">ESC</button>
       </div>
-      <div id="search-results" class="p-2.5 grid grid-cols-2 gap-2">
+      <div id="search-results" class="p-3 grid grid-cols-2 gap-2.5">
         <!-- Up to 6 top instant matches -->
       </div>
-      <div class="px-3 py-2 border-t border-[var(--border)] bg-[var(--sidebar)] flex items-center justify-between text-xs text-[var(--muted-foreground)]">
+      <div class="px-3.5 py-2.5 border-t border-[var(--border)] bg-[var(--sidebar)] flex items-center justify-between t-micro text-[var(--muted-foreground)]">
         <span id="search-count">顯示最相關前 6 筆，無需捲動</span>
         <span>點選結果直接跳轉至對應章節與 Lab</span>
       </div>
@@ -2018,14 +2048,18 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
       view: 'stages',             // 'stages' | 'chapters' | 'dag' | 'reference' | 'quiz'
       selectedStageId: 'release', // Highlight CD/Release initially
       stagePage: 0,
+      stageInfoTab: 'flow',       // 'flow' | 'checklist'
       selectedChapterId: 'ch09',
       selectedLabIndex: 0,
-      labDetailTab: 'points',     // 'points' | 'steps' | 'code'
+      labDetailTab: 'points',     // 'points' | 'steps' | 'code' | 'insight'
+      chapterDepTab: 'upstream',  // 'upstream' | 'downstream'
       dagSelectedId: 'ch09',
       dagFilter: 'all',           // 'all' | 'ci' | 'cd' | 'agile' | 'sec'
+      dagDepTab: 'upstream',      // 'upstream' | 'downstream'
       refTab: 'compare',          // 'compare' | 'yaml' | 'sec' | 'cli' | 'index'
       compareIdx: 0,
       yamlIdx: 0,
+      secLayerIdx: 0,
       cliIdx: 0,
       // Quiz & Flashcard state
       quizMode: 'mcq',            // 'mcq' | 'flashcard'
@@ -2035,6 +2069,7 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
       fcFlipped: false,
       confirmResetProgress: false,
       confirmResetQuiz: false,
+      fontSize: 'lg',             // 'md' | 'lg' | 'xl'
       searchOpen: false
     };
 
@@ -2146,9 +2181,9 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
     function stageBadgeHtml(stageId, clickable = false) {
       const st = stageMap[stageId];
       if (!st) return '';
-      const cls = `inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium border border-[var(--border)] ${st.tintClass} text-[var(--foreground)] ${clickable ? 'cursor-pointer hover:opacity-80' : ''}`;
+      const cls = `inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md t-micro font-medium border border-[var(--border)] ${st.tintClass} text-[var(--foreground)] ${clickable ? 'cursor-pointer hover:opacity-80' : ''}`;
       const attr = clickable ? `data-jump-stage="${st.id}"` : '';
-      return `<span ${attr} class="${cls}"><span class="w-1.5 h-1.5 rounded-full" style="background-color: var(${st.colorVar})"></span>${st.en}</span>`;
+      return `<span ${attr} class="${cls}"><span class="w-2 h-2 rounded-full" style="background-color: var(${st.colorVar})"></span>${st.en}</span>`;
     }
 
     function jumpToChapterLab(chapterId, labIndex = 0) {
@@ -2157,6 +2192,7 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
       const ch = chapterMap[chapterId];
       state.selectedLabIndex = Math.min(labIndex, (ch?.labs.length || 1) - 1);
       state.labDetailTab = 'points';
+      state.chapterDepTab = ch.upstream.length > 0 ? 'upstream' : 'downstream';
       closeSearch();
       render();
     }
@@ -2178,171 +2214,179 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
       }
     }
 
+    // Font Size Controller (md / lg / xl, persisted in localStorage)
+    const FONT_KEY = 'az400_devops_portal_font_v1';
+    const FONT_LABELS = { md: '字級：標準', lg: '字級：大', xl: '字級：特大' };
+    const FONT_ORDER = ['md', 'lg', 'xl'];
+
+    function applyFontSize(sz) {
+      const valid = FONT_ORDER.includes(sz) ? sz : 'lg';
+      state.fontSize = valid;
+      document.body.setAttribute('data-font', valid);
+      const btn = document.getElementById('btn-font-size');
+      if (btn) btn.textContent = FONT_LABELS[valid];
+      try { localStorage.setItem(FONT_KEY, valid); } catch (e) {}
+    }
+
+    (function initFontSize() {
+      let saved = 'lg';
+      try { saved = localStorage.getItem(FONT_KEY) || 'lg'; } catch (e) {}
+      applyFontSize(saved);
+    })();
+
     // =========================================================================
-    // 4. VIEW 1: DEVOPS 8-STAGE LIFECYCLE MAP (WITH LIVE PROGRESS CHECKS)
+    // 4. VIEW 1: DEVOPS 8-STAGE LIFECYCLE MAP (SPACIOUS 2-COLUMN STUDY LAYOUT)
     // =========================================================================
     function renderStagesView() {
       const stage = stageMap[state.selectedStageId];
       const stageLabs = ALL_LABS.filter(item => item.stages.includes(stage.id));
       const stageChapters = CHAPTERS.filter(ch => ch.stages.includes(stage.id));
-      const pageSize = 4;
+      const pageSize = 2; // 2 large, ultra-readable study cards per page!
       const totalPages = Math.max(1, Math.ceil(stageLabs.length / pageSize));
       if (state.stagePage >= totalPages) state.stagePage = 0;
       const visibleLabs = stageLabs.slice(state.stagePage * pageSize, (state.stagePage + 1) * pageSize);
 
       return `
-        <div class="h-full min-h-0 flex flex-col gap-3 overflow-hidden">
+        <div class="h-full min-h-0 flex flex-col gap-3.5 overflow-hidden">
           <!-- 8-STAGE INTERACTIVE PIPELINE STRIP -->
-          <section class="shrink-0 bg-[var(--card)] border border-[var(--border)] rounded-lg p-2.5">
-            <div class="flex items-center justify-between mb-2 px-0.5">
-              <div class="flex items-center gap-2">
-                <span class="text-xs font-semibold text-[var(--foreground)]">DevOps 八大生命週期階段</span>
-                <span class="text-xs text-[var(--muted-foreground)]">點選階段檢視知識點與相依流向；卡片右上角可直接勾選學習完成</span>
-              </div>
-              <span class="text-xs font-mono text-[var(--muted-foreground)]">階段 ${stage.order} / 8</span>
-            </div>
-            <div class="grid grid-cols-8 gap-1.5">
+          <section class="shrink-0 bg-[var(--card)] border border-[var(--border)] rounded-xl p-3">
+            <div class="grid grid-cols-8 gap-2">
               ${DEVOPS_STAGES.map(s => {
                 const labsInStage = ALL_LABS.filter(l => l.stages.includes(s.id));
                 const doneInStage = labsInStage.filter(l => isLabDone(l.labId)).length;
                 const allStageDone = labsInStage.length > 0 && doneInStage === labsInStage.length;
                 const active = s.id === stage.id;
                 return `
-                  <button data-select-stage="${s.id}" class="stage-pill text-left p-2 rounded-md border transition-all cursor-pointer ${
+                  <button data-select-stage="${s.id}" class="stage-pill text-left px-2.5 py-2 rounded-lg border transition-all cursor-pointer ${
                     active
                       ? 'border-[var(--primary)] bg-[var(--secondary)]'
                       : 'border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)]'
                   }">
-                    <div class="flex items-center justify-between gap-1 mb-1">
-                      <span class="w-2 h-2 rounded-full shrink-0" style="background-color: var(${s.colorVar})"></span>
-                      <span class="text-xs font-mono ${allStageDone ? 'text-[var(--success)] font-semibold' : 'text-[var(--muted-foreground)]'}">${doneInStage}/${labsInStage.length}${allStageDone ? ' ✓' : ''}</span>
+                    <div class="flex items-center justify-between gap-1 mb-0.5">
+                      <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: var(${s.colorVar})"></span>
+                      <span class="t-micro font-mono ${allStageDone ? 'text-[var(--success)] font-bold' : 'text-[var(--muted-foreground)]'}">${doneInStage}/${labsInStage.length}${allStageDone ? ' ✓' : ''}</span>
                     </div>
-                    <div class="text-xs font-semibold text-[var(--foreground)] truncate">${s.order}. ${s.en}</div>
-                    <div class="text-xs text-[var(--muted-foreground)] truncate">${s.zh}</div>
+                    <div class="t-ui font-bold text-[var(--foreground)] truncate">${s.order}. ${s.en}</div>
+                    <div class="t-micro text-[var(--muted-foreground)] truncate">${s.zh}</div>
                   </button>
                 `;
               }).join('')}
             </div>
           </section>
 
-          <!-- 3-COLUMN STAGE DETAIL WORKSPACE -->
-          <section class="flex-1 min-h-0 grid grid-cols-12 gap-3 overflow-hidden">
-            <!-- LEFT 4 COLS: STAGE IDENTITY & DEPENDENCY FLOW -->
-            <div class="col-span-4 flex flex-col gap-3 min-h-0 overflow-hidden">
-              <div class="bg-[var(--card)] border border-[var(--border)] rounded-lg p-3.5 shrink-0">
+          <!-- SPACIOUS 2-COLUMN STUDY WORKSPACE (5 + 7 COLS) -->
+          <section class="flex-1 min-h-0 grid grid-cols-12 gap-3.5 overflow-hidden">
+            <!-- LEFT 5 COLS: STAGE OVERVIEW + TABBED DEPENDENCY/CHECKLIST GUIDE -->
+            <div class="col-span-5 flex flex-col gap-3 min-h-0 overflow-hidden">
+              <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shrink-0 select-text">
                 <div class="flex items-center justify-between gap-2 mb-2">
-                  <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full" style="background-color: var(${stage.colorVar})"></span>
-                    <h2 class="text-base font-semibold text-[var(--foreground)]">${stage.en} · ${stage.zh}</h2>
+                  <div class="flex items-center gap-2.5">
+                    <span class="w-3 h-3 rounded-full" style="background-color: var(${stage.colorVar})"></span>
+                    <h2 class="t-title font-bold text-[var(--foreground)]">${stage.en} · ${stage.zh}</h2>
                   </div>
-                  <span class="text-xs font-mono px-2 py-0.5 rounded bg-[var(--secondary)] text-[var(--secondary-foreground)]">Stage ${stage.order}</span>
+                  <span class="t-micro font-mono px-2.5 py-0.5 rounded-md bg-[var(--secondary)] text-[var(--secondary-foreground)]">Stage ${stage.order}/8</span>
                 </div>
-                <p class="text-xs leading-relaxed text-[var(--muted-foreground)] select-text">${stage.summary}</p>
+                <p class="t-body text-[var(--muted-foreground)]">${stage.summary}</p>
               </div>
 
-              <div class="flex-1 min-h-0 bg-[var(--card)] border border-[var(--border)] rounded-lg p-3.5 flex flex-col justify-between overflow-hidden">
-                <div>
-                  <div class="text-xs font-semibold text-[var(--foreground)] mb-2">DevOps 階段相依流向</div>
-                  <div class="space-y-2.5">
-                    <div class="p-2.5 rounded-md bg-[var(--background)] border border-[var(--border)]">
-                      <div class="flex items-center justify-between mb-1">
-                        <span class="text-xs font-medium text-[var(--muted-foreground)]">上游輸入 (Upstream)</span>
-                        <div class="flex items-center gap-1">${stage.upstream.map(id => stageBadgeHtml(id, true)).join('')}</div>
-                      </div>
-                      <p class="text-xs text-[var(--foreground)] leading-snug clamp-2">${stage.upstreamNote}</p>
-                    </div>
-                    <div class="p-2.5 rounded-md bg-[var(--background)] border border-[var(--border)]">
-                      <div class="flex items-center justify-between mb-1">
-                        <span class="text-xs font-medium text-[var(--muted-foreground)]">下游解鎖 (Downstream)</span>
-                        <div class="flex items-center gap-1">${stage.downstream.map(id => stageBadgeHtml(id, true)).join('')}</div>
-                      </div>
-                      <p class="text-xs text-[var(--foreground)] leading-snug clamp-2">${stage.downstreamNote}</p>
-                    </div>
+              <div class="flex-1 min-h-0 bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 flex flex-col overflow-hidden">
+                <div class="flex items-center justify-between gap-2 pb-2.5 mb-3 border-b border-[var(--border)] shrink-0">
+                  <div class="flex items-center gap-1.5 bg-[var(--background)] p-1 rounded-lg border border-[var(--border)]">
+                    <button data-stage-info-tab="flow" class="px-3 py-1 rounded-md t-ui font-medium cursor-pointer transition-colors ${state.stageInfoTab === 'flow' ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'text-[var(--muted-foreground)] hover:text-[var(--foreground)]'}">階段相依流向</button>
+                    <button data-stage-info-tab="checklist" class="px-3 py-1 rounded-md t-ui font-medium cursor-pointer transition-colors ${state.stageInfoTab === 'checklist' ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'text-[var(--muted-foreground)] hover:text-[var(--foreground)]'}">實務檢查清單</button>
                   </div>
+                  <span class="t-micro text-[var(--muted-foreground)]">涵蓋 ${stageChapters.length} 章</span>
                 </div>
-                <div class="pt-2 border-t border-[var(--border)] flex items-center justify-between">
-                  <span class="text-xs text-[var(--muted-foreground)]">關鍵度量指標</span>
-                  <div class="flex flex-wrap gap-1 justify-end">
-                    ${stage.metrics.map(m => `<span class="text-xs px-1.5 py-0.5 rounded bg-[var(--secondary)] text-[var(--secondary-foreground)]">${m}</span>`).join('')}
-                  </div>
+
+                <div class="flex-1 min-h-0 flex flex-col justify-between overflow-hidden select-text">
+                  ${state.stageInfoTab === 'flow' ? `
+                    <div class="space-y-3">
+                      <div class="p-3.5 rounded-lg bg-[var(--background)] border border-[var(--border)]">
+                        <div class="flex items-center justify-between gap-2 mb-1.5">
+                          <span class="t-ui font-semibold text-[var(--foreground)]">上游輸入 (Upstream)</span>
+                          <div class="flex items-center gap-1.5">${stage.upstream.map(id => stageBadgeHtml(id, true)).join('')}</div>
+                        </div>
+                        <p class="t-body text-[var(--muted-foreground)]">${stage.upstreamNote}</p>
+                      </div>
+                      <div class="p-3.5 rounded-lg bg-[var(--background)] border border-[var(--border)]">
+                        <div class="flex items-center justify-between gap-2 mb-1.5">
+                          <span class="t-ui font-semibold text-[var(--foreground)]">下游解鎖 (Downstream)</span>
+                          <div class="flex items-center gap-1.5">${stage.downstream.map(id => stageBadgeHtml(id, true)).join('')}</div>
+                        </div>
+                        <p class="t-body text-[var(--muted-foreground)]">${stage.downstreamNote}</p>
+                      </div>
+                    </div>
+                    <div class="pt-2.5 border-t border-[var(--border)] flex items-center gap-1.5 flex-wrap">
+                      <span class="t-micro font-semibold text-[var(--muted-foreground)] mr-1">相關章節：</span>
+                      ${stageChapters.map(ch => `
+                        <button data-open-lab="${ch.id}|0" class="px-2.5 py-1 rounded-md border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] t-micro text-[var(--foreground)] cursor-pointer transition-colors">
+                          <strong class="font-mono text-[var(--primary)]">${ch.num}</strong> ${ch.short}
+                        </button>
+                      `).join('')}
+                    </div>
+                  ` : `
+                    <ul class="space-y-3 t-body text-[var(--foreground)]">
+                      ${stage.checklist.map(item => `
+                        <li class="p-3 rounded-lg bg-[var(--background)] border border-[var(--border)] flex items-start gap-2.5">
+                          <span class="text-[var(--success)] font-bold shrink-0">✓</span>
+                          <span>${item}</span>
+                        </li>
+                      `).join('')}
+                    </ul>
+                    <div class="pt-2.5 border-t border-[var(--border)] flex items-center justify-between gap-2 flex-wrap">
+                      <span class="t-micro font-semibold text-[var(--muted-foreground)]">關鍵指標</span>
+                      <div class="flex flex-wrap gap-1.5">
+                        ${stage.metrics.map(m => `<span class="t-micro px-2.5 py-0.5 rounded-md bg-[var(--secondary)] text-[var(--secondary-foreground)] font-medium">${m}</span>`).join('')}
+                      </div>
+                    </div>
+                  `}
                 </div>
               </div>
             </div>
 
-            <!-- CENTER 5 COLS: PAGINATED 2x2 LAB GRID WITH QUICK CHECKBOXES -->
-            <div class="col-span-5 bg-[var(--card)] border border-[var(--border)] rounded-lg p-3.5 flex flex-col min-h-0 overflow-hidden">
-              <div class="flex items-center justify-between gap-2 mb-2.5 shrink-0">
+            <!-- RIGHT 7 COLS: 2 LARGE, COMFORTABLE LAB STUDY CARDS PER PAGE -->
+            <div class="col-span-7 bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 flex flex-col min-h-0 overflow-hidden">
+              <div class="flex items-center justify-between gap-2 mb-3 shrink-0">
                 <div>
-                  <h3 class="text-sm font-semibold text-[var(--foreground)]">本階段實戰 Lab 與知識點 (${stageLabs.length})</h3>
-                  <p class="text-xs text-[var(--muted-foreground)]">點擊卡片檢視詳情，或點擊右上角方塊記錄學習進度</p>
+                  <h3 class="t-lead font-bold text-[var(--foreground)]">本階段實戰 Lab 與知識點（共 ${stageLabs.length} 項）</h3>
+                  <p class="t-micro text-[var(--muted-foreground)]">點擊卡片進入完整章節學習，或直接點擊右上角按鈕勾選完成進度</p>
                 </div>
-                <div class="flex items-center gap-1.5 shrink-0">
-                  <button data-stage-page="-1" ${totalPages <= 1 ? 'disabled' : ''} class="px-2 py-1 rounded border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] disabled:opacity-40 text-xs cursor-pointer">←</button>
-                  <span class="text-xs font-mono text-[var(--muted-foreground)] px-1">${state.stagePage + 1} / ${totalPages}</span>
-                  <button data-stage-page="1" ${totalPages <= 1 ? 'disabled' : ''} class="px-2 py-1 rounded border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] disabled:opacity-40 text-xs cursor-pointer">→</button>
+                <div class="flex items-center gap-2 shrink-0">
+                  <button data-stage-page="-1" ${totalPages <= 1 ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] disabled:opacity-40 t-ui font-medium cursor-pointer">← 上一頁</button>
+                  <span class="t-ui font-mono font-semibold text-[var(--foreground)] px-1">${state.stagePage + 1} / ${totalPages}</span>
+                  <button data-stage-page="1" ${totalPages <= 1 ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] disabled:opacity-40 t-ui font-medium cursor-pointer">下一頁 →</button>
                 </div>
               </div>
 
-              <div class="flex-1 min-h-0 grid grid-cols-2 grid-rows-2 gap-2.5 overflow-hidden">
+              <div class="flex-1 min-h-0 grid grid-rows-2 gap-3 overflow-hidden">
                 ${visibleLabs.map(item => {
                   const done = isLabDone(item.labId);
                   return `
-                    <div data-open-lab="${item.chapterId}|${item.labIndex}" role="button" tabindex="0" class="text-left p-3 rounded-lg border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] transition-colors flex flex-col justify-between min-h-0 overflow-hidden cursor-pointer">
+                    <div data-open-lab="${item.chapterId}|${item.labIndex}" role="button" tabindex="0" class="text-left p-4 rounded-xl border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] transition-colors flex flex-col justify-between min-h-0 overflow-hidden cursor-pointer">
                       <div class="min-h-0">
-                        <div class="flex items-center justify-between gap-1 mb-1">
-                          <span class="text-xs font-mono font-semibold text-[var(--primary)]">${item.chapterNum}</span>
-                          <button data-toggle-lab="${item.labId}" title="${done ? '取消完成標記' : '標記為已完成'}" class="px-1.5 py-0.5 rounded border text-xs font-medium cursor-pointer transition-colors ${
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                          <div class="flex items-center gap-2 min-w-0">
+                            <span class="font-mono t-ui font-bold px-2 py-0.5 rounded bg-[var(--primary)] text-[var(--primary-foreground)] shrink-0">${item.chapterNum}</span>
+                            <span class="t-lead font-bold text-[var(--foreground)] truncate">${item.label}</span>
+                          </div>
+                          <button data-toggle-lab="${item.labId}" title="${done ? '取消完成標記' : '標記為已完成'}" class="px-3 py-1 rounded-lg border t-ui font-semibold cursor-pointer transition-colors shrink-0 ${
                             done
                               ? 'tint-success border-[var(--success)] text-[var(--success)]'
                               : 'bg-[var(--card)] border-[var(--border)] text-[var(--muted-foreground)] hover:text-[var(--foreground)]'
-                          }">${done ? '✓ 已完成' : '☐ 勾選'}</button>
+                          }">${done ? '✓ 已學完' : '☐ 標記完成'}</button>
                         </div>
-                        <div class="text-xs font-semibold text-[var(--foreground)] mb-1.5 truncate">${item.label}</div>
-                        <p class="text-xs text-[var(--muted-foreground)] leading-snug clamp-3">${item.points[0]}</p>
+                        <ul class="space-y-1.5 t-body text-[var(--foreground)]">
+                          <li class="clamp-2">• ${escapeHtml(item.points[0])}</li>
+                          ${item.points[1] ? `<li class="clamp-2 text-[var(--muted-foreground)]">• ${escapeHtml(item.points[1])}</li>` : ''}
+                        </ul>
                       </div>
-                      <div class="pt-1.5 mt-1 border-t border-[var(--border)] flex items-center justify-between gap-1">
-                        <div class="flex items-center gap-1 flex-wrap">${item.stages.slice(0, 2).map(sid => stageBadgeHtml(sid)).join('')}</div>
-                        <span class="text-xs text-[var(--muted-foreground)] shrink-0">進入 →</span>
+                      <div class="pt-2.5 mt-2 border-t border-[var(--border)] flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-1.5 flex-wrap">${item.stages.map(sid => stageBadgeHtml(sid)).join('')}</div>
+                        <span class="t-ui font-semibold text-[var(--primary)] shrink-0">開始學習本 Lab →</span>
                       </div>
                     </div>
                   `;
                 }).join('')}
-              </div>
-            </div>
-
-            <!-- RIGHT 3 COLS: CHAPTERS + CROSS-CUTTING + CHECKLIST -->
-            <div class="col-span-3 flex flex-col gap-3 min-h-0 overflow-hidden">
-              <div class="bg-[var(--card)] border border-[var(--border)] rounded-lg p-3 shrink-0">
-                <div class="text-xs font-semibold text-[var(--foreground)] mb-2">涵蓋章節 (${stageChapters.length})</div>
-                <div class="flex flex-wrap gap-1.5">
-                  ${stageChapters.map(ch => {
-                    const cp = getChapterProgress(ch);
-                    return `
-                      <button data-open-lab="${ch.id}|0" class="px-2 py-1 rounded border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] text-xs text-[var(--foreground)] cursor-pointer transition-colors">
-                        <span class="font-mono font-semibold ${cp.allDone ? 'text-[var(--success)]' : 'text-[var(--primary)]'}">${ch.num}</span> ${ch.short}
-                      </button>
-                    `;
-                  }).join('')}
-                </div>
-              </div>
-
-              <div class="bg-[var(--card)] border border-[var(--border)] rounded-lg p-3 shrink-0">
-                <div class="text-xs font-semibold text-[var(--foreground)] mb-1.5">橫向貫穿機制</div>
-                <div class="flex flex-wrap gap-1.5">
-                  ${stage.crossCutting.map(c => `<span class="text-xs px-2 py-0.5 rounded bg-[var(--secondary)] text-[var(--secondary-foreground)]">${c}</span>`).join('')}
-                </div>
-              </div>
-
-              <div class="flex-1 min-h-0 bg-[var(--card)] border border-[var(--border)] rounded-lg p-3 flex flex-col overflow-hidden">
-                <div class="text-xs font-semibold text-[var(--foreground)] mb-2 shrink-0">實務落地檢查清單</div>
-                <ul class="space-y-2 text-xs text-[var(--muted-foreground)] leading-snug">
-                  ${stage.checklist.map(item => `
-                    <li class="flex items-start gap-2">
-                      <span class="text-[var(--success)] font-bold shrink-0">✓</span>
-                      <span class="clamp-2">${item}</span>
-                    </li>
-                  `).join('')}
-                </ul>
               </div>
             </div>
           </section>
@@ -2351,7 +2395,7 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
     }
 
     // =========================================================================
-    // 5. VIEW 2: CHAPTERS & KNOWLEDGE POINTS (WITH CHAPTER & LAB PROGRESS)
+    // 5. VIEW 2: CHAPTERS & KNOWLEDGE POINTS (COMFORTABLE 2x2 STUDY CARDS)
     // =========================================================================
     function renderChaptersView() {
       const ch = chapterMap[state.selectedChapterId];
@@ -2361,12 +2405,12 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
       const chProg = getChapterProgress(ch);
 
       return `
-        <div class="h-full min-h-0 grid grid-cols-12 gap-3 overflow-hidden">
-          <!-- LEFT 3 COLS: ALL 10 CHAPTERS WITH LIVE COMPLETION COUNTERS -->
-          <aside class="col-span-3 bg-[var(--sidebar)] border border-[var(--border)] rounded-lg p-2 flex flex-col min-h-0 overflow-hidden">
-            <div class="px-1.5 pb-1.5 mb-1 border-b border-[var(--border)] flex items-center justify-between shrink-0">
-              <span class="text-xs font-semibold text-[var(--foreground)]">課程章節目錄</span>
-              <span class="text-xs font-mono text-[var(--muted-foreground)]">${chIdx + 1} / 10</span>
+        <div class="h-full min-h-0 flex gap-3.5 overflow-hidden">
+          <!-- LEFT RAIL (255px): ALL 10 CHAPTERS WITH CLEAR READABLE LABELS -->
+          <aside class="w-64 shrink-0 bg-[var(--sidebar)] border border-[var(--border)] rounded-xl p-2.5 flex flex-col min-h-0 overflow-hidden">
+            <div class="px-2 pb-2 mb-1.5 border-b border-[var(--border)] flex items-center justify-between shrink-0">
+              <span class="t-ui font-bold text-[var(--foreground)]">課程 10 大章節</span>
+              <span class="t-micro font-mono text-[var(--muted-foreground)]">${chIdx + 1} / 10</span>
             </div>
             <div class="flex-1 min-h-0 grid grid-rows-[repeat(10,minmax(0,1fr))] gap-1 overflow-hidden">
               ${CHAPTERS.map(item => {
@@ -2374,46 +2418,50 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
                 const primaryStage = stageMap[item.stages[0]];
                 const cp = getChapterProgress(item);
                 return `
-                  <button data-select-chapter="${item.id}" class="w-full px-2 rounded-md border text-left flex items-center justify-between gap-2 transition-colors cursor-pointer min-h-0 ${
+                  <button data-select-chapter="${item.id}" class="w-full px-2.5 rounded-lg border text-left flex items-center justify-between gap-2 transition-colors cursor-pointer min-h-0 ${
                     active
-                      ? 'bg-[var(--card)] border-[var(--primary)] text-[var(--foreground)] font-semibold'
+                      ? 'bg-[var(--card)] border-[var(--primary)] text-[var(--foreground)] font-bold'
                       : 'bg-transparent border-transparent hover:bg-[var(--card)] text-[var(--muted-foreground)] hover:text-[var(--foreground)]'
                   }">
                     <div class="flex items-center gap-2 min-w-0">
-                      <span class="w-2 h-2 rounded-full shrink-0" style="background-color: var(${cp.allDone ? '--success' : primaryStage.colorVar})"></span>
-                      <span class="font-mono text-xs shrink-0 ${active ? 'text-[var(--primary)]' : ''}">${item.num}</span>
-                      <span class="text-xs truncate">${item.short}</span>
+                      <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: var(${cp.allDone ? '--success' : primaryStage.colorVar})"></span>
+                      <span class="font-mono t-ui shrink-0 ${active ? 'text-[var(--primary)]' : ''}">${item.num}</span>
+                      <span class="t-ui truncate">${item.short}</span>
                     </div>
-                    <span class="text-xs font-mono shrink-0 ${cp.allDone ? 'text-[var(--success)] font-semibold' : 'text-[var(--muted-foreground)]'}">${cp.done}/${cp.total}${cp.allDone ? ' ✓' : ''}</span>
+                    <span class="t-micro font-mono shrink-0 ${cp.allDone ? 'text-[var(--success)] font-bold' : 'text-[var(--muted-foreground)]'}">${cp.done}/${cp.total}${cp.allDone ? '✓' : ''}</span>
                   </button>
                 `;
               }).join('')}
             </div>
           </aside>
 
-          <!-- RIGHT 9 COLS: CHAPTER HEADER + LAB PILLS + SPLIT KNOWLEDGE & DEPENDENCY -->
-          <section class="col-span-9 flex flex-col gap-2.5 min-h-0 overflow-hidden">
-            <!-- CHAPTER BANNER & LAB PILL TABS -->
-            <div class="shrink-0 bg-[var(--card)] border border-[var(--border)] rounded-lg px-3.5 py-2.5">
-              <div class="flex items-center justify-between gap-2 mb-1.5">
-                <div class="flex items-center gap-2 min-w-0">
-                  <span class="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-[var(--primary)] text-[var(--primary-foreground)] shrink-0">${ch.num}</span>
-                  <h2 class="text-sm font-semibold text-[var(--foreground)] truncate">${ch.title}</h2>
+          <!-- MAIN STUDY CANVAS -->
+          <section class="flex-1 min-w-0 flex flex-col gap-3 min-h-0 overflow-hidden">
+            <!-- CHAPTER HEADER & HORIZONTAL LAB PILLS -->
+            <div class="shrink-0 bg-[var(--card)] border border-[var(--border)] rounded-xl px-4 py-3">
+              <div class="flex items-center justify-between gap-3 mb-2">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <span class="font-mono t-ui font-bold px-2.5 py-0.5 rounded-md bg-[var(--primary)] text-[var(--primary-foreground)] shrink-0">${ch.num}</span>
+                  <h2 class="t-title font-bold text-[var(--foreground)] truncate">${ch.title}</h2>
                 </div>
-                <div class="flex items-center gap-1.5 shrink-0">
-                  <span class="text-xs font-mono px-2 py-0.5 rounded bg-[var(--secondary)] text-[var(--foreground)]">本章 ${chProg.done}/${chProg.total}</span>
-                  ${ch.stages.map(sid => stageBadgeHtml(sid, true)).join('')}
+                <div class="flex items-center gap-2 shrink-0">
+                  <span class="t-micro font-mono font-semibold px-2.5 py-0.5 rounded-md bg-[var(--secondary)] text-[var(--foreground)]">本章 ${chProg.done}/${chProg.total}</span>
+                  <button data-toggle-lab="${lab.id}" title="快捷鍵 Space 切換完成狀態" class="px-3 py-1 rounded-lg border t-ui font-semibold cursor-pointer transition-colors ${
+                    labDone
+                      ? 'tint-success border-[var(--success)] text-[var(--success)]'
+                      : 'bg-[var(--background)] border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--secondary)]'
+                  }">${labDone ? '✓ 本主題已學完' : '☐ 標記已學完 (Space)'}</button>
                 </div>
               </div>
-              <p class="text-xs text-[var(--muted-foreground)] mb-2 truncate select-text">${ch.summary}</p>
-              <!-- HORIZONTAL LAB TABS -->
+
+              <!-- HORIZONTAL LAB SWITCHER -->
               <div class="flex items-center justify-between gap-2 pt-2 border-t border-[var(--border)]">
                 <div class="flex items-center gap-1.5 flex-wrap">
                   ${ch.labs.map((l, idx) => {
                     const active = idx === state.selectedLabIndex;
                     const done = isLabDone(l.id);
                     return `
-                      <button data-select-lab="${idx}" class="px-2.5 py-1 rounded-md text-xs font-medium border transition-colors cursor-pointer flex items-center gap-1 ${
+                      <button data-select-lab="${idx}" class="px-3 py-1 rounded-lg t-ui font-medium border transition-colors cursor-pointer flex items-center gap-1.5 ${
                         active
                           ? 'bg-[var(--primary)] text-[var(--primary-foreground)] border-[var(--primary)]'
                           : 'bg-[var(--background)] text-[var(--foreground)] border-[var(--border)] hover:bg-[var(--secondary)]'
@@ -2424,170 +2472,144 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
                     `;
                   }).join('')}
                 </div>
-                <div class="flex items-center gap-1 shrink-0">
-                  <button data-step-lab="-1" class="px-2 py-1 rounded border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] text-xs cursor-pointer" title="上一個 Lab (←)">←</button>
-                  <button data-step-lab="1" class="px-2 py-1 rounded border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] text-xs cursor-pointer" title="下一個 Lab (→)">→</button>
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <button data-step-lab="-1" class="px-2.5 py-1 rounded-lg border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] t-ui cursor-pointer" title="上一個 Lab (←)">←</button>
+                  <button data-step-lab="1" class="px-2.5 py-1 rounded-lg border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] t-ui cursor-pointer" title="下一個 Lab (→)">→</button>
                 </div>
               </div>
             </div>
 
-            <!-- BODY SPLIT: KNOWLEDGE PANEL (7 COLS) + STAGE & DEPENDENCY PANEL (5 COLS) -->
-            <div class="flex-1 min-h-0 grid grid-cols-12 gap-3 overflow-hidden">
-              <!-- LEFT 7 COLS: LAB KNOWLEDGE CARD (SUB-TABBED SO ZERO SCROLL) + INSIGHT -->
-              <div class="col-span-7 flex flex-col gap-2.5 min-h-0 overflow-hidden">
-                <div class="flex-1 min-h-0 bg-[var(--card)] border border-[var(--border)] rounded-lg p-3.5 flex flex-col overflow-hidden">
-                  <div class="flex items-center justify-between gap-2 pb-2.5 mb-2.5 border-b border-[var(--border)] shrink-0">
-                    <div class="flex items-center gap-2 min-w-0">
-                      <button data-toggle-lab="${lab.id}" title="快捷鍵 Space 切換完成狀態" class="px-2.5 py-1 rounded-md border text-xs font-semibold cursor-pointer transition-colors shrink-0 ${
-                        labDone
-                          ? 'tint-success border-[var(--success)] text-[var(--success)]'
-                          : 'bg-[var(--background)] border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--secondary)]'
-                      }">${labDone ? '✓ 已學完' : '☐ 標記完成'}</button>
-                      <h3 class="text-sm font-semibold text-[var(--foreground)] truncate">${lab.label}</h3>
-                    </div>
-                    <!-- SUB-TAB SWITCHER -->
-                    <div class="flex items-center gap-1 bg-[var(--background)] p-0.5 rounded-md border border-[var(--border)] shrink-0">
-                      <button data-detail-tab="points" class="px-2 py-0.5 rounded text-xs font-medium cursor-pointer ${state.labDetailTab === 'points' ? 'bg-[var(--secondary)] text-[var(--foreground)]' : 'text-[var(--muted-foreground)]'}">核心知識點</button>
-                      <button data-detail-tab="steps" class="px-2 py-0.5 rounded text-xs font-medium cursor-pointer ${state.labDetailTab === 'steps' ? 'bg-[var(--secondary)] text-[var(--foreground)]' : 'text-[var(--muted-foreground)]'}">實作步驟</button>
-                      <button data-detail-tab="code" class="px-2 py-0.5 rounded text-xs font-medium cursor-pointer ${state.labDetailTab === 'code' ? 'bg-[var(--secondary)] text-[var(--foreground)]' : 'text-[var(--muted-foreground)]'}">設定/指令</button>
-                    </div>
+            <!-- BODY SPLIT: MAIN READING AREA (8 COLS) + STUDY COMPANION (4 COLS) -->
+            <div class="flex-1 min-h-0 grid grid-cols-12 gap-3.5 overflow-hidden">
+              <!-- LEFT 8 COLS: DEDICATED READING CARD WITH 4 STUDY SUB-TABS -->
+              <div class="col-span-8 bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 flex flex-col min-h-0 overflow-hidden">
+                <div class="flex items-center justify-between gap-2 pb-3 mb-3 border-b border-[var(--border)] shrink-0">
+                  <div class="flex items-center gap-1.5 bg-[var(--background)] p-1 rounded-lg border border-[var(--border)]">
+                    <button data-detail-tab="points" class="px-3 py-1 rounded-md t-ui font-semibold cursor-pointer transition-colors ${state.labDetailTab === 'points' ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'text-[var(--muted-foreground)] hover:text-[var(--foreground)]'}">核心知識點</button>
+                    <button data-detail-tab="steps" class="px-3 py-1 rounded-md t-ui font-semibold cursor-pointer transition-colors ${state.labDetailTab === 'steps' ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'text-[var(--muted-foreground)] hover:text-[var(--foreground)]'}">實作關鍵步驟</button>
+                    <button data-detail-tab="code" class="px-3 py-1 rounded-md t-ui font-semibold cursor-pointer transition-colors ${state.labDetailTab === 'code' ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'text-[var(--muted-foreground)] hover:text-[var(--foreground)]'}">指令 / 設定</button>
+                    <button data-detail-tab="insight" class="px-3 py-1 rounded-md t-ui font-semibold cursor-pointer transition-colors ${state.labDetailTab === 'insight' ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'text-[var(--muted-foreground)] hover:text-[var(--foreground)]'}">實戰洞察與陷阱</button>
                   </div>
-
-                  <!-- TAB CONTENT (FITS CLEANLY WITHOUT SCROLL) -->
-                  <div class="flex-1 min-h-0 flex flex-col justify-between overflow-hidden select-text">
-                    ${state.labDetailTab === 'points' ? `
-                      <div class="grid grid-cols-1 gap-2">
-                        ${lab.points.map((pt, i) => `
-                          <div class="p-2.5 rounded-md bg-[var(--background)] border border-[var(--border)] flex items-start gap-2.5">
-                            <span class="w-5 h-5 rounded bg-[var(--secondary)] text-[var(--foreground)] font-mono text-xs font-semibold flex items-center justify-center shrink-0">${i + 1}</span>
-                            <p class="text-xs leading-relaxed text-[var(--foreground)]">${escapeHtml(pt)}</p>
-                          </div>
-                        `).join('')}
-                      </div>
-                    ` : state.labDetailTab === 'steps' ? `
-                      <div class="grid grid-cols-1 gap-2">
-                        ${lab.steps.map(st => `
-                          <div class="p-2.5 rounded-md bg-[var(--background)] border border-[var(--border)] text-xs leading-relaxed text-[var(--foreground)]">
-                            ${escapeHtml(st)}
-                          </div>
-                        `).join('')}
-                      </div>
-                    ` : `
-                      <div class="flex-1 min-h-0 flex flex-col bg-[var(--background)] border border-[var(--border)] rounded-md overflow-hidden">
-                        <div class="px-3 py-1.5 border-b border-[var(--border)] bg-[var(--sidebar)] flex items-center justify-between shrink-0">
-                          <span class="text-xs font-medium text-[var(--muted-foreground)]">${escapeHtml(lab.codeTitle)}</span>
-                          <button id="btn-copy-lab-code" class="px-2 py-0.5 rounded border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--secondary)] text-xs text-[var(--foreground)] cursor-pointer">複製</button>
-                        </div>
-                        <pre class="p-3 code-block text-[var(--code-foreground)] m-0 flex-1 overflow-hidden">${escapeHtml(lab.code)}</pre>
-                      </div>
-                    `}
-                  </div>
+                  <div class="hidden xl:flex items-center gap-1.5 shrink-0">${lab.stages.map(s => stageBadgeHtml(s, true)).join('')}</div>
                 </div>
 
-                <!-- BOTTOM PRO INSIGHT CARD -->
-                <div class="shrink-0 bg-[var(--card)] border border-[var(--border)] rounded-lg p-3 select-text">
-                  <div class="flex items-start gap-2.5">
-                    <span class="px-2 py-0.5 rounded text-xs font-semibold tint-warning text-[var(--foreground)] border border-[var(--border)] shrink-0">實戰關鍵</span>
-                    <p class="text-xs leading-relaxed text-[var(--foreground)]">${escapeHtml(ch.insight)}</p>
-                  </div>
+                <!-- SPACIOUS 2x2 READING CARDS (FITS HUGE TEXT WITH ZERO SCROLL!) -->
+                <div class="flex-1 min-h-0 flex flex-col overflow-hidden select-text">
+                  ${state.labDetailTab === 'points' ? `
+                    <div class="flex-1 min-h-0 grid grid-cols-2 grid-rows-2 gap-3 overflow-hidden">
+                      ${lab.points.map((pt, i) => `
+                        <div class="p-4 rounded-xl bg-[var(--background)] border border-[var(--border)] flex flex-col justify-between overflow-hidden">
+                          <div class="flex items-center gap-2 mb-2 shrink-0">
+                            <span class="w-6 h-6 rounded-md bg-[var(--primary)] text-[var(--primary-foreground)] font-mono t-micro font-bold flex items-center justify-center shrink-0">0${i + 1}</span>
+                            <span class="t-micro font-semibold text-[var(--muted-foreground)]">知識要點 ${i + 1}</span>
+                          </div>
+                          <p class="t-body text-[var(--foreground)] flex-1">${escapeHtml(pt)}</p>
+                        </div>
+                      `).join('')}
+                    </div>
+                  ` : state.labDetailTab === 'steps' ? `
+                    <div class="flex-1 min-h-0 grid grid-cols-2 grid-rows-2 gap-3 overflow-hidden">
+                      ${lab.steps.map((st, i) => `
+                        <div class="p-4 rounded-xl bg-[var(--background)] border border-[var(--border)] flex flex-col justify-start overflow-hidden">
+                          <div class="flex items-center gap-2 mb-2 shrink-0">
+                            <span class="px-2 py-0.5 rounded-md bg-[var(--secondary)] text-[var(--foreground)] font-mono t-micro font-bold">STEP ${i + 1}</span>
+                          </div>
+                          <p class="t-body text-[var(--foreground)]">${escapeHtml(st.replace(/^\d+\.\s*/, ''))}</p>
+                        </div>
+                      `).join('')}
+                    </div>
+                  ` : state.labDetailTab === 'code' ? `
+                    <div class="flex-1 min-h-0 flex flex-col bg-[var(--background)] border border-[var(--border)] rounded-xl overflow-hidden">
+                      <div class="px-4 py-2.5 border-b border-[var(--border)] bg-[var(--sidebar)] flex items-center justify-between shrink-0">
+                        <span class="t-ui font-semibold text-[var(--foreground)]">${escapeHtml(lab.codeTitle)}</span>
+                        <button id="btn-copy-lab-code" class="px-3 py-1 rounded-lg border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--secondary)] t-ui font-medium text-[var(--foreground)] cursor-pointer">複製程式碼</button>
+                      </div>
+                      <pre class="p-4 code-block text-[var(--code-foreground)] m-0 flex-1 overflow-hidden">${escapeHtml(lab.code)}</pre>
+                    </div>
+                  ` : `
+                    <div class="flex-1 min-h-0 flex flex-col justify-between gap-3 overflow-hidden">
+                      <div class="p-5 rounded-xl tint-warning border border-[var(--warning)]">
+                        <div class="t-ui font-bold text-[var(--foreground)] mb-2">實戰關鍵洞察與常見陷阱（${ch.num}）</div>
+                        <p class="t-lead text-[var(--foreground)]">${escapeHtml(ch.insight)}</p>
+                      </div>
+                      <div class="p-4 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+                        <div class="t-ui font-bold text-[var(--foreground)] mb-1.5">本章學習目標摘要</div>
+                        <p class="t-body text-[var(--muted-foreground)]">${escapeHtml(ch.summary)}</p>
+                      </div>
+                      <div class="p-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)] flex items-center gap-2 flex-wrap">
+                        <span class="t-ui font-semibold text-[var(--muted-foreground)] mr-1">技術堆疊：</span>
+                        ${ch.tech.map(t => `<span class="t-micro px-2.5 py-1 rounded-md bg-[var(--secondary)] text-[var(--secondary-foreground)] font-medium">${t}</span>`).join('')}
+                      </div>
+                    </div>
+                  `}
                 </div>
               </div>
 
-              <!-- RIGHT 5 COLS: DEVOPS STAGE LOCATOR & UPSTREAM/DOWNSTREAM DEPENDENCIES -->
-              <div class="col-span-5 flex flex-col gap-2.5 min-h-0 overflow-hidden">
-                <!-- MINI 8-STAGE LOCATOR -->
-                <div class="shrink-0 bg-[var(--card)] border border-[var(--border)] rounded-lg p-3">
+              <!-- RIGHT 4 COLS: FULL-NAME 4x2 STAGE LOCATOR + TABBED DEPENDENCIES -->
+              <div class="col-span-4 flex flex-col gap-3 min-h-0 overflow-hidden">
+                <!-- FULL-NAME 4x2 DEVOPS STAGE LOCATOR -->
+                <div class="shrink-0 bg-[var(--card)] border border-[var(--border)] rounded-xl p-3.5">
                   <div class="flex items-center justify-between mb-2">
-                    <span class="text-xs font-semibold text-[var(--foreground)]">所在 DevOps 生命週期位置</span>
-                    <span class="text-xs text-[var(--muted-foreground)]">點擊階段可切換全覽</span>
+                    <span class="t-ui font-bold text-[var(--foreground)]">DevOps 階段定位</span>
+                    <span class="t-micro text-[var(--muted-foreground)]">點擊跳轉階段</span>
                   </div>
-                  <div class="grid grid-cols-8 gap-1 mb-2">
+                  <div class="grid grid-cols-4 gap-1.5 mb-2">
                     ${DEVOPS_STAGES.map(s => {
                       const inLab = lab.stages.includes(s.id);
                       const inCh = ch.stages.includes(s.id);
                       return `
-                        <button data-jump-stage="${s.id}" title="${s.en} (${s.zh})" class="py-1.5 px-0.5 rounded text-center border text-xs font-medium cursor-pointer transition-colors ${
+                        <button data-jump-stage="${s.id}" title="${s.en} (${s.zh})" class="py-1.5 px-1.5 rounded-lg text-center border t-micro font-medium cursor-pointer transition-colors truncate ${
                           inLab
-                            ? 'border-[var(--primary)] text-[var(--foreground)] font-semibold'
+                            ? 'border-[var(--primary)] text-[var(--foreground)] font-bold'
                             : inCh
                               ? 'border-[var(--border)] bg-[var(--secondary)] text-[var(--foreground)]'
                               : 'border-[var(--border)] bg-[var(--background)] text-[var(--muted-foreground)] opacity-55'
                         }" ${inLab ? `style="background-color: color-mix(in srgb, var(${s.colorVar}) 24%, transparent)"` : ''}>
-                          ${s.en.slice(0, 3)}
+                          ${s.en}
                         </button>
                       `;
                     }).join('')}
                   </div>
-                  <p class="text-xs text-[var(--muted-foreground)] truncate">${escapeHtml(ch.stageRole)}</p>
+                  <p class="t-micro text-[var(--muted-foreground)] leading-snug">${escapeHtml(ch.stageRole)}</p>
                 </div>
 
-                <!-- UPSTREAM & DOWNSTREAM DEPENDENCY CARD -->
-                <div class="flex-1 min-h-0 bg-[var(--card)] border border-[var(--border)] rounded-lg p-3 flex flex-col justify-between overflow-hidden">
-                  <div class="space-y-2.5 min-h-0">
-                    <div>
-                      <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-xs font-semibold text-[var(--foreground)]">上游前置相依 (Requires)</span>
-                        <span class="text-xs font-mono text-[var(--muted-foreground)]">${ch.upstream.length} 項</span>
-                      </div>
-                      ${ch.upstream.length === 0 ? `
-                        <div class="p-2 rounded bg-[var(--background)] border border-[var(--border)] text-xs text-[var(--muted-foreground)]">
-                          無前置章節相依，為整體課程與 DevOps 平台起點。
-                        </div>
-                      ` : `
-                        <div class="space-y-1">
-                          ${ch.upstream.slice(0, 3).map(dep => {
-                            const target = chapterMap[dep.id];
-                            return `
-                              <button data-open-lab="${dep.id}|0" class="w-full text-left px-2.5 py-1.5 rounded bg-[var(--background)] hover:bg-[var(--secondary)] border border-[var(--border)] flex items-center justify-between gap-2 cursor-pointer transition-colors">
-                                <span class="text-xs truncate"><strong class="font-mono text-[var(--primary)]">${target.num}</strong> ${target.short} — <span class="text-[var(--muted-foreground)]">${dep.reason}</span></span>
-                                <span class="text-xs text-[var(--muted-foreground)] shrink-0">↗</span>
-                              </button>
-                            `;
-                          }).join('')}
-                          ${ch.upstream.length > 3 ? `
-                            <div class="flex flex-wrap gap-1 pt-0.5">
-                              ${ch.upstream.slice(3).map(dep => {
-                                const target = chapterMap[dep.id];
-                                return `<button data-open-lab="${dep.id}|0" class="px-2 py-0.5 rounded bg-[var(--background)] hover:bg-[var(--secondary)] border border-[var(--border)] text-xs cursor-pointer"><strong class="font-mono text-[var(--primary)]">${target.num}</strong> ${target.short}</button>`;
-                              }).join('')}
-                            </div>
-                          ` : ''}
-                        </div>
-                      `}
-                    </div>
-
-                    <div>
-                      <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-xs font-semibold text-[var(--foreground)]">下游解鎖能力 (Unlocks)</span>
-                        <span class="text-xs font-mono text-[var(--muted-foreground)]">${ch.downstream.length} 項</span>
-                      </div>
-                      <div class="space-y-1">
-                        ${ch.downstream.slice(0, 3).map(dep => {
-                          const target = chapterMap[dep.id];
-                          return `
-                            <button data-open-lab="${dep.id}|0" class="w-full text-left px-2.5 py-1.5 rounded bg-[var(--background)] hover:bg-[var(--secondary)] border border-[var(--border)] flex items-center justify-between gap-2 cursor-pointer transition-colors">
-                              <span class="text-xs truncate"><strong class="font-mono text-[var(--success)]">${target.num}</strong> ${target.short} — <span class="text-[var(--muted-foreground)]">${dep.reason}</span></span>
-                              <span class="text-xs text-[var(--muted-foreground)] shrink-0">→</span>
-                            </button>
-                          `;
-                        }).join('')}
-                        ${ch.downstream.length > 3 ? `
-                          <div class="flex flex-wrap gap-1 pt-0.5">
-                            ${ch.downstream.slice(3).map(dep => {
-                              const target = chapterMap[dep.id];
-                              return `<button data-open-lab="${dep.id}|0" class="px-2 py-0.5 rounded bg-[var(--background)] hover:bg-[var(--secondary)] border border-[var(--border)] text-xs cursor-pointer"><strong class="font-mono text-[var(--success)]">${target.num}</strong> ${target.short}</button>`;
-                            }).join('')}
-                          </div>
-                        ` : ''}
-                      </div>
-                    </div>
+                <!-- TABBED UPSTREAM / DOWNSTREAM DEPENDENCIES (ZERO TRUNCATION!) -->
+                <div class="flex-1 min-h-0 bg-[var(--card)] border border-[var(--border)] rounded-xl p-3.5 flex flex-col overflow-hidden">
+                  <div class="grid grid-cols-2 gap-1.5 bg-[var(--background)] p-1 rounded-lg border border-[var(--border)] mb-3 shrink-0">
+                    <button data-ch-dep-tab="upstream" class="py-1.5 rounded-md t-ui font-semibold cursor-pointer transition-colors ${state.chapterDepTab === 'upstream' ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'text-[var(--muted-foreground)] hover:text-[var(--foreground)]'}">上游前置 (${ch.upstream.length})</button>
+                    <button data-ch-dep-tab="downstream" class="py-1.5 rounded-md t-ui font-semibold cursor-pointer transition-colors ${state.chapterDepTab === 'downstream' ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'text-[var(--muted-foreground)] hover:text-[var(--foreground)]'}">下游解鎖 (${ch.downstream.length})</button>
                   </div>
 
-                  <!-- TECH STACK FOOTER -->
-                  <div class="pt-2 border-t border-[var(--border)] shrink-0">
-                    <div class="flex items-center gap-1 flex-wrap">
-                      ${ch.tech.slice(0, 6).map(t => `<span class="text-xs px-1.5 py-0.5 rounded bg-[var(--secondary)] text-[var(--secondary-foreground)]">${t}</span>`).join('')}
-                    </div>
+                  <div class="flex-1 min-h-0 flex flex-col gap-2 overflow-hidden">
+                    ${state.chapterDepTab === 'upstream' ? (
+                      ch.upstream.length === 0
+                        ? `<div class="p-4 rounded-lg bg-[var(--background)] border border-[var(--border)] t-body text-[var(--muted-foreground)]">無前置章節相依，本章為整體課程與 DevOps 平台起點。</div>`
+                        : ch.upstream.slice(0, 4).map(dep => {
+                            const target = chapterMap[dep.id];
+                            return `
+                              <button data-open-lab="${dep.id}|0" class="w-full text-left p-2.5 rounded-lg bg-[var(--background)] hover:bg-[var(--secondary)] border border-[var(--border)] cursor-pointer transition-colors">
+                                <div class="flex items-center justify-between gap-2 mb-0.5">
+                                  <span class="t-ui font-bold text-[var(--foreground)]"><span class="font-mono text-[var(--primary)]">${target.num}</span> ${target.short}</span>
+                                  <span class="t-micro text-[var(--muted-foreground)]">前往 ↗</span>
+                                </div>
+                                <p class="t-micro text-[var(--muted-foreground)] clamp-2">${dep.reason}</p>
+                              </button>
+                            `;
+                          }).join('')
+                    ) : (
+                      ch.downstream.slice(0, 4).map(dep => {
+                        const target = chapterMap[dep.id];
+                        return `
+                          <button data-open-lab="${dep.id}|0" class="w-full text-left p-2.5 rounded-lg bg-[var(--background)] hover:bg-[var(--secondary)] border border-[var(--border)] cursor-pointer transition-colors">
+                            <div class="flex items-center justify-between gap-2 mb-0.5">
+                              <span class="t-ui font-bold text-[var(--foreground)]"><span class="font-mono text-[var(--success)]">${target.num}</span> ${target.short}</span>
+                              <span class="t-micro text-[var(--muted-foreground)]">前往 →</span>
+                            </div>
+                            <p class="t-micro text-[var(--muted-foreground)] clamp-2">${dep.reason}</p>
+                          </button>
+                        `;
+                      }).join('')
+                    )}
                   </div>
                 </div>
               </div>
@@ -2598,7 +2620,7 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
     }
 
     // =========================================================================
-    // 6. VIEW 3: INTERACTIVE SVG DEPENDENCY DAG (WITH CHAPTER COMPLETION)
+    // 6. VIEW 3: INTERACTIVE SVG DEPENDENCY DAG (LARGE READABLE NODES)
     // =========================================================================
     function renderDagView() {
       const selId = state.dagSelectedId;
@@ -2613,7 +2635,7 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
         { id: 'ci', label: 'CI 品質安全鏈' },
         { id: 'cd', label: 'CD 發布交付鏈' },
         { id: 'agile', label: '敏捷與回饋閉環' },
-        { id: 'sec', label: '資安機密與 IaC 鏈' }
+        { id: 'sec', label: '資安機密與 IaC' }
       ];
 
       const edgesSvg = DAG_EDGES.map(edge => {
@@ -2626,21 +2648,15 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
 
         let pathD = '';
         if (edge.feedback) {
-          pathD = `M ${a.x} ${a.y - 26} C ${a.x - 100} 18, ${b.x + 120} 18, ${b.x} ${b.y - 26}`;
+          pathD = `M ${a.x} ${a.y - 30} C ${a.x - 100} 20, ${b.x + 120} 20, ${b.x} ${b.y - 30}`;
         } else {
           const mx = (a.x + b.x) / 2;
-          pathD = `M ${a.x + 52} ${a.y} C ${mx} ${a.y}, ${mx} ${b.y}, ${b.x - 52} ${b.y}`;
+          pathD = `M ${a.x + 58} ${a.y} C ${mx} ${a.y}, ${mx} ${b.y}, ${b.x - 58} ${b.y}`;
         }
 
-        const stroke = isUpEdge
-          ? 'var(--chart-1)'
-          : isDownEdge
-            ? 'var(--success)'
-            : edge.feedback
-              ? 'var(--warning)'
-              : 'var(--border)';
-        const opacity = !matchesFilter ? 0.08 : highlighted ? 1 : 0.42;
-        const width = highlighted ? 2.6 : 1.4;
+        const stroke = isUpEdge ? 'var(--chart-1)' : isDownEdge ? 'var(--success)' : edge.feedback ? 'var(--warning)' : 'var(--border)';
+        const opacity = !matchesFilter ? 0.08 : highlighted ? 1 : 0.45;
+        const width = highlighted ? 2.8 : 1.5;
         const marker = isUpEdge ? 'url(#arrow-up)' : isDownEdge ? 'url(#arrow-down)' : edge.feedback ? 'url(#arrow-fb)' : 'url(#arrow-muted)';
 
         return `<path d="${pathD}" fill="none" stroke="${stroke}" stroke-width="${width}" opacity="${opacity}" ${edge.feedback ? 'stroke-dasharray="6 4"' : ''} marker-end="${marker}" class="dag-edge" />`;
@@ -2654,44 +2670,44 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
         const isDown = downIds.has(n.id);
         const related = isSel || isUp || isDown;
         const stroke = isSel ? 'var(--primary)' : isUp ? 'var(--chart-1)' : isDown ? 'var(--success)' : 'var(--border)';
-        const strokeW = isSel ? 2.5 : related ? 2 : 1.2;
+        const strokeW = isSel ? 2.8 : related ? 2 : 1.3;
         const opacity = related ? 1 : 0.55;
 
         return `
           <g data-dag-node="${n.id}" class="dag-node" opacity="${opacity}">
-            <rect x="${n.x - 52}" y="${n.y - 26}" width="104" height="52" rx="8"
+            <rect x="${n.x - 58}" y="${n.y - 30}" width="116" height="60" rx="10"
               fill="var(--background)" stroke="${stroke}" stroke-width="${strokeW}" />
-            <circle cx="${n.x - 36}" cy="${n.y - 8}" r="4" fill="var(${cp.allDone ? '--success' : n.stageColor})" />
-            <text x="${n.x - 26}" y="${n.y - 4}" fill="var(--foreground)" font-size="12" font-weight="700" font-family="ui-monospace, monospace">${n.label}</text>
-            <text x="${n.x + 44}" y="${n.y - 4}" text-anchor="end" fill="${cp.allDone ? 'var(--success)' : 'var(--muted-foreground)'}" font-size="12" font-family="ui-monospace, monospace">${cp.allDone ? '✓' : `${cp.done}/${cp.total}`}</text>
-            <text x="${n.x}" y="${n.y + 14}" text-anchor="middle" fill="var(--muted-foreground)" font-size="12">${n.sub}</text>
+            <circle cx="${n.x - 42}" cy="${n.y - 9}" r="4.5" fill="var(${cp.allDone ? '--success' : n.stageColor})" />
+            <text x="${n.x - 32}" y="${n.y - 4}" fill="var(--foreground)" font-size="14" font-weight="700" font-family="ui-monospace, monospace">${n.label}</text>
+            <text x="${n.x + 48}" y="${n.y - 4}" text-anchor="end" fill="${cp.allDone ? 'var(--success)' : 'var(--muted-foreground)'}" font-size="13" font-family="ui-monospace, monospace">${cp.allDone ? '✓' : `${cp.done}/${cp.total}`}</text>
+            <text x="${n.x}" y="${n.y + 17}" text-anchor="middle" fill="var(--muted-foreground)" font-size="13.5" font-weight="500">${n.sub}</text>
           </g>
         `;
       }).join('');
 
       return `
-        <div class="h-full min-h-0 grid grid-cols-12 gap-3 overflow-hidden">
+        <div class="h-full min-h-0 grid grid-cols-12 gap-3.5 overflow-hidden">
           <!-- LEFT 8 COLS: INTERACTIVE SVG DAG -->
-          <div class="col-span-8 bg-[var(--card)] border border-[var(--border)] rounded-lg p-3 flex flex-col min-h-0 overflow-hidden">
-            <div class="flex items-center justify-between gap-2 pb-2 mb-2 border-b border-[var(--border)] shrink-0">
+          <div class="col-span-8 bg-[var(--card)] border border-[var(--border)] rounded-xl p-3.5 flex flex-col min-h-0 overflow-hidden">
+            <div class="flex items-center justify-between gap-2 pb-2.5 mb-2 border-b border-[var(--border)] shrink-0">
               <div class="flex items-center gap-1.5 flex-wrap">
                 ${filterDefs.map(f => `
-                  <button data-dag-filter="${f.id}" class="px-2.5 py-1 rounded-md text-xs font-medium border cursor-pointer transition-colors ${
+                  <button data-dag-filter="${f.id}" class="px-3 py-1 rounded-lg t-ui font-medium border cursor-pointer transition-colors ${
                     state.dagFilter === f.id
                       ? 'bg-[var(--primary)] text-[var(--primary-foreground)] border-[var(--primary)]'
                       : 'bg-[var(--background)] text-[var(--foreground)] border-[var(--border)] hover:bg-[var(--secondary)]'
                   }">${f.label}</button>
                 `).join('')}
               </div>
-              <div class="hidden xl:flex items-center gap-3 text-xs text-[var(--muted-foreground)] shrink-0">
-                <span class="flex items-center gap-1"><span class="w-2.5 h-0.5 inline-block" style="background:var(--chart-1)"></span>上游前置</span>
-                <span class="flex items-center gap-1"><span class="w-2.5 h-0.5 inline-block" style="background:var(--success)"></span>下游解鎖</span>
-                <span class="flex items-center gap-1"><span class="w-2.5 h-0.5 inline-block border-t border-dashed" style="border-color:var(--warning)"></span>監控回饋</span>
+              <div class="hidden xl:flex items-center gap-3 t-micro text-[var(--muted-foreground)] shrink-0">
+                <span class="flex items-center gap-1"><span class="w-3 h-0.5 inline-block" style="background:var(--chart-1)"></span>上游前置</span>
+                <span class="flex items-center gap-1"><span class="w-3 h-0.5 inline-block" style="background:var(--success)"></span>下游解鎖</span>
+                <span class="flex items-center gap-1"><span class="w-3 h-0.5 inline-block border-t border-dashed" style="border-color:var(--warning)"></span>監控回饋</span>
               </div>
             </div>
 
             <div class="flex-1 min-h-0 flex items-center justify-center overflow-hidden">
-              <svg viewBox="0 0 890 455" class="w-full h-full" role="img" aria-label="AZ-400 DevOps 章節相依性拓撲圖">
+              <svg viewBox="0 0 890 465" class="w-full h-full" role="img" aria-label="AZ-400 DevOps 章節相依性拓撲圖">
                 <defs>
                   <marker id="arrow-muted" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                     <path d="M 0 1 L 10 5 L 0 9 z" fill="var(--border)" />
@@ -2707,13 +2723,13 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
                   </marker>
                 </defs>
 
-                <text x="75" y="440" text-anchor="middle" fill="var(--muted-foreground)" font-size="12">前置基礎</text>
-                <text x="215" y="440" text-anchor="middle" fill="var(--muted-foreground)" font-size="12">Plan / Code</text>
-                <text x="375" y="440" text-anchor="middle" fill="var(--muted-foreground)" font-size="12">CI/CD 入門</text>
-                <text x="540" y="440" text-anchor="middle" fill="var(--muted-foreground)" font-size="12">Build / Test / Pkg / IaC</text>
-                <text x="695" y="440" text-anchor="middle" fill="var(--muted-foreground)" font-size="12">DevSecOps</text>
-                <text x="805" y="440" text-anchor="middle" fill="var(--muted-foreground)" font-size="12">Release / Deploy</text>
-                <text x="515" y="20" text-anchor="middle" fill="var(--muted-foreground)" font-size="12">Monitor 線上指標與缺陷回饋閉環 (CD → Plan)</text>
+                <text x="75" y="452" text-anchor="middle" fill="var(--muted-foreground)" font-size="13.5">前置基礎</text>
+                <text x="215" y="452" text-anchor="middle" fill="var(--muted-foreground)" font-size="13.5">Plan / Code</text>
+                <text x="375" y="452" text-anchor="middle" fill="var(--muted-foreground)" font-size="13.5">CI/CD 入門</text>
+                <text x="540" y="452" text-anchor="middle" fill="var(--muted-foreground)" font-size="13.5">Build / Test / Pkg / IaC</text>
+                <text x="695" y="452" text-anchor="middle" fill="var(--muted-foreground)" font-size="13.5">DevSecOps</text>
+                <text x="805" y="452" text-anchor="middle" fill="var(--muted-foreground)" font-size="13.5">Release / Deploy</text>
+                <text x="515" y="22" text-anchor="middle" fill="var(--muted-foreground)" font-size="13.5">Monitor 線上指標與缺陷回饋閉環 (CD → Plan)</text>
 
                 ${edgesSvg}
                 ${nodesSvg}
@@ -2721,59 +2737,54 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
             </div>
           </div>
 
-          <!-- RIGHT 4 COLS: SELECTED NODE DEPENDENCY INSPECTOR -->
-          <div class="col-span-4 bg-[var(--card)] border border-[var(--border)] rounded-lg p-3.5 flex flex-col justify-between min-h-0 overflow-hidden">
-            <div class="space-y-2.5 min-h-0">
-              <div class="pb-2 border-b border-[var(--border)]">
+          <!-- RIGHT 4 COLS: SPACIOUS TABBED NODE INSPECTOR -->
+          <div class="col-span-4 bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 flex flex-col justify-between min-h-0 overflow-hidden">
+            <div class="flex flex-col flex-1 min-h-0 overflow-hidden">
+              <div class="pb-3 mb-3 border-b border-[var(--border)] shrink-0">
                 <div class="flex items-center justify-between gap-2 mb-1.5">
-                  <span class="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-[var(--primary)] text-[var(--primary-foreground)]">${selCh.num}</span>
-                  <div class="flex items-center gap-1 flex-wrap justify-end">${selCh.stages.map(s => stageBadgeHtml(s, true)).join('')}</div>
+                  <span class="font-mono t-ui font-bold px-2.5 py-0.5 rounded-md bg-[var(--primary)] text-[var(--primary-foreground)]">${selCh.num}</span>
+                  <div class="flex items-center gap-1.5 flex-wrap justify-end">${selCh.stages.map(s => stageBadgeHtml(s, true)).join('')}</div>
                 </div>
-                <h2 class="text-sm font-semibold text-[var(--foreground)] mb-1">${selCh.title}</h2>
-                <p class="text-xs text-[var(--muted-foreground)] leading-snug">${selCh.stageRole}</p>
+                <h2 class="t-lead font-bold text-[var(--foreground)] mb-1">${selCh.title}</h2>
+                <p class="t-micro text-[var(--muted-foreground)]">${selCh.stageRole}</p>
               </div>
 
-              <div>
-                <div class="text-xs font-semibold text-[var(--foreground)] mb-1.5">為何必須先完成上游 (${selCh.upstream.length})</div>
-                ${selCh.upstream.length === 0 ? `
-                  <div class="p-2 rounded bg-[var(--background)] border border-[var(--border)] text-xs text-[var(--muted-foreground)]">無上游相依，為整體體系起點。</div>
-                ` : `
-                  <div class="space-y-1">
-                    ${selCh.upstream.slice(0, 3).map(u => `
-                      <button data-dag-node="${u.id}" class="w-full text-left p-2 rounded bg-[var(--background)] hover:bg-[var(--secondary)] border border-[var(--border)] text-xs cursor-pointer transition-colors">
-                        <span class="font-mono font-semibold" style="color: var(--chart-1)">${chapterMap[u.id].num}</span>
-                        <span class="font-medium text-[var(--foreground)]"> ${chapterMap[u.id].short}</span>
-                        <div class="text-xs text-[var(--muted-foreground)] truncate mt-0.5">${u.reason}</div>
-                      </button>
-                    `).join('')}
-                  </div>
-                `}
+              <div class="grid grid-cols-2 gap-1.5 bg-[var(--background)] p-1 rounded-lg border border-[var(--border)] mb-3 shrink-0">
+                <button data-dag-dep-tab="upstream" class="py-1.5 rounded-md t-ui font-semibold cursor-pointer transition-colors ${state.dagDepTab === 'upstream' ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'text-[var(--muted-foreground)] hover:text-[var(--foreground)]'}">上游前置 (${selCh.upstream.length})</button>
+                <button data-dag-dep-tab="downstream" class="py-1.5 rounded-md t-ui font-semibold cursor-pointer transition-colors ${state.dagDepTab === 'downstream' ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'text-[var(--muted-foreground)] hover:text-[var(--foreground)]'}">下游解鎖 (${selCh.downstream.length})</button>
               </div>
 
-              <div>
-                <div class="text-xs font-semibold text-[var(--foreground)] mb-1.5">完成後解鎖的下游 (${selCh.downstream.length})</div>
-                <div class="space-y-1">
-                  ${selCh.downstream.slice(0, 3).map(d => `
-                    <button data-dag-node="${d.id}" class="w-full text-left p-2 rounded bg-[var(--background)] hover:bg-[var(--secondary)] border border-[var(--border)] text-xs cursor-pointer transition-colors">
-                      <span class="font-mono font-semibold" style="color: var(--success)">${chapterMap[d.id].num}</span>
-                      <span class="font-medium text-[var(--foreground)]"> ${chapterMap[d.id].short}</span>
-                      <div class="text-xs text-[var(--muted-foreground)] truncate mt-0.5">${d.reason}</div>
+              <div class="flex-1 min-h-0 space-y-2 overflow-hidden">
+                ${state.dagDepTab === 'upstream' ? (
+                  selCh.upstream.length === 0
+                    ? `<div class="p-3.5 rounded-lg bg-[var(--background)] border border-[var(--border)] t-body text-[var(--muted-foreground)]">無上游相依，為整體知識體系起點。</div>`
+                    : selCh.upstream.slice(0, 4).map(u => `
+                        <button data-dag-node="${u.id}" class="w-full text-left p-2.5 rounded-lg bg-[var(--background)] hover:bg-[var(--secondary)] border border-[var(--border)] cursor-pointer transition-colors">
+                          <div class="t-ui font-bold text-[var(--foreground)]"><span class="font-mono" style="color: var(--chart-1)">${chapterMap[u.id].num}</span> ${chapterMap[u.id].short}</div>
+                          <div class="t-micro text-[var(--muted-foreground)] mt-0.5 clamp-2">${u.reason}</div>
+                        </button>
+                      `).join('')
+                ) : (
+                  selCh.downstream.slice(0, 4).map(d => `
+                    <button data-dag-node="${d.id}" class="w-full text-left p-2.5 rounded-lg bg-[var(--background)] hover:bg-[var(--secondary)] border border-[var(--border)] cursor-pointer transition-colors">
+                      <div class="t-ui font-bold text-[var(--foreground)]"><span class="font-mono" style="color: var(--success)">${chapterMap[d.id].num}</span> ${chapterMap[d.id].short}</div>
+                      <div class="t-micro text-[var(--muted-foreground)] mt-0.5 clamp-2">${d.reason}</div>
                     </button>
-                  `).join('')}
-                </div>
+                  `).join('')
+                )}
               </div>
             </div>
 
-            <div class="space-y-1.5 shrink-0 pt-2 border-t border-[var(--border)]">
-              <button data-toggle-chapter="${selCh.id}" class="w-full py-1.5 px-3 rounded-md border text-xs font-medium cursor-pointer transition-colors ${
+            <div class="space-y-2 shrink-0 pt-3 border-t border-[var(--border)]">
+              <button data-toggle-chapter="${selCh.id}" class="w-full py-2 px-3 rounded-lg border t-ui font-semibold cursor-pointer transition-colors ${
                 selProg.allDone
                   ? 'tint-success border-[var(--success)] text-[var(--success)]'
                   : 'bg-[var(--background)] border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--secondary)]'
               }">
-                ${selProg.allDone ? `✓ 本章已完成 (${selProg.done}/${selProg.total}) — 點擊取消` : `☐ 一鍵標記本章全部完成 (${selProg.done}/${selProg.total})`}
+                ${selProg.allDone ? `✓ 本章已完成 (${selProg.done}/${selProg.total})` : `☐ 一鍵標記本章完成 (${selProg.done}/${selProg.total})`}
               </button>
-              <button data-open-lab="${selCh.id}|0" class="w-full py-2 px-3 rounded-md bg-[var(--primary)] text-[var(--primary-foreground)] text-xs font-semibold hover:opacity-90 transition-opacity cursor-pointer">
-                進入 ${selCh.num} 完整知識點與 ${selCh.labs.length} 個實作 →
+              <button data-open-lab="${selCh.id}|0" class="w-full py-2.5 px-3 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] t-ui font-bold hover:opacity-90 transition-opacity cursor-pointer">
+                進入 ${selCh.num} 開始學習 (${selCh.labs.length} 個主題) →
               </button>
             </div>
           </div>
@@ -2782,14 +2793,14 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
     }
 
     // =========================================================================
-    // 7. VIEW 4: QUICK REFERENCE, YAML ANATOMY & 32-TOPIC PROGRESS MATRIX
+    // 7. VIEW 4: QUICK REFERENCE, YAML ANATOMY & PROGRESS MATRIX (LARGE TYPE)
     // =========================================================================
     function renderReferenceView() {
       const tabs = [
         { id: 'compare', label: '核心架構對照表 (6 組)' },
         { id: 'yaml', label: 'Multi-Stage YAML 互動解剖' },
-        { id: 'sec', label: 'DevSecOps 五層安全防線' },
-        { id: 'cli', label: '高頻指令與設定速查' },
+        { id: 'sec', label: 'DevSecOps 五層防線' },
+        { id: 'cli', label: '高頻指令與設定' },
         { id: 'index', label: '全課程進度勾選矩陣' }
       ];
 
@@ -2800,32 +2811,32 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
         const cmp = COMPARISONS[state.compareIdx];
         bodyHtml = `
           <div class="flex-1 min-h-0 flex flex-col gap-3 overflow-hidden">
-            <div class="flex items-center gap-1.5 flex-wrap shrink-0">
+            <div class="flex items-center gap-2 flex-wrap shrink-0">
               ${COMPARISONS.map((c, idx) => `
-                <button data-cmp-idx="${idx}" class="px-2.5 py-1 rounded-md border text-xs font-medium cursor-pointer transition-colors ${
+                <button data-cmp-idx="${idx}" class="px-3 py-1.5 rounded-lg border t-ui font-medium cursor-pointer transition-colors ${
                   idx === state.compareIdx
-                    ? 'bg-[var(--secondary)] border-[var(--primary)] text-[var(--foreground)] font-semibold'
+                    ? 'bg-[var(--secondary)] border-[var(--primary)] text-[var(--foreground)] font-bold'
                     : 'bg-[var(--card)] border-[var(--border)] text-[var(--muted-foreground)] hover:text-[var(--foreground)]'
                 }">${c.title}</button>
               `).join('')}
             </div>
 
-            <div class="flex-1 min-h-0 bg-[var(--card)] border border-[var(--border)] rounded-lg p-4 flex flex-col justify-between overflow-hidden select-text">
-              <div class="flex items-center justify-between pb-2.5 mb-3 border-b border-[var(--border)] shrink-0">
-                <h2 class="text-base font-semibold text-[var(--foreground)]">${cmp.title}</h2>
-                <span class="text-xs px-2 py-0.5 rounded bg-[var(--secondary)] text-[var(--secondary-foreground)]">DevOps 階段：${cmp.stage}</span>
+            <div class="flex-1 min-h-0 bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 flex flex-col justify-between overflow-hidden select-text">
+              <div class="flex items-center justify-between pb-3 mb-3 border-b border-[var(--border)] shrink-0">
+                <h2 class="t-title font-bold text-[var(--foreground)]">${cmp.title}</h2>
+                <span class="t-ui px-3 py-1 rounded-md bg-[var(--secondary)] text-[var(--secondary-foreground)] font-medium">DevOps 階段：${cmp.stage}</span>
               </div>
-              <div class="flex-1 min-h-0 grid grid-rows-5 gap-2 overflow-hidden">
-                <div class="grid grid-cols-12 gap-3 px-3 items-center rounded-md bg-[var(--sidebar)] border border-[var(--border)] text-xs font-semibold text-[var(--foreground)]">
+              <div class="flex-1 min-h-0 grid grid-rows-5 gap-2.5 overflow-hidden">
+                <div class="grid grid-cols-12 gap-4 px-4 items-center rounded-lg bg-[var(--sidebar)] border border-[var(--border)] t-ui font-bold text-[var(--foreground)]">
                   <div class="col-span-2">比較維度</div>
                   <div class="col-span-5">${cmp.leftName}</div>
                   <div class="col-span-5">${cmp.rightName}</div>
                 </div>
                 ${cmp.rows.map(r => `
-                  <div class="grid grid-cols-12 gap-3 px-3 items-center rounded-md bg-[var(--background)] border border-[var(--border)] text-xs">
-                    <div class="col-span-2 font-semibold text-[var(--primary)]">${r[0]}</div>
-                    <div class="col-span-5 text-[var(--foreground)] leading-snug">${r[1]}</div>
-                    <div class="col-span-5 text-[var(--foreground)] leading-snug">${r[2]}</div>
+                  <div class="grid grid-cols-12 gap-4 px-4 items-center rounded-lg bg-[var(--background)] border border-[var(--border)] t-body">
+                    <div class="col-span-2 font-bold text-[var(--primary)]">${r[0]}</div>
+                    <div class="col-span-5 text-[var(--foreground)]">${r[1]}</div>
+                    <div class="col-span-5 text-[var(--foreground)]">${r[2]}</div>
                   </div>
                 `).join('')}
               </div>
@@ -2835,65 +2846,94 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
       } else if (state.refTab === 'yaml') {
         const block = YAML_ANATOMY[state.yamlIdx];
         bodyHtml = `
-          <div class="flex-1 min-h-0 grid grid-cols-12 gap-3 overflow-hidden">
-            <div class="col-span-4 bg-[var(--card)] border border-[var(--border)] rounded-lg p-3 flex flex-col gap-2 min-h-0 overflow-hidden">
-              <div class="text-xs font-semibold text-[var(--foreground)] pb-1.5 border-b border-[var(--border)] shrink-0">點選 Lab 25 Multi-Stage YAML 區塊解剖</div>
-              <div class="flex-1 min-h-0 grid grid-rows-5 gap-1.5">
+          <div class="flex-1 min-h-0 grid grid-cols-12 gap-3.5 overflow-hidden">
+            <div class="col-span-4 bg-[var(--card)] border border-[var(--border)] rounded-xl p-3.5 flex flex-col gap-2 min-h-0 overflow-hidden">
+              <div class="t-ui font-bold text-[var(--foreground)] pb-2 border-b border-[var(--border)] shrink-0">Lab 25 Multi-Stage YAML 區塊解剖</div>
+              <div class="flex-1 min-h-0 grid grid-rows-5 gap-2">
                 ${YAML_ANATOMY.map((item, idx) => `
-                  <button data-yaml-idx="${idx}" class="text-left px-3 py-2 rounded-md border cursor-pointer transition-colors flex flex-col justify-center ${
+                  <button data-yaml-idx="${idx}" class="text-left px-3.5 py-2 rounded-lg border cursor-pointer transition-colors flex flex-col justify-center ${
                     idx === state.yamlIdx
                       ? 'bg-[var(--secondary)] border-[var(--primary)] text-[var(--foreground)]'
                       : 'bg-[var(--background)] border-[var(--border)] text-[var(--muted-foreground)] hover:text-[var(--foreground)]'
                   }">
-                    <div class="text-xs font-semibold text-[var(--foreground)]">${item.title}</div>
-                    <div class="text-xs text-[var(--muted-foreground)] mt-0.5">階段：${item.stage}</div>
+                    <div class="t-ui font-bold text-[var(--foreground)]">${item.title}</div>
+                    <div class="t-micro text-[var(--muted-foreground)] mt-0.5">階段：${item.stage}</div>
                   </button>
                 `).join('')}
               </div>
             </div>
 
             <div class="col-span-8 flex flex-col gap-3 min-h-0 overflow-hidden select-text">
-              <div class="flex-1 min-h-0 bg-[var(--card)] border border-[var(--border)] rounded-lg flex flex-col overflow-hidden">
-                <div class="px-3.5 py-2 border-b border-[var(--border)] bg-[var(--sidebar)] flex items-center justify-between shrink-0">
-                  <span class="text-xs font-semibold text-[var(--foreground)]">${block.title}</span>
+              <div class="flex-1 min-h-0 bg-[var(--card)] border border-[var(--border)] rounded-xl flex flex-col overflow-hidden">
+                <div class="px-4 py-2.5 border-b border-[var(--border)] bg-[var(--sidebar)] flex items-center justify-between shrink-0">
+                  <span class="t-ui font-bold text-[var(--foreground)]">${block.title}</span>
                   <div class="flex items-center gap-2">
-                    <span class="text-xs px-2 py-0.5 rounded bg-[var(--secondary)] text-[var(--secondary-foreground)]">${block.stage}</span>
-                    <button id="btn-copy-yaml" class="px-2 py-0.5 rounded border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--secondary)] text-xs cursor-pointer">複製片段</button>
+                    <span class="t-micro px-2.5 py-0.5 rounded-md bg-[var(--secondary)] text-[var(--secondary-foreground)]">${block.stage}</span>
+                    <button id="btn-copy-yaml" class="px-3 py-1 rounded-lg border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--secondary)] t-ui font-medium cursor-pointer">複製片段</button>
                   </div>
                 </div>
                 <pre class="p-4 code-block text-[var(--code-foreground)] m-0 flex-1 overflow-hidden">${escapeHtml(block.lines)}</pre>
               </div>
-              <div class="shrink-0 bg-[var(--card)] border border-[var(--border)] rounded-lg p-3.5">
-                <div class="text-xs font-semibold text-[var(--primary)] mb-1">架構原理解析</div>
-                <p class="text-xs leading-relaxed text-[var(--foreground)]">${escapeHtml(block.explain)}</p>
+              <div class="shrink-0 bg-[var(--card)] border border-[var(--border)] rounded-xl p-4">
+                <div class="t-ui font-bold text-[var(--primary)] mb-1">架構原理解析</div>
+                <p class="t-body text-[var(--foreground)]">${escapeHtml(block.explain)}</p>
               </div>
             </div>
           </div>
         `;
       } else if (state.refTab === 'sec') {
+        const layer = DEVSECOPS_LAYERS[state.secLayerIdx];
         bodyHtml = `
-          <div class="flex-1 min-h-0 flex flex-col gap-3 overflow-hidden">
-            <div class="shrink-0 bg-[var(--card)] border border-[var(--border)] rounded-lg px-4 py-2.5 flex items-center justify-between">
-              <span class="text-sm font-semibold text-[var(--foreground)]">DevSecOps 全生命週期五層防禦縱深 (Shift-Left Security)</span>
-              <span class="text-xs text-[var(--muted-foreground)]">從設計期到線上營運層層把關，不依賴單一防線</span>
-            </div>
-            <div class="flex-1 min-h-0 grid grid-cols-5 gap-2.5 overflow-hidden">
-              ${DEVSECOPS_LAYERS.map((l, idx) => `
-                <div class="bg-[var(--card)] border border-[var(--border)] rounded-lg p-3.5 flex flex-col justify-between overflow-hidden select-text">
-                  <div>
-                    <div class="flex items-center justify-between mb-2">
-                      <span class="w-6 h-6 rounded-md bg-[var(--primary)] text-[var(--primary-foreground)] font-mono text-xs font-bold flex items-center justify-center">0${idx + 1}</span>
-                      <span class="text-xs text-[var(--muted-foreground)]">${l.stage}</span>
+          <div class="flex-1 min-h-0 flex flex-col gap-3.5 overflow-hidden">
+            <!-- 5-STEP HORIZONTAL DEFENSE RAIL -->
+            <div class="shrink-0 grid grid-cols-5 gap-2.5">
+              ${DEVSECOPS_LAYERS.map((l, idx) => {
+                const active = idx === state.secLayerIdx;
+                return `
+                  <button data-sec-idx="${idx}" class="text-left p-3.5 rounded-xl border transition-all cursor-pointer ${
+                    active
+                      ? 'bg-[var(--secondary)] border-[var(--primary)] text-[var(--foreground)]'
+                      : 'bg-[var(--card)] border-[var(--border)] text-[var(--muted-foreground)] hover:bg-[var(--secondary)]'
+                  }">
+                    <div class="flex items-center justify-between mb-1.5">
+                      <span class="w-7 h-7 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] font-mono t-ui font-bold flex items-center justify-center">0${idx + 1}</span>
+                      <span class="t-micro">${l.stage}</span>
                     </div>
-                    <h3 class="text-sm font-semibold text-[var(--foreground)] mb-1.5">${l.layer}</h3>
-                    <div class="text-xs font-mono text-[var(--primary)] mb-2.5">${l.tool}</div>
-                    <p class="text-xs leading-relaxed text-[var(--muted-foreground)]">${l.focus}</p>
+                    <div class="t-ui font-bold text-[var(--foreground)] truncate">${l.layer}</div>
+                  </button>
+                `;
+              }).join('')}
+            </div>
+
+            <!-- SPACIOUS ACTIVE DEFENSE LAYER READING CARD -->
+            <div class="flex-1 min-h-0 bg-[var(--card)] border border-[var(--border)] rounded-xl p-6 flex flex-col justify-between overflow-hidden select-text">
+              <div>
+                <div class="flex items-center justify-between gap-3 pb-3.5 mb-4 border-b border-[var(--border)]">
+                  <div>
+                    <span class="t-micro font-semibold text-[var(--primary)]">DevSecOps 防禦縱深 · 第 ${state.secLayerIdx + 1} / 5 層</span>
+                    <h2 class="t-hero font-bold text-[var(--foreground)] mt-0.5">${layer.layer}</h2>
                   </div>
-                  <div class="pt-2.5 border-t border-[var(--border)] text-xs font-medium text-[var(--foreground)]">
-                    對應實作：${l.lab}
+                  <span class="px-3 py-1 rounded-lg bg-[var(--secondary)] text-[var(--foreground)] t-ui font-semibold">${layer.stage}</span>
+                </div>
+                <div class="grid grid-cols-12 gap-4">
+                  <div class="col-span-5 p-4 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+                    <div class="t-micro font-semibold text-[var(--muted-foreground)] mb-1.5">代表工具與機制</div>
+                    <div class="t-lead font-mono font-bold text-[var(--primary)]">${layer.tool}</div>
+                    <div class="t-ui text-[var(--muted-foreground)] mt-3">對應實作：${layer.lab}</div>
+                  </div>
+                  <div class="col-span-7 p-4 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+                    <div class="t-micro font-semibold text-[var(--muted-foreground)] mb-1.5">防護目標與核心價值</div>
+                    <p class="t-lead text-[var(--foreground)]">${layer.focus}</p>
                   </div>
                 </div>
-              `).join('')}
+              </div>
+              <div class="flex items-center justify-between pt-3 border-t border-[var(--border)]">
+                <span class="t-ui text-[var(--muted-foreground)]">點擊上方任一防線卡片切換檢視，建立從設計期到線上營運的完整安全思維。</span>
+                <div class="flex items-center gap-2 shrink-0">
+                  <button data-sec-idx="${(state.secLayerIdx + 4) % 5}" class="px-3 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] t-ui cursor-pointer">← 上一層</button>
+                  <button data-sec-idx="${(state.secLayerIdx + 1) % 5}" class="px-3 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] t-ui cursor-pointer">下一層 →</button>
+                </div>
+              </div>
             </div>
           </div>
         `;
@@ -2901,77 +2941,74 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
         const deck = CLI_DECKS[state.cliIdx];
         bodyHtml = `
           <div class="flex-1 min-h-0 flex flex-col gap-3 overflow-hidden">
-            <div class="flex items-center gap-1.5 shrink-0">
+            <div class="flex items-center gap-2 shrink-0">
               ${CLI_DECKS.map((d, idx) => `
-                <button data-cli-idx="${idx}" class="px-2.5 py-1 rounded-md border text-xs font-medium cursor-pointer transition-colors ${
+                <button data-cli-idx="${idx}" class="px-3 py-1.5 rounded-lg border t-ui font-medium cursor-pointer transition-colors ${
                   idx === state.cliIdx
-                    ? 'bg-[var(--secondary)] border-[var(--primary)] text-[var(--foreground)] font-semibold'
+                    ? 'bg-[var(--secondary)] border-[var(--primary)] text-[var(--foreground)] font-bold'
                     : 'bg-[var(--card)] border-[var(--border)] text-[var(--muted-foreground)] hover:text-[var(--foreground)]'
                 }">${d.label}</button>
               `).join('')}
             </div>
-            <div class="flex-1 min-h-0 grid grid-cols-2 gap-3 overflow-hidden select-text">
+            <div class="flex-1 min-h-0 grid grid-cols-2 gap-3.5 overflow-hidden select-text">
               ${deck.items.map((item, i) => `
-                <div class="bg-[var(--card)] border border-[var(--border)] rounded-lg flex flex-col overflow-hidden">
-                  <div class="px-3.5 py-2 border-b border-[var(--border)] bg-[var(--sidebar)] flex items-center justify-between shrink-0">
-                    <span class="text-xs font-semibold text-[var(--foreground)]">${item.title}</span>
-                    <button data-copy-cli="${i}" class="px-2 py-0.5 rounded border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--secondary)] text-xs cursor-pointer">複製</button>
+                <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl flex flex-col overflow-hidden">
+                  <div class="px-4 py-2.5 border-b border-[var(--border)] bg-[var(--sidebar)] flex items-center justify-between shrink-0">
+                    <span class="t-ui font-bold text-[var(--foreground)]">${item.title}</span>
+                    <button data-copy-cli="${i}" class="px-3 py-1 rounded-lg border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--secondary)] t-ui font-medium cursor-pointer">複製</button>
                   </div>
-                  <pre class="p-3.5 code-block text-[var(--code-foreground)] m-0 flex-1 overflow-hidden">${escapeHtml(item.code)}</pre>
+                  <pre class="p-4 code-block text-[var(--code-foreground)] m-0 flex-1 overflow-hidden">${escapeHtml(item.code)}</pre>
                 </div>
               `).join('')}
             </div>
           </div>
         `;
       } else {
-        // Full 32-item interactive progress checklist matrix (5 cols x 2 rows — ZERO SCROLL!)
+        // Full 32-item interactive progress checklist matrix (5 cols x 2 rows)
         bodyHtml = `
-          <div class="flex-1 min-h-0 flex flex-col gap-2.5 overflow-hidden">
-            <div class="shrink-0 bg-[var(--card)] border border-[var(--border)] rounded-lg px-3.5 py-2 flex items-center justify-between gap-3">
+          <div class="flex-1 min-h-0 flex flex-col gap-3 overflow-hidden">
+            <div class="shrink-0 bg-[var(--card)] border border-[var(--border)] rounded-xl px-4 py-2.5 flex items-center justify-between gap-3">
               <div class="flex items-center gap-3 min-w-0">
-                <span class="text-xs font-semibold text-[var(--foreground)]">整體學習進度</span>
-                <span class="font-mono text-xs font-semibold text-[var(--success)]">${overall.done} / ${overall.total} (${overall.pct}%)</span>
-                <div class="w-40 h-2 rounded-full bg-[var(--secondary)] overflow-hidden hidden sm:block">
+                <span class="t-ui font-bold text-[var(--foreground)]">整體學習進度</span>
+                <span class="font-mono t-ui font-bold text-[var(--success)]">${overall.done} / ${overall.total} (${overall.pct}%)</span>
+                <div class="w-44 h-2.5 rounded-full bg-[var(--secondary)] overflow-hidden hidden sm:block">
                   <div class="h-full rounded-full transition-all" style="width: ${overall.pct}%; background-color: var(--success);"></div>
                 </div>
-                <span class="hidden lg:inline text-xs text-[var(--muted-foreground)]">點擊方塊勾選完成（自動保存於本機），點擊名稱跳轉閱讀</span>
+                <span class="hidden xl:inline t-micro text-[var(--muted-foreground)]">點擊方塊勾選（自動保存於本機），點擊主題名稱立即開始學習</span>
               </div>
-              <button id="btn-reset-progress" class="px-2.5 py-1 rounded border text-xs font-medium cursor-pointer transition-colors shrink-0 ${
+              <button id="btn-reset-progress" class="px-3 py-1 rounded-lg border t-ui font-medium cursor-pointer transition-colors shrink-0 ${
                 state.confirmResetProgress
                   ? 'tint-error border-[var(--error)] text-[var(--error)]'
                   : 'bg-[var(--background)] border-[var(--border)] text-[var(--muted-foreground)] hover:text-[var(--foreground)]'
               }">${state.confirmResetProgress ? '再次點擊確認清除進度' : '重置學習進度'}</button>
             </div>
 
-            <div class="flex-1 min-h-0 grid grid-cols-5 grid-rows-2 gap-2.5 overflow-hidden">
+            <div class="flex-1 min-h-0 grid grid-cols-5 grid-rows-2 gap-3 overflow-hidden">
               ${CHAPTERS.map(ch => {
                 const cp = getChapterProgress(ch);
                 return `
-                  <div class="bg-[var(--card)] border border-[var(--border)] rounded-lg p-2.5 flex flex-col justify-between min-h-0 overflow-hidden">
+                  <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-3 flex flex-col justify-between min-h-0 overflow-hidden">
                     <div class="min-h-0">
-                      <div class="flex items-center justify-between gap-1 pb-1.5 mb-1.5 border-b border-[var(--border)]">
-                        <button data-toggle-chapter="${ch.id}" title="切換本章全部完成" class="font-mono text-xs font-bold cursor-pointer ${cp.allDone ? 'text-[var(--success)]' : 'text-[var(--primary)]'}">${cp.allDone ? '✓ ' : ''}${ch.num}</button>
-                        <span class="text-xs font-mono text-[var(--muted-foreground)]">${cp.done}/${cp.total}</span>
+                      <div class="flex items-center justify-between gap-1 pb-1.5 mb-2 border-b border-[var(--border)]">
+                        <button data-toggle-chapter="${ch.id}" title="切換本章全部完成" class="font-mono t-ui font-bold cursor-pointer ${cp.allDone ? 'text-[var(--success)]' : 'text-[var(--primary)]'}">${cp.allDone ? '✓ ' : ''}${ch.num}</button>
+                        <span class="t-micro font-mono font-semibold text-[var(--muted-foreground)]">${cp.done}/${cp.total}</span>
                       </div>
-                      <div class="flex flex-wrap gap-1">
+                      <div class="flex flex-wrap gap-1.5">
                         ${ch.labs.map((l, idx) => {
                           const done = isLabDone(l.id);
                           return `
-                            <span class="inline-flex items-center rounded border text-xs max-w-full overflow-hidden ${
-                              done
-                                ? 'tint-success border-[var(--success)]'
-                                : 'bg-[var(--background)] border-[var(--border)]'
+                            <span class="inline-flex items-center rounded-md border t-micro max-w-full overflow-hidden ${
+                              done ? 'tint-success border-[var(--success)]' : 'bg-[var(--background)] border-[var(--border)]'
                             }">
                               <button data-toggle-lab="${l.id}" title="勾選完成" class="px-1.5 py-0.5 cursor-pointer font-bold ${done ? 'text-[var(--success)]' : 'text-[var(--muted-foreground)] hover:text-[var(--foreground)]'}">${done ? '✓' : '☐'}</button>
-                              <button data-open-lab="${ch.id}|${idx}" class="pr-1.5 py-0.5 text-[var(--foreground)] hover:underline truncate cursor-pointer">${l.label.replace(/^Lab\s+/, 'L')}</button>
+                              <button data-open-lab="${ch.id}|${idx}" class="pr-2 py-0.5 text-[var(--foreground)] hover:underline truncate cursor-pointer">${l.label.replace(/^Lab\s+/, 'L')}</button>
                             </span>
                           `;
                         }).join('')}
                       </div>
                     </div>
                     <div class="pt-1.5 mt-1 border-t border-[var(--border)] flex items-center justify-between gap-1">
-                      <span class="text-xs text-[var(--muted-foreground)] truncate">${ch.short}</span>
-                      ${stageBadgeHtml(ch.stages[0])}
+                      <span class="t-micro font-medium text-[var(--muted-foreground)] truncate">${ch.short}</span>
                     </div>
                   </div>
                 `;
@@ -2983,17 +3020,16 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
 
       return `
         <div class="h-full min-h-0 flex flex-col gap-3 overflow-hidden">
-          <div class="shrink-0 flex items-center justify-between gap-2 bg-[var(--card)] border border-[var(--border)] rounded-lg px-3 py-2">
-            <div class="flex items-center gap-1.5 flex-wrap">
+          <div class="shrink-0 flex items-center justify-between gap-2 bg-[var(--card)] border border-[var(--border)] rounded-xl px-3.5 py-2.5">
+            <div class="flex items-center gap-2 flex-wrap">
               ${tabs.map(t => `
-                <button data-ref-tab="${t.id}" class="px-2.5 py-1 rounded-md text-xs font-medium border cursor-pointer transition-colors ${
+                <button data-ref-tab="${t.id}" class="px-3 py-1.5 rounded-lg t-ui font-semibold border cursor-pointer transition-colors ${
                   state.refTab === t.id
                     ? 'bg-[var(--primary)] text-[var(--primary-foreground)] border-[var(--primary)]'
                     : 'bg-[var(--background)] text-[var(--foreground)] border-[var(--border)] hover:bg-[var(--secondary)]'
                 }">${t.label}</button>
               `).join('')}
             </div>
-            <span class="hidden lg:inline text-xs text-[var(--muted-foreground)]">所有速查模組皆以分頁切換呈現</span>
           </div>
           ${bodyHtml}
         </div>
@@ -3001,7 +3037,7 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
     }
 
     // =========================================================================
-    // 8. VIEW 5: AZ-400 EXAM QUIZ & FLIP FLASHCARD MODE (ZERO-SCROLL)
+    // 8. VIEW 5: AZ-400 EXAM QUIZ & FLIP FLASHCARD MODE (LARGE STUDY TYPE)
     // =========================================================================
     function renderQuizView() {
       const stats = getQuizStats();
@@ -3010,12 +3046,11 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
         { id: 'all', label: '全部範圍' },
         { id: 'plan_code', label: 'Plan & Code' },
         { id: 'ci_test', label: 'CI & Test' },
-        { id: 'sec_iac_pkg', label: '資安 / IaC / 套件' },
+        { id: 'sec_iac_pkg', label: '資安/IaC/套件' },
         { id: 'cd_deploy', label: 'CD & 部署' },
         { id: 'review', label: state.quizMode === 'mcq' ? '僅看錯題' : '待複習/未學' }
       ];
 
-      // Compute domain mastery bars
       const domainBars = QUIZ_DOMAINS.map(d => {
         const qs = QUIZ_QUESTIONS.filter(q => q.domain === d.id);
         const right = qs.filter(q => progress.quizAnswers[q.id] === q.answer).length;
@@ -3032,10 +3067,10 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
 
         if (list.length === 0) {
           leftPanelHtml = `
-            <div class="flex-1 min-h-0 bg-[var(--card)] border border-[var(--border)] rounded-lg p-6 flex flex-col items-center justify-center text-center gap-3">
-              <div class="text-base font-semibold text-[var(--foreground)]">太棒了！目前沒有錯題需要複習</div>
-              <p class="text-xs text-[var(--muted-foreground)]">您可以切換回「全部範圍」挑戰尚未作答的 AZ-400 考題，或切換至「翻轉記憶卡」模式加強關鍵觀念。</p>
-              <button data-quiz-filter="all" class="px-3 py-1.5 rounded-md bg-[var(--primary)] text-[var(--primary-foreground)] text-xs font-semibold cursor-pointer">檢視全部 20 道考題</button>
+            <div class="flex-1 min-h-0 bg-[var(--card)] border border-[var(--border)] rounded-xl p-8 flex flex-col items-center justify-center text-center gap-4">
+              <div class="t-title font-bold text-[var(--foreground)]">太棒了！目前沒有錯題需要複習</div>
+              <p class="t-body text-[var(--muted-foreground)]">您可以切換回「全部範圍」挑戰尚未作答的 AZ-400 考題，或切換至「翻轉記憶卡」模式加強關鍵觀念。</p>
+              <button data-quiz-filter="all" class="px-4 py-2 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] t-ui font-bold cursor-pointer">檢視全部 20 道考題</button>
             </div>
           `;
         } else {
@@ -3048,30 +3083,30 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
           const lab = ch.labs[q.labIndex] || ch.labs[0];
 
           leftPanelHtml = `
-            <div class="flex-1 min-h-0 bg-[var(--card)] border border-[var(--border)] rounded-lg p-4 flex flex-col justify-between overflow-hidden">
+            <div class="flex-1 min-h-0 bg-[var(--card)] border border-[var(--border)] rounded-xl p-5 flex flex-col justify-between overflow-hidden">
               <!-- QUESTION HEADER -->
-              <div class="flex items-center justify-between gap-2 pb-2.5 border-b border-[var(--border)] shrink-0">
+              <div class="flex items-center justify-between gap-2 pb-3 border-b border-[var(--border)] shrink-0">
                 <div class="flex items-center gap-2 flex-wrap">
-                  <span class="font-mono text-xs font-bold px-2 py-0.5 rounded bg-[var(--primary)] text-[var(--primary-foreground)]">Q ${String(state.quizIdx + 1).padStart(2, '0')} / ${String(list.length).padStart(2, '0')}</span>
+                  <span class="font-mono t-ui font-bold px-2.5 py-0.5 rounded-md bg-[var(--primary)] text-[var(--primary-foreground)]">Q ${String(state.quizIdx + 1).padStart(2, '0')} / ${String(list.length).padStart(2, '0')}</span>
                   ${stageBadgeHtml(q.stageId, true)}
-                  <span class="text-xs text-[var(--muted-foreground)]">${ch.num} · ${lab.label}</span>
+                  <span class="t-ui text-[var(--muted-foreground)]">${ch.num} · ${lab.label}</span>
                 </div>
-                <div class="flex items-center gap-1 shrink-0">
-                  <button data-step-quiz="-1" class="px-2.5 py-1 rounded border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] text-xs cursor-pointer">← 上一題</button>
-                  <button data-step-quiz="1" class="px-2.5 py-1 rounded border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] text-xs cursor-pointer">下一題 →</button>
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <button data-step-quiz="-1" class="px-3 py-1 rounded-lg border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] t-ui font-medium cursor-pointer">← 上一題</button>
+                  <button data-step-quiz="1" class="px-3 py-1 rounded-lg border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] t-ui font-medium cursor-pointer">下一題 →</button>
                 </div>
               </div>
 
-              <!-- QUESTION STEM & 4 OPTIONS -->
-              <div class="flex-1 min-h-0 flex flex-col justify-center gap-3 py-2 overflow-hidden select-text">
-                <h2 class="text-sm font-semibold leading-relaxed text-[var(--foreground)]">${escapeHtml(q.q)}</h2>
+              <!-- QUESTION STEM & 4 LARGE OPTIONS -->
+              <div class="flex-1 min-h-0 flex flex-col justify-center gap-3.5 py-2 overflow-hidden select-text">
+                <h2 class="t-lead font-bold text-[var(--foreground)]">${escapeHtml(q.q)}</h2>
                 <div class="grid grid-cols-1 gap-2">
                   ${q.options.map((opt, idx) => {
                     let cls = 'bg-[var(--background)] border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--secondary)]';
                     let tag = letters[idx];
                     if (answered) {
                       if (idx === q.answer) {
-                        cls = 'tint-success border-[var(--success)] text-[var(--foreground)] font-medium';
+                        cls = 'tint-success border-[var(--success)] text-[var(--foreground)] font-semibold';
                         tag = `${letters[idx]} ✓`;
                       } else if (idx === picked) {
                         cls = 'tint-error border-[var(--error)] text-[var(--foreground)]';
@@ -3081,9 +3116,9 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
                       }
                     }
                     return `
-                      <button data-answer-opt="${idx}" class="w-full text-left px-3 py-2.5 rounded-lg border transition-colors flex items-start gap-2.5 cursor-pointer ${cls}">
-                        <span class="font-mono text-xs font-bold px-1.5 py-0.5 rounded bg-[var(--card)] border border-[var(--border)] shrink-0">${tag}</span>
-                        <span class="text-xs leading-snug">${escapeHtml(opt)}</span>
+                      <button data-answer-opt="${idx}" class="w-full text-left px-3.5 py-2.5 rounded-xl border transition-colors flex items-start gap-3 cursor-pointer ${cls}">
+                        <span class="font-mono t-ui font-bold px-2 py-0.5 rounded-md bg-[var(--card)] border border-[var(--border)] shrink-0">${tag}</span>
+                        <span class="t-body">${escapeHtml(opt)}</span>
                       </button>
                     `;
                   }).join('')}
@@ -3091,23 +3126,23 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
               </div>
 
               <!-- EXPLANATION / HINT BAR -->
-              <div class="shrink-0 pt-2.5 border-t border-[var(--border)] select-text">
+              <div class="shrink-0 pt-3 border-t border-[var(--border)] select-text">
                 ${answered ? `
-                  <div class="p-2.5 rounded-lg border flex items-start justify-between gap-3 ${isCorrect ? 'tint-success border-[var(--success)]' : 'tint-error border-[var(--error)]'}">
+                  <div class="p-3 rounded-xl border flex items-start justify-between gap-3 ${isCorrect ? 'tint-success border-[var(--success)]' : 'tint-error border-[var(--error)]'}">
                     <div class="min-w-0">
-                      <div class="text-xs font-semibold mb-0.5 ${isCorrect ? 'text-[var(--success)]' : 'text-[var(--error)]'}">
+                      <div class="t-ui font-bold mb-0.5 ${isCorrect ? 'text-[var(--success)]' : 'text-[var(--error)]'}">
                         ${isCorrect ? '答對了！核心觀念正確' : `答錯了 — 正確答案為 ${letters[q.answer]}`}
                       </div>
-                      <p class="text-xs text-[var(--foreground)] leading-snug">${escapeHtml(q.explain)}</p>
+                      <p class="t-ui text-[var(--foreground)]">${escapeHtml(q.explain)}</p>
                     </div>
-                    <button data-open-lab="${q.chapterId}|${q.labIndex}" class="px-2.5 py-1.5 rounded-md bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--secondary)] text-xs font-medium text-[var(--foreground)] shrink-0 cursor-pointer">
+                    <button data-open-lab="${q.chapterId}|${q.labIndex}" class="px-3 py-2 rounded-lg bg-[var(--card)] border border-[var(--border)] hover:bg-[var(--secondary)] t-ui font-semibold text-[var(--foreground)] shrink-0 cursor-pointer">
                       複習該知識點 →
                     </button>
                   </div>
                 ` : `
-                  <div class="p-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] flex items-center justify-between text-xs text-[var(--muted-foreground)]">
-                    <span>請點選選項或按鍵盤 <span class="kbd-chip">A</span>–<span class="kbd-chip">D</span> 作答，作答後立即顯示 AZ-400 考點解析。</span>
-                    <button data-open-lab="${q.chapterId}|${q.labIndex}" class="text-[var(--link)] hover:underline cursor-pointer shrink-0 ml-2">先看章節提示 ↗</button>
+                  <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)] flex items-center justify-between t-ui text-[var(--muted-foreground)]">
+                    <span>請點選選項或按鍵盤 <span class="kbd-chip">A</span>–<span class="kbd-chip">D</span> 作答，立即顯示考點詳解。</span>
+                    <button data-open-lab="${q.chapterId}|${q.labIndex}" class="text-[var(--link)] font-semibold hover:underline cursor-pointer shrink-0 ml-2">查看章節提示 ↗</button>
                   </div>
                 `}
               </div>
@@ -3115,18 +3150,18 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
           `;
 
           navGridHtml = `
-            <div class="grid grid-cols-5 gap-1.5">
+            <div class="grid grid-cols-5 gap-2">
               ${list.map((item, idx) => {
                 const p = progress.quizAnswers[item.id];
                 const isCurr = idx === state.quizIdx;
                 let cls = 'bg-[var(--background)] border-[var(--border)] text-[var(--muted-foreground)]';
                 if (p !== undefined) {
                   cls = p === item.answer
-                    ? 'tint-success border-[var(--success)] text-[var(--success)] font-semibold'
-                    : 'tint-error border-[var(--error)] text-[var(--error)] font-semibold';
+                    ? 'tint-success border-[var(--success)] text-[var(--success)] font-bold'
+                    : 'tint-error border-[var(--error)] text-[var(--error)] font-bold';
                 }
                 if (isCurr) cls += ' ring-2 ring-[var(--primary)] text-[var(--foreground)] font-bold';
-                return `<button data-jump-quiz="${idx}" class="py-1.5 rounded-md border text-xs font-mono cursor-pointer transition-colors ${cls}">${idx + 1}</button>`;
+                return `<button data-jump-quiz="${idx}" class="py-2 rounded-lg border t-ui font-mono cursor-pointer transition-colors ${cls}">${idx + 1}</button>`;
               }).join('')}
             </div>
           `;
@@ -3138,75 +3173,75 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
 
         if (list.length === 0) {
           leftPanelHtml = `
-            <div class="flex-1 min-h-0 bg-[var(--card)] border border-[var(--border)] rounded-lg p-6 flex flex-col items-center justify-center text-center gap-3">
-              <div class="text-base font-semibold text-[var(--foreground)]">全部記憶卡都已標記為「已掌握」！</div>
-              <p class="text-xs text-[var(--muted-foreground)]">您可以切回「全部範圍」再次複習，或前往「模擬單選測驗」實戰檢驗。</p>
-              <button data-quiz-filter="all" class="px-3 py-1.5 rounded-md bg-[var(--primary)] text-[var(--primary-foreground)] text-xs font-semibold cursor-pointer">檢視全部 16 張記憶卡</button>
+            <div class="flex-1 min-h-0 bg-[var(--card)] border border-[var(--border)] rounded-xl p-8 flex flex-col items-center justify-center text-center gap-4">
+              <div class="t-title font-bold text-[var(--foreground)]">全部記憶卡都已標記為「已掌握」！</div>
+              <p class="t-body text-[var(--muted-foreground)]">您可以切回「全部範圍」再次複習，或前往「模擬單選測驗」實戰檢驗。</p>
+              <button data-quiz-filter="all" class="px-4 py-2 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] t-ui font-bold cursor-pointer">檢視全部 16 張記憶卡</button>
             </div>
           `;
         } else {
           const fc = list[state.fcIdx];
-          const status = progress.flashcardStatus[fc.id]; // 'mastered' | 'review' | undefined
+          const status = progress.flashcardStatus[fc.id];
           const ch = chapterMap[fc.chapterId];
           const lab = ch.labs[fc.labIndex] || ch.labs[0];
 
           leftPanelHtml = `
-            <div class="flex-1 min-h-0 bg-[var(--card)] border border-[var(--border)] rounded-lg p-4 flex flex-col justify-between overflow-hidden">
+            <div class="flex-1 min-h-0 bg-[var(--card)] border border-[var(--border)] rounded-xl p-5 flex flex-col justify-between overflow-hidden">
               <!-- CARD HEADER -->
-              <div class="flex items-center justify-between gap-2 pb-2.5 border-b border-[var(--border)] shrink-0">
+              <div class="flex items-center justify-between gap-2 pb-3 border-b border-[var(--border)] shrink-0">
                 <div class="flex items-center gap-2 flex-wrap">
-                  <span class="font-mono text-xs font-bold px-2 py-0.5 rounded bg-[var(--primary)] text-[var(--primary-foreground)]">Card ${String(state.fcIdx + 1).padStart(2, '0')} / ${String(list.length).padStart(2, '0')}</span>
+                  <span class="font-mono t-ui font-bold px-2.5 py-0.5 rounded-md bg-[var(--primary)] text-[var(--primary-foreground)]">Card ${String(state.fcIdx + 1).padStart(2, '0')} / ${String(list.length).padStart(2, '0')}</span>
                   ${stageBadgeHtml(fc.stageId, true)}
-                  <span class="text-xs text-[var(--muted-foreground)]">${ch.num} · ${lab.label}</span>
+                  <span class="t-ui text-[var(--muted-foreground)]">${ch.num} · ${lab.label}</span>
                   ${status === 'mastered'
-                    ? '<span class="text-xs px-2 py-0.5 rounded tint-success border border-[var(--success)] text-[var(--success)] font-medium">✓ 已掌握</span>'
+                    ? '<span class="t-micro px-2.5 py-0.5 rounded-md tint-success border border-[var(--success)] text-[var(--success)] font-bold">✓ 已掌握</span>'
                     : status === 'review'
-                      ? '<span class="text-xs px-2 py-0.5 rounded tint-warning border border-[var(--warning)] text-[var(--foreground)] font-medium">待複習</span>'
-                      : '<span class="text-xs px-2 py-0.5 rounded bg-[var(--secondary)] text-[var(--muted-foreground)]">未標記</span>'
+                      ? '<span class="t-micro px-2.5 py-0.5 rounded-md tint-warning border border-[var(--warning)] text-[var(--foreground)] font-bold">待複習</span>'
+                      : '<span class="t-micro px-2.5 py-0.5 rounded-md bg-[var(--secondary)] text-[var(--muted-foreground)]">未標記</span>'
                   }
                 </div>
-                <div class="flex items-center gap-1 shrink-0">
-                  <button data-step-fc="-1" class="px-2.5 py-1 rounded border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] text-xs cursor-pointer">← 上一張</button>
-                  <button data-step-fc="1" class="px-2.5 py-1 rounded border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] text-xs cursor-pointer">下一張 →</button>
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <button data-step-fc="-1" class="px-3 py-1 rounded-lg border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] t-ui font-medium cursor-pointer">← 上一張</button>
+                  <button data-step-fc="1" class="px-3 py-1 rounded-lg border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] t-ui font-medium cursor-pointer">下一張 →</button>
                 </div>
               </div>
 
               <!-- INTERACTIVE FLIPPABLE CARD SURFACE -->
-              <div id="flashcard-surface" role="button" tabindex="0" class="flex-1 min-h-0 my-3 rounded-xl border-2 p-6 flex flex-col items-center justify-center text-center cursor-pointer transition-colors select-text ${
+              <div id="flashcard-surface" role="button" tabindex="0" class="flex-1 min-h-0 my-4 rounded-2xl border-2 p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-colors select-text ${
                 state.fcFlipped
                   ? 'bg-[var(--sidebar)] border-[var(--primary)]'
                   : 'bg-[var(--background)] border-[var(--border)] hover:border-[var(--primary)]'
               }">
-                <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full mb-4 ${
+                <span class="t-ui font-semibold px-3.5 py-1 rounded-full mb-5 ${
                   state.fcFlipped
                     ? 'bg-[var(--primary)] text-[var(--primary-foreground)]'
                     : 'bg-[var(--secondary)] text-[var(--secondary-foreground)]'
                 }">${state.fcFlipped ? '標準解答與實戰重點（背面）' : 'AZ-400 主動回憶題（正面）'}</span>
 
                 ${state.fcFlipped ? `
-                  <p class="text-sm leading-relaxed text-[var(--foreground)] max-w-2xl mb-4">${escapeHtml(fc.back)}</p>
-                  <button data-open-lab="${fc.chapterId}|${fc.labIndex}" class="px-3 py-1 rounded-md border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--secondary)] text-xs font-medium text-[var(--foreground)] cursor-pointer">
+                  <p class="t-lead text-[var(--foreground)] max-w-2xl mb-5">${escapeHtml(fc.back)}</p>
+                  <button data-open-lab="${fc.chapterId}|${fc.labIndex}" class="px-4 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--secondary)] t-ui font-semibold text-[var(--foreground)] cursor-pointer">
                     深入查看 ${ch.num} ${lab.label} →
                   </button>
                 ` : `
-                  <h2 class="text-base font-semibold leading-relaxed text-[var(--foreground)] max-w-xl mb-4">${escapeHtml(fc.front)}</h2>
-                  <p class="text-xs text-[var(--muted-foreground)]">點擊卡片中央或按 <span class="kbd-chip">Space</span> 翻面核對答案</p>
+                  <h2 class="t-hero font-bold text-[var(--foreground)] max-w-2xl mb-5">${escapeHtml(fc.front)}</h2>
+                  <p class="t-ui text-[var(--muted-foreground)]">點擊卡片中央或按 <span class="kbd-chip">Space</span> 翻面核對答案</p>
                 `}
               </div>
 
               <!-- FLASHCARD ACTION BAR -->
-              <div class="shrink-0 flex items-center justify-between gap-2 pt-2 border-t border-[var(--border)]">
-                <button data-mark-fc="review" class="flex-1 py-2 px-3 rounded-md border text-xs font-medium cursor-pointer transition-colors ${
+              <div class="shrink-0 flex items-center justify-between gap-2.5 pt-2.5 border-t border-[var(--border)]">
+                <button data-mark-fc="review" class="flex-1 py-2.5 px-3 rounded-lg border t-ui font-semibold cursor-pointer transition-colors ${
                   status === 'review'
-                    ? 'tint-warning border-[var(--warning)] text-[var(--foreground)] font-semibold'
+                    ? 'tint-warning border-[var(--warning)] text-[var(--foreground)]'
                     : 'bg-[var(--background)] border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--secondary)]'
                 }">↺ 標記待複習 (R)</button>
-                <button id="btn-flip-fc" class="px-4 py-2 rounded-md border border-[var(--border)] bg-[var(--secondary)] text-[var(--foreground)] text-xs font-semibold cursor-pointer">
+                <button id="btn-flip-fc" class="px-5 py-2.5 rounded-lg border border-[var(--border)] bg-[var(--secondary)] text-[var(--foreground)] t-ui font-bold cursor-pointer">
                   ${state.fcFlipped ? '翻回題目 (Space)' : '翻看答案 (Space)'}
                 </button>
-                <button data-mark-fc="mastered" class="flex-1 py-2 px-3 rounded-md border text-xs font-medium cursor-pointer transition-colors ${
+                <button data-mark-fc="mastered" class="flex-1 py-2.5 px-3 rounded-lg border t-ui font-semibold cursor-pointer transition-colors ${
                   status === 'mastered'
-                    ? 'tint-success border-[var(--success)] text-[var(--success)] font-semibold'
+                    ? 'tint-success border-[var(--success)] text-[var(--success)]'
                     : 'bg-[var(--background)] border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--secondary)]'
                 }">✓ 已完全掌握 (M)</button>
               </div>
@@ -3214,15 +3249,15 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
           `;
 
           navGridHtml = `
-            <div class="grid grid-cols-4 gap-1.5">
+            <div class="grid grid-cols-4 gap-2">
               ${list.map((item, idx) => {
                 const st = progress.flashcardStatus[item.id];
                 const isCurr = idx === state.fcIdx;
                 let cls = 'bg-[var(--background)] border-[var(--border)] text-[var(--muted-foreground)]';
-                if (st === 'mastered') cls = 'tint-success border-[var(--success)] text-[var(--success)] font-semibold';
-                else if (st === 'review') cls = 'tint-warning border-[var(--warning)] text-[var(--foreground)] font-semibold';
+                if (st === 'mastered') cls = 'tint-success border-[var(--success)] text-[var(--success)] font-bold';
+                else if (st === 'review') cls = 'tint-warning border-[var(--warning)] text-[var(--foreground)] font-bold';
                 if (isCurr) cls += ' ring-2 ring-[var(--primary)] text-[var(--foreground)] font-bold';
-                return `<button data-jump-fc="${idx}" class="py-1.5 rounded-md border text-xs font-mono cursor-pointer transition-colors ${cls}">C${idx + 1}</button>`;
+                return `<button data-jump-fc="${idx}" class="py-2 rounded-lg border t-ui font-mono cursor-pointer transition-colors ${cls}">C${idx + 1}</button>`;
               }).join('')}
             </div>
           `;
@@ -3232,68 +3267,66 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
       return `
         <div class="h-full min-h-0 flex flex-col gap-3 overflow-hidden">
           <!-- TOP CONTROL BAR -->
-          <div class="shrink-0 bg-[var(--card)] border border-[var(--border)] rounded-lg px-3 py-2 flex items-center justify-between gap-2 flex-wrap">
+          <div class="shrink-0 bg-[var(--card)] border border-[var(--border)] rounded-xl px-3.5 py-2.5 flex items-center justify-between gap-2 flex-wrap">
             <div class="flex items-center gap-2 flex-wrap">
-              <!-- MODE SWITCHER -->
-              <div class="flex items-center gap-1 bg-[var(--background)] p-0.5 rounded-md border border-[var(--border)]">
-                <button data-quiz-mode="mcq" class="px-2.5 py-1 rounded text-xs font-semibold cursor-pointer transition-colors ${
+              <div class="flex items-center gap-1 bg-[var(--background)] p-1 rounded-lg border border-[var(--border)]">
+                <button data-quiz-mode="mcq" class="px-3 py-1 rounded-md t-ui font-bold cursor-pointer transition-colors ${
                   state.quizMode === 'mcq' ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'text-[var(--muted-foreground)] hover:text-[var(--foreground)]'
                 }">模擬單選測驗 (${QUIZ_QUESTIONS.length})</button>
-                <button data-quiz-mode="flashcard" class="px-2.5 py-1 rounded text-xs font-semibold cursor-pointer transition-colors ${
+                <button data-quiz-mode="flashcard" class="px-3 py-1 rounded-md t-ui font-bold cursor-pointer transition-colors ${
                   state.quizMode === 'flashcard' ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'text-[var(--muted-foreground)] hover:text-[var(--foreground)]'
                 }">翻轉記憶卡 (${FLASHCARDS.length})</button>
               </div>
-              <!-- DOMAIN FILTER PILLS -->
-              <div class="flex items-center gap-1 flex-wrap">
+              <div class="flex items-center gap-1.5 flex-wrap">
                 ${filterPills.map(f => `
-                  <button data-quiz-filter="${f.id}" class="px-2 py-1 rounded-md border text-xs font-medium cursor-pointer transition-colors ${
+                  <button data-quiz-filter="${f.id}" class="px-2.5 py-1 rounded-lg border t-ui font-medium cursor-pointer transition-colors ${
                     state.quizFilter === f.id
-                      ? 'bg-[var(--secondary)] border-[var(--primary)] text-[var(--foreground)] font-semibold'
+                      ? 'bg-[var(--secondary)] border-[var(--primary)] text-[var(--foreground)] font-bold'
                       : 'bg-[var(--background)] border-[var(--border)] text-[var(--muted-foreground)] hover:text-[var(--foreground)]'
                   }">${f.label}</button>
                 `).join('')}
               </div>
             </div>
 
-            <button id="btn-reset-quiz" class="px-2.5 py-1 rounded border text-xs font-medium cursor-pointer transition-colors shrink-0 ${
+            <button id="btn-reset-quiz" class="px-3 py-1 rounded-lg border t-ui font-medium cursor-pointer transition-colors shrink-0 ${
               state.confirmResetQuiz
                 ? 'tint-error border-[var(--error)] text-[var(--error)]'
                 : 'bg-[var(--background)] border-[var(--border)] text-[var(--muted-foreground)] hover:text-[var(--foreground)]'
-            }">${state.confirmResetQuiz ? '再次點擊確認重置測驗' : '重置測驗紀錄'}</button>
+            }">${state.confirmResetQuiz ? '再次點擊確認重置' : '重置測驗'}</button>
           </div>
 
           <!-- MAIN SPLIT: QUESTION/FLASHCARD STAGE (8 COLS) + SCOREBOARD & NAVIGATOR (4 COLS) -->
-          <div class="flex-1 min-h-0 grid grid-cols-12 gap-3 overflow-hidden">
+          <div class="flex-1 min-h-0 grid grid-cols-12 gap-3.5 overflow-hidden">
             <div class="col-span-8 flex flex-col min-h-0 overflow-hidden">
               ${leftPanelHtml}
             </div>
 
             <div class="col-span-4 flex flex-col gap-3 min-h-0 overflow-hidden">
               <!-- READINESS & DOMAIN MASTERY -->
-              <div class="bg-[var(--card)] border border-[var(--border)] rounded-lg p-3.5 shrink-0">
-                <div class="text-xs font-semibold text-[var(--foreground)] mb-2.5">AZ-400 備試儀表板</div>
+              <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shrink-0">
+                <div class="t-ui font-bold text-[var(--foreground)] mb-3">AZ-400 備試儀表板</div>
                 <div class="grid grid-cols-3 gap-2 mb-3">
-                  <div class="p-2 rounded-md bg-[var(--background)] border border-[var(--border)] text-center">
-                    <div class="font-mono text-sm font-bold text-[var(--foreground)]">${stats.accuracy}%</div>
-                    <div class="text-xs text-[var(--muted-foreground)]">單選答對率</div>
+                  <div class="p-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-center">
+                    <div class="font-mono t-lead font-bold text-[var(--foreground)]">${stats.accuracy}%</div>
+                    <div class="t-micro text-[var(--muted-foreground)]">答對率</div>
                   </div>
-                  <div class="p-2 rounded-md bg-[var(--background)] border border-[var(--border)] text-center">
-                    <div class="font-mono text-sm font-bold text-[var(--success)]">${stats.fcMastered}/${stats.totalFc}</div>
-                    <div class="text-xs text-[var(--muted-foreground)]">記憶卡掌握</div>
+                  <div class="p-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-center">
+                    <div class="font-mono t-lead font-bold text-[var(--success)]">${stats.fcMastered}/${stats.totalFc}</div>
+                    <div class="t-micro text-[var(--muted-foreground)]">記憶卡</div>
                   </div>
-                  <div class="p-2 rounded-md bg-[var(--background)] border border-[var(--border)] text-center">
-                    <div class="font-mono text-sm font-bold text-[var(--primary)]">${overall.done}/${overall.total}</div>
-                    <div class="text-xs text-[var(--muted-foreground)]">實作完成度</div>
+                  <div class="p-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-center">
+                    <div class="font-mono t-lead font-bold text-[var(--primary)]">${overall.done}/${overall.total}</div>
+                    <div class="t-micro text-[var(--muted-foreground)]">實作進度</div>
                   </div>
                 </div>
-                <div class="space-y-1.5">
+                <div class="space-y-2">
                   ${domainBars.map(d => `
                     <div>
-                      <div class="flex items-center justify-between text-xs mb-0.5">
+                      <div class="flex items-center justify-between t-micro mb-1">
                         <span class="text-[var(--muted-foreground)]">${d.label}</span>
-                        <span class="font-mono text-[var(--foreground)]">${d.right}/${d.total}</span>
+                        <span class="font-mono font-semibold text-[var(--foreground)]">${d.right}/${d.total}</span>
                       </div>
-                      <div class="w-full h-1.5 rounded-full bg-[var(--secondary)] overflow-hidden">
+                      <div class="w-full h-2 rounded-full bg-[var(--secondary)] overflow-hidden">
                         <div class="h-full rounded-full transition-all" style="width: ${d.pct}%; background-color: var(${d.colorVar});"></div>
                       </div>
                     </div>
@@ -3302,15 +3335,15 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
               </div>
 
               <!-- COMPACT QUESTION / CARD NAVIGATOR -->
-              <div class="flex-1 min-h-0 bg-[var(--card)] border border-[var(--border)] rounded-lg p-3.5 flex flex-col justify-between overflow-hidden">
+              <div class="flex-1 min-h-0 bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 flex flex-col justify-between overflow-hidden">
                 <div>
-                  <div class="flex items-center justify-between mb-2">
-                    <span class="text-xs font-semibold text-[var(--foreground)]">${state.quizMode === 'mcq' ? '題號快速跳轉' : '記憶卡快速跳轉'}</span>
-                    <span class="text-xs font-mono text-[var(--muted-foreground)]">${state.quizMode === 'mcq' ? `已作答 ${stats.answered}/${stats.totalQ}` : `待複習 ${stats.fcReview}`}</span>
+                  <div class="flex items-center justify-between mb-2.5">
+                    <span class="t-ui font-bold text-[var(--foreground)]">${state.quizMode === 'mcq' ? '題號快速跳轉' : '記憶卡快速跳轉'}</span>
+                    <span class="t-micro font-mono text-[var(--muted-foreground)]">${state.quizMode === 'mcq' ? `已作答 ${stats.answered}/${stats.totalQ}` : `待複習 ${stats.fcReview}`}</span>
                   </div>
-                  ${navGridHtml || '<div class="text-xs text-[var(--muted-foreground)]">目前篩選無項目</div>'}
+                  ${navGridHtml || '<div class="t-ui text-[var(--muted-foreground)]">目前篩選無項目</div>'}
                 </div>
-                <div class="pt-2 border-t border-[var(--border)] flex items-center justify-between text-xs text-[var(--muted-foreground)]">
+                <div class="pt-2.5 border-t border-[var(--border)] flex items-center justify-between t-micro text-[var(--muted-foreground)]">
                   <span><span class="text-[var(--success)] font-bold">■</span> 答對/掌握</span>
                   <span><span class="text-[var(--error)] font-bold">■</span> 錯題</span>
                   <span><span class="text-[var(--warning)] font-bold">■</span> 待複習</span>
@@ -3353,12 +3386,12 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
       container.innerHTML = top6.map(item => {
         const done = isLabDone(item.labId);
         return `
-          <button data-open-lab="${item.chapterId}|${item.labIndex}" class="text-left p-2.5 rounded-lg border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] cursor-pointer transition-colors">
+          <button data-open-lab="${item.chapterId}|${item.labIndex}" class="text-left p-3 rounded-lg border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] cursor-pointer transition-colors">
             <div class="flex items-center justify-between gap-1 mb-1">
-              <span class="font-mono text-xs font-semibold ${done ? 'text-[var(--success)]' : 'text-[var(--primary)]'}">${done ? '✓ ' : ''}${item.chapterNum} · ${item.label}</span>
-              <div class="flex gap-1">${item.stages.slice(0, 2).map(s => stageBadgeHtml(s)).join('')}</div>
+              <span class="font-mono t-ui font-bold ${done ? 'text-[var(--success)]' : 'text-[var(--primary)]'}">${done ? '✓ ' : ''}${item.chapterNum} · ${item.label}</span>
+              <div class="flex gap-1">${item.stages.slice(0, 1).map(s => stageBadgeHtml(s)).join('')}</div>
             </div>
-            <p class="text-xs text-[var(--muted-foreground)] truncate">${escapeHtml(item.points[0])}</p>
+            <p class="t-micro text-[var(--muted-foreground)] truncate">${escapeHtml(item.points[0])}</p>
           </button>
         `;
       }).join('');
@@ -3387,7 +3420,7 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
 
       document.querySelectorAll('.nav-btn').forEach(btn => {
         const active = btn.getAttribute('data-view') === state.view;
-        btn.className = `nav-btn px-2 py-1 rounded-md text-xs font-medium transition-colors flex items-center gap-1 cursor-pointer ${
+        btn.className = `nav-btn px-3 py-1.5 rounded-md t-ui font-semibold transition-colors flex items-center gap-1.5 cursor-pointer ${
           active
             ? 'bg-[var(--primary)] text-[var(--primary-foreground)]'
             : 'text-[var(--muted-foreground)] hover:text-[var(--foreground)] hover:bg-[var(--secondary)]'
@@ -3432,7 +3465,6 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
     function bindWorkspaceEvents() {
       const ws = document.getElementById('workspace');
 
-      // Progress toggle buttons (stop propagation so parent card doesn't navigate)
       ws.querySelectorAll('[data-toggle-lab]').forEach(el => {
         el.addEventListener('click', (e) => {
           e.stopPropagation();
@@ -3470,6 +3502,13 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
         });
       });
 
+      ws.querySelectorAll('[data-stage-info-tab]').forEach(el => {
+        el.addEventListener('click', () => {
+          state.stageInfoTab = el.getAttribute('data-stage-info-tab');
+          render();
+        });
+      });
+
       ws.querySelectorAll('[data-jump-stage]').forEach(el => {
         el.addEventListener('click', (e) => {
           e.stopPropagation();
@@ -3481,7 +3520,7 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
         el.addEventListener('click', () => {
           const delta = Number(el.getAttribute('data-stage-page'));
           const stageLabs = ALL_LABS.filter(item => item.stages.includes(state.selectedStageId));
-          const totalPages = Math.max(1, Math.ceil(stageLabs.length / 4));
+          const totalPages = Math.max(1, Math.ceil(stageLabs.length / 2));
           state.stagePage = (state.stagePage + delta + totalPages) % totalPages;
           render();
         });
@@ -3497,9 +3536,11 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
 
       ws.querySelectorAll('[data-select-chapter]').forEach(el => {
         el.addEventListener('click', () => {
-          state.selectedChapterId = el.getAttribute('data-select-chapter');
+          const cid = el.getAttribute('data-select-chapter');
+          state.selectedChapterId = cid;
           state.selectedLabIndex = 0;
           state.labDetailTab = 'points';
+          state.chapterDepTab = chapterMap[cid].upstream.length > 0 ? 'upstream' : 'downstream';
           render();
         });
       });
@@ -3527,6 +3568,13 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
         });
       });
 
+      ws.querySelectorAll('[data-ch-dep-tab]').forEach(el => {
+        el.addEventListener('click', () => {
+          state.chapterDepTab = el.getAttribute('data-ch-dep-tab');
+          render();
+        });
+      });
+
       const copyLabBtn = document.getElementById('btn-copy-lab-code');
       if (copyLabBtn) {
         copyLabBtn.addEventListener('click', () => {
@@ -3538,7 +3586,16 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
 
       ws.querySelectorAll('[data-dag-node]').forEach(el => {
         el.addEventListener('click', () => {
-          state.dagSelectedId = el.getAttribute('data-dag-node');
+          const nid = el.getAttribute('data-dag-node');
+          state.dagSelectedId = nid;
+          state.dagDepTab = chapterMap[nid].upstream.length > 0 ? 'upstream' : 'downstream';
+          render();
+        });
+      });
+
+      ws.querySelectorAll('[data-dag-dep-tab]').forEach(el => {
+        el.addEventListener('click', () => {
+          state.dagDepTab = el.getAttribute('data-dag-dep-tab');
           render();
         });
       });
@@ -3568,6 +3625,13 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
       ws.querySelectorAll('[data-yaml-idx]').forEach(el => {
         el.addEventListener('click', () => {
           state.yamlIdx = Number(el.getAttribute('data-yaml-idx'));
+          render();
+        });
+      });
+
+      ws.querySelectorAll('[data-sec-idx]').forEach(el => {
+        el.addEventListener('click', () => {
+          state.secLayerIdx = Number(el.getAttribute('data-sec-idx'));
           render();
         });
       });
@@ -3686,13 +3750,8 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
           progress.flashcardStatus[fc.id] = mark;
           state.confirmResetQuiz = false;
           saveProgress();
-          // Auto-advance smoothly to next card if still in list
           const nextList = getFilteredFlashcards();
-          if (nextList.length > 1) {
-            state.fcIdx = (state.fcIdx + 1) % nextList.length;
-          } else {
-            state.fcIdx = 0;
-          }
+          state.fcIdx = nextList.length > 1 ? (state.fcIdx + 1) % nextList.length : 0;
           state.fcFlipped = false;
           render();
         });
@@ -3726,6 +3785,11 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
         state.confirmResetQuiz = false;
         render();
       });
+    });
+
+    document.getElementById('btn-font-size').addEventListener('click', () => {
+      const next = FONT_ORDER[(FONT_ORDER.indexOf(state.fontSize) + 1) % FONT_ORDER.length];
+      applyFontSize(next);
     });
 
     document.getElementById('btn-header-progress').addEventListener('click', () => {
@@ -3810,6 +3874,9 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
         } else if (state.view === 'reference' && state.refTab === 'yaml') {
           state.yamlIdx = (state.yamlIdx + delta + YAML_ANATOMY.length) % YAML_ANATOMY.length;
           render();
+        } else if (state.view === 'reference' && state.refTab === 'sec') {
+          state.secLayerIdx = (state.secLayerIdx + delta + DEVSECOPS_LAYERS.length) % DEVSECOPS_LAYERS.length;
+          render();
         } else if (state.view === 'quiz') {
           if (state.quizMode === 'mcq') {
             const list = getFilteredQuestions();
@@ -3830,13 +3897,17 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
         const delta = e.key === 'ArrowDown' ? 1 : -1;
         if (state.view === 'chapters') {
           const idx = CHAPTERS.findIndex(c => c.id === state.selectedChapterId);
-          state.selectedChapterId = CHAPTERS[(idx + delta + CHAPTERS.length) % CHAPTERS.length].id;
+          const nextCh = CHAPTERS[(idx + delta + CHAPTERS.length) % CHAPTERS.length];
+          state.selectedChapterId = nextCh.id;
           state.selectedLabIndex = 0;
           state.labDetailTab = 'points';
+          state.chapterDepTab = nextCh.upstream.length > 0 ? 'upstream' : 'downstream';
           render();
         } else if (state.view === 'dag') {
           const idx = CHAPTERS.findIndex(c => c.id === state.dagSelectedId);
-          state.dagSelectedId = CHAPTERS[(idx + delta + CHAPTERS.length) % CHAPTERS.length].id;
+          const nextCh = CHAPTERS[(idx + delta + CHAPTERS.length) % CHAPTERS.length];
+          state.dagSelectedId = nextCh.id;
+          state.dagDepTab = nextCh.upstream.length > 0 ? 'upstream' : 'downstream';
           render();
         }
       }
