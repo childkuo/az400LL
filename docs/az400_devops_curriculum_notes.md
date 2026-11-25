@@ -1,7 +1,7 @@
 # AZ-400 Azure DevOps 全生命週期知識體系整理
 
 > [!NOTE]
-> 本文整理自課程講義 [AZ-400 DevOps 實戰筆記 (HackMD)](https://hackmd.io/@twdeveloper/ByykzFuAGx#CDContinuous-Delivery)，已去除課堂臨時測試帳密與金鑰，重新結構化為 **10 大章節、28 項實作主題**，並標註每一項知識點的 **DevOps 生命週期階段** 與 **上下游相依性**。
+> 本文整理自課程講義 [AZ-400 DevOps 實戰筆記 (HackMD)](https://hackmd.io/@twdeveloper/ByykzFuAGx#CDContinuous-Delivery)，已去除課堂臨時測試帳密與金鑰，重新結構化為 **11 大章節、35 項實作主題**，並標註每一項知識點的 **DevOps 生命週期階段** 與 **上下游相依性**。
 
 ---
 
@@ -18,6 +18,7 @@ flowchart LR
     CH07["Ch 07 相依套件管理\n(Code / Build / Release)"]
     CH06["Ch 06 資安機密與動態組態\n(DevSecOps / Operate)"]
     CH08["Ch 08 IaC: ARM & Bicep\n(Code / Release / Deploy)"]
+    CH10["Ch 10 自動化測試與覆蓋率\n(Build / Test / Deploy)"]
     CH09["Ch 09 持續交付與部署策略\n(Release / Deploy / Operate)"]
 
     CH00 --> CH04
@@ -32,6 +33,10 @@ flowchart LR
     CH05 --> CH07
     CH02 --> CH08
     CH05 --> CH06
+    CH03 --> CH10
+    CH05 --> CH10
+    CH10 --> CH09
+    CH10 -.->|"測試與覆蓋率指標回饋"| CH04
     CH03 --> CH09
     CH04 --> CH09
     CH05 --> CH09
@@ -48,13 +53,14 @@ flowchart LR
 | **Ch 00** | 課前環境建置與平台初始化 | `Foundation` (前置準備) | 無（系統起點） | 所有 Azure DevOps 與 Azure 雲端實作 |
 | **Ch 01** | 認識 Azure DevOps 與 CI/CD 入門 | `Build` → `Deploy` | Ch 00 | Ch 03 進階 CI、Ch 05 YAML、Ch 09 CD |
 | **Ch 02** | Azure Repos 與 Git 工作流 | `Code` (連動 `Plan`) | Ch 00、Ch 04 (Work Items) | Ch 03 PR-CI、Ch 05 YAML 版控、Ch 08 IaC 版控 |
-| **Ch 03** | 持續整合與品質安全左移 | `Code` → `Build` → `Test` (`DevSecOps`) | Ch 01、Ch 02 | 產出可信 Artifact 供 Ch 09 CD 部署 |
+| **Ch 03** | 持續整合與品質安全左移 | `Code` → `Build` → `Test` (`DevSecOps`) | Ch 01、Ch 02 | 產出可信 Artifact 供 Ch 09 CD、延伸 Ch 10 自動化測試 |
 | **Ch 04** | 敏捷開發、需求追蹤與儀表板 | `Plan` ↔ `Monitor` | Ch 00 | Ch 02 分支關聯 Task、Ch 09 Lab 23 Release Gate |
-| **Ch 05** | Build Agent 與 Pipeline-as-Code | `Build` / `Test` / `Deploy` (執行層) | Ch 01、Ch 02 | Ch 09 Lab 25 Multi-Stage YAML、內網自託管建置 |
+| **Ch 05** | Build Agent 與 Pipeline-as-Code | `Build` / `Test` / `Deploy` (執行層) | Ch 01、Ch 02 | Ch 09 Multi-Stage YAML、Ch 10 Playwright 管線環境 |
 | **Ch 06** | 資安、機密管理與動態組態 | `Plan` → `Code` → `Deploy` → `Operate` | Ch 01/05、Ch 02 | 無密鑰部署、部署與業務發布解耦 (Feature Flags) |
 | **Ch 07** | 相依套件管理與私有套件庫 | `Code` → `Build` → `Release` | Ch 01/05、Ch 02 | 元件解耦與版本治理、銜接 SCA 漏洞掃描 |
 | **Ch 08** | 基礎設施即程式碼 (ARM / Bicep) | `Code` → `Release` / `Deploy` (`IaC`) | Ch 00、Ch 02 | 自動佈建一致的 Dev/QA/Prod 環境供 Ch 09 部署 |
-| **Ch 09** | 持續交付與多元部署策略 (CD) | `Release` → `Deploy` → `Operate` | Ch 03、04、05、06、07、08 | 零停機交付、治理閘門與監控回饋至 Ch 04 |
+| **Ch 09** | 持續交付與多元部署策略 (CD) | `Release` → `Deploy` → `Operate` | Ch 03–08、Ch 10 | 零停機交付、治理閘門與監控回饋至 Ch 04 |
+| **Ch 10** | 自動化測試與覆蓋率治理 | `Build` → `Test` → `Deploy` | Ch 01、Ch 03、Ch 05 | Playwright E2E UI 回歸與 Cobertura 覆蓋率可視化 |
 
 ---
 
@@ -146,8 +152,8 @@ flowchart LR
 - **Lab 15｜Azure Key Vault + Variable Groups**：
   - 建立 Key Vault 並配置 IAM / Access Policy 與 Secret，於 ADO 建立連結 Key Vault 的 **Variable Group**，於管線動態注入機密並自動遮蔽日誌輸出。
 - **Lab (無金鑰驗證)｜DefaultAzureCredential + RBAC + Managed Identity**：
-  - 存取 MS Foundry / Azure OpenAI (LLM API) 時徹底淘汰 API Key：本機開發以 `az login` 認證，部署至 Azure Web App 後啟用 **Managed Identity + RBAC**，程式碼維持一致的 `DefaultAzureCredential`。
-- **Lab 16｜Azure App Configuration**：
+  - 存取 MS Foundry / Azure OpenAI (LLM API) 時徹底淘汰 API Key：本機開發以 `az login` 認證，部署至 Azure Web App 後啟用 **Managed Identity + RBAC**，程式碼維持一致的 `DefaultAzureCredential`（課程參考影片：`https://www.youtube.com/watch?v=tSa3wTcX2sY`）。
+- **Lab 16｜Azure App Configuration**（使用 Go Deploy AZ-400 Lab 11 環境）：
   - 集中化管理 Key/Value 組態（如 `Page:SubTitle`），使設定與程式碼解耦。
 - **Lab 17｜Feature Toggle (功能旗標)**：
   - 透過 App Configuration 動態切換 `toggle01`，實現 **Deployment (部署上線) 與 Release (功能開放) 分離**，並可調整 `CacheExpirationInterval` 控制快取更新週期。
@@ -176,10 +182,26 @@ flowchart LR
 
 ### Ch 09｜持續交付與多元部署策略 (CD: Continuous Delivery)
 - **DevOps 階段**：`Release` → `Deploy` → `Operate`（並回饋至 `Monitor` → `Plan`）
-- **相依性**：彙整所有前置能力——接收 Ch 03/05 的 CI Artifact、Ch 04 的 Shared Query、Ch 06 的 Key Vault/Feature Flags、Ch 08 的多環境基礎設施。
+- **相依性**：彙整所有前置能力——接收 Ch 03/05 的 CI Artifact、Ch 04 的 Shared Query、Ch 06 的 Key Vault/Feature Flags、Ch 08 的多環境基礎設施與 Ch 10 的自動化測試驗證。
 - **Lab 21｜Classic Release Pipeline (多環境遞進)**：串接 CI 成品，建立 `Dev → QA → Prod` 連續自動部署流程。
 - **Lab 22｜Pre-Deployment Approvals**：於關鍵環境前插入人工簽核機制，落實發布治理。
 - **Lab 23｜Release Gates (自動化閘門)**：串接 Azure Boards Shared Query（並配置查詢權限），設定 `Active Bugs < 5` 等自動化檢核條件取代人工等待。
 - **Lab 24｜Blue-Green 藍綠部署 (Deployment Slots)**：先部署至 Staging Slot 驗證，簽核後執行 **Swap Slot** 瞬間切換至 Production，達成零停機部署與秒級回滾。
-- **Lab 25｜Multi-Stage YAML Pipeline**：單一 YAML 完整定義 Build Stage 與 Deploy Stage（透過 `dependsOn: Build` 與 `environment: 'production'` 銜接 Approvals/Gates），落實完整 CI/CD-as-Code。
+- **Lab 25｜Multi-Stage YAML Pipeline**：建立 Azure Web App 並在 ADO Project 的 Service Connections 建立 ARM 連線，以單一 YAML 完整定義 Build Stage 與 Deploy Stage（透過 `dependsOn: Build` 與 `environment: 'production'` 銜接 Approvals/Gates），落實完整 CI/CD-as-Code。
 - **Lab 26｜Deployment Groups (VM / IIS 叢集)**：於多台 Azure VM 安裝 IIS 與 Agent 註冊腳本，透過 Deployment Group 集中管理並滾動部署傳統主機叢集。
+
+---
+
+### Ch 10｜自動化測試與覆蓋率治理 (Playwright E2E & Code Coverage)
+- **DevOps 階段**：`Build` → `Test` → `Deploy`（並回饋品質指標至 `Monitor` → `Plan`）
+- **相依性**：依賴 Ch 01 Pipeline 基礎、Ch 03 CI 品質防線與 Ch 05 YAML / Agent 執行環境；為 Ch 09 CD 上線前後提供可重複的 E2E UI 驗證與覆蓋率把關。
+- **Lab 27-1｜Playwright 本機錄製與自動化 UI 測試**：
+  - 全域安裝 `dotnet tool install --global Microsoft.Playwright.CLI`，建立 MSTest 專案（`dotnet new mstest`）、安裝 `Microsoft.Playwright` 套件、執行 `dotnet build` 與 `playwright install` 下載瀏覽器核心。
+  - 使用 **`playwright codegen`** 互動式錄製目標網站（如 `https://td-testplan.azurewebsites.net/`）自動產出 C# UI 測試腳本（參考 `isdaviddong/PlaywrightAutoUITest`），並以 `dotnet test` 執行驗證。
+- **Lab 27-2｜Playwright Auto UI Test 整合至 Azure Pipelines**：
+  - 匯入 `PlaywrightAutoUITest.git`，於 `windows-latest` Agent 依序設定 `UseDotNet@2`（SDK `5.0.408`）、`DotNetCoreCLI@2`（`restore` 與 `build`）。
+  - **關鍵必設步驟**：新增兩道 `PowerShell@2` Task，分別執行 `dotnet tool install --global Microsoft.Playwright.CLI` 與 `playwright install`（於全新雲端 Build Agent 安裝執行期瀏覽器），最後以 `DotNetCoreCLI@2`（`test` 指向 `**/PlaywrightAutoUITest.csproj`）完成自動化 E2E UI 測試。
+- **Lab 28｜Unit Test Code Coverage (單元測試程式碼覆蓋率)**：
+  - **本機報表**：Clone `dotNet8BMISample.git`，安裝 `dotnet tool install -g dotnet-reportgenerator-globaltool`，執行 `dotnet test --collect:"XPlat Code Coverage"` 產出 `coverage.cobertura.xml`，再透過 `reportgenerator -reports:"<path>\coverage.cobertura.xml" -targetdir:"coveragereport" -reporttypes:Html` 產生互動式 HTML 報表。
+  - **Pipeline 整合**：在基礎 .NET Web App Pipeline 的 `dotnet test` 任務加入參數 `--collect:"XPlat Code Coverage"`，並新增 **Publish Code Coverage Results v1.0**（工具選 `cobertura`、Summary file 設為 `$(Agent.TempDirectory)/**/coverage.cobertura.xml`），建置後即可於 ADO Build Summary 檢視視覺化覆蓋率報表。
+

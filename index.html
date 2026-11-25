@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="AZ-400 DevOps" />
   <title>AZ-400 DevOps 專業知識中樞｜桌面零捲動 · iPhone 行動學習</title>
-  <meta name="description" content="AZ-400 Azure DevOps 實戰課程完整知識體系，涵蓋 10 大章節、32 項實作主題、DevOps 八階段定位、相依性拓撲與考題記憶卡，同時針對桌面零捲動與 iPhone 行動學習優化。" />
+  <meta name="description" content="AZ-400 Azure DevOps 實戰課程完整知識體系，涵蓋 11 大章節、35 項實作主題、DevOps 八階段定位、相依性拓撲與考題記憶卡，同時針對桌面零捲動與 iPhone 行動學習優化。" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root {
@@ -233,7 +233,7 @@
           字級：大
         </button>
         <button id="btn-header-progress" title="檢視全課程學習進度與勾選矩陣" class="px-2 lg:px-2.5 py-1 lg:py-1.5 rounded-md border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--secondary)] text-xs lg:t-ui flex items-center gap-1.5 transition-colors cursor-pointer">
-          <span id="header-progress-text" class="font-mono font-semibold text-[var(--foreground)]">0/32</span>
+          <span id="header-progress-text" class="font-mono font-semibold text-[var(--foreground)]">0/35</span>
           <span class="w-10 lg:w-12 h-2 rounded-full bg-[var(--secondary)] overflow-hidden hidden sm:inline-block">
             <span id="header-progress-bar" class="block h-full rounded-full transition-all" style="width: 0%; background-color: var(--success);"></span>
           </span>
@@ -387,18 +387,18 @@
         zh: '自動化測試與安全掃描',
         colorVar: '--chart-4',
         tintClass: 'tint-c4',
-        summary: '在合併前與建置中落實品質安全左移：結合單元測試、GPT AI Code Review、SonarCloud SAST 與 Mend SCA 掃描。',
+        summary: '在合併前、建置中與部署前後落實品質安全左移：結合單元測試覆蓋率 (Cobertura)、Playwright 自動化 UI 測試、GPT AI Review、SonarCloud SAST 與 Mend SCA。',
         upstream: ['code', 'build'],
         downstream: ['release'],
-        upstreamNote: '由 PR Build Validation 與 CI 管線觸發，在進入 main 分支前攔截缺陷。',
-        downstreamNote: '品質門檻 (Quality Gate) 全數通過後，成品才具備進入 Release 階段的資格。',
-        crossCutting: ['SAST 靜態分析 (SonarCloud)', 'SCA 套件漏洞掃描 (Mend)', 'AI 自動化 PR Review'],
+        upstreamNote: '由 PR Build Validation 與 CI 管線觸發，在進入 main 與發布前攔截缺陷與回歸異常。',
+        downstreamNote: '品質門檻 (Quality Gate)、覆蓋率指標與 E2E UI 測試通過後，成品具備進入 Release 的資格。',
+        crossCutting: ['Playwright E2E UI 測試', 'XPlat Code Coverage (Cobertura)', 'SAST (SonarCloud) / SCA (Mend)', 'AI PR Review'],
         checklist: [
-          '於 main 分支設定 Branch Policy 強制執行 PR-CI Build Validation',
-          '配置 Repo 與 OAuth Token 權限讓 GPT 自動於 PR 留言指出潛在 Bug',
-          '整合 SAST + SCA 同時涵蓋自研程式碼品質與第三方開源套件 CVE 風險'
+          '於 main 分支設定 Branch Policy 強制執行 PR-CI Build Validation 與 AI/SAST/SCA 掃描',
+          'Pipeline 執行 Playwright 測試前務必安裝 Microsoft.Playwright.CLI 並跑 playwright install',
+          '於 dotnet test 加入 --collect:"XPlat Code Coverage" 並以 Publish Code Coverage v1.0 發佈 Cobertura 報表'
         ],
-        metrics: ['Quality Gate Pass Rate', 'CVE Vulnerability Count', 'Test Pass Rate']
+        metrics: ['Code Coverage %', 'E2E UI Pass Rate', 'Quality Gate & CVE Count']
       },
       {
         id: 'release',
@@ -707,7 +707,8 @@ git push -u origin --all`
           { id: 'ch02', reason: '需先建立 Feature Branch 與 Pull Request 協作模式' }
         ],
         downstream: [
-          { id: 'ch09', reason: '確保進入 CD 發布流程的 Artifact 皆通過編譯、靜態分析與套件安全驗證' }
+          { id: 'ch09', reason: '確保進入 CD 發布流程的 Artifact 皆通過編譯、靜態分析與套件安全驗證' },
+          { id: 'ch10', reason: '將品質左移由靜態掃描延伸至 Playwright E2E UI 測試與單元測試覆蓋率可視化' }
         ],
         tech: ['Branch Policy', 'PR-CI', 'GPT PR Reviewer', 'SonarCloud (SAST)', 'WhiteSource/Mend (SCA)', 'Git pre-commit Hook'],
         insight: '安全左移黃金法則：越早發現問題修復成本越低！本章構成三道遞進防線——(1) 本機 Git Hook 阻擋機密入 Commit → (2) PR-CI 執行編譯 + GPT Review → (3) CI 全面執行 SAST + SCA 掃描。',
@@ -962,7 +963,8 @@ graph LR
         downstream: [
           { id: 'ch06', reason: 'YAML 管線可串接 Key Vault Variable Groups 進行安全建置' },
           { id: 'ch07', reason: '透過自動化管線封裝並推送 NuGet 套件至私有 Feed' },
-          { id: 'ch09', reason: 'Lab 25 Multi-Stage YAML 直接基於此章 YAML 語法擴展至完整 CD' }
+          { id: 'ch09', reason: 'Lab 25 Multi-Stage YAML 直接基於此章 YAML 語法擴展至完整 CD' },
+          { id: 'ch10', reason: '於 Agent 執行期透過 PowerShell 安裝 Playwright CLI 並整合覆蓋率發佈' }
         ],
         tech: ['Self-Hosted Agent', 'Ubuntu 24.04', 'PAT', 'Agent Pool', 'azure-pipelines.yml', 'GitHub Actions', 'Codespaces'],
         insight: '何時必須用 Self-Hosted Agent？(1) 需存取企業內網資料庫或私有部署環境、(2) 專案需要客製化 SDK / GPU / 特殊憑證、(3) 雲端免費分鐘數不足或大型專案想利用本機快取大幅加速建置。',
@@ -1102,7 +1104,7 @@ Write-Host "$(testSecret01)"
               '痛點解決：呼叫 Azure OpenAI / MS Foundry LLM API 若使用靜態 API Key，面臨外洩、輪換困難與難稽核風險。',
               '統一驗證鏈：程式碼全面採用 Azure.Identity 的 DefaultAzureCredential，完全不寫任何 API Key。',
               '環境自適應：本機開發透過 az login 取得開發者身分；部署至 Azure Web App 後啟用 Managed Identity 並授予對應 RBAC 角色（最小權限）。',
-              '實現零密碼 (Passwordless) 架構，大幅降低憑證管理維運負擔。'
+              '實現零密碼 (Passwordless) 架構，大幅降低憑證管理維運負擔（搭配課程參考教學影片 youtube.com/watch?v=tSa3wTcX2sY）。'
             ],
             steps: [
               '1. Clone Demo_DefaultAzureCredential_With_MS_Foundry 範例並佈建模型。',
@@ -1122,7 +1124,7 @@ var client = new AzureOpenAIClient(new Uri(endpoint), credential);`
             label: 'Lab 16: App Configuration',
             stages: ['code', 'operate'],
             points: [
-              '集中化組態管理：將應用程式設定（如 Page:SubTitle）從本機 appsettings.json 抽離至 Azure App Configuration。',
+              '集中化組態管理：將應用程式設定（如 Page:SubTitle）從本機 appsettings.json 抽離至 Azure App Configuration（使用 Go Deploy AZ-400 Lab 11 環境）。',
               '支援跨環境（Dev/QA/Prod）標籤管理與統一變更，避免多台微服務設定不同步。',
               '驗證生命週期：新增、修改、甚至刪除雲端 Key/Value，觀察應用程式呈現內容與預設值回退行為。',
               '建議正式環境同樣改以 Managed Identity 連線 App Configuration 取代存取金鑰連線字串。'
@@ -1330,10 +1332,12 @@ output QAWebApp object = qaWebApp`
           { id: 'ch04', reason: 'Lab 23 Release Gate 直接查詢 Azure Boards Shared Query Bug 數' },
           { id: 'ch05', reason: 'Lab 25 Multi-Stage YAML 建構於 YAML Pipeline 語法之上' },
           { id: 'ch06', reason: '部署期透過 Key Vault 保護機密、上線後透過 Feature Flags 灰度開放' },
-          { id: 'ch08', reason: '使用 ARM / Bicep 自動佈建一致的 Dev / QA / Prod 目標環境' }
+          { id: 'ch08', reason: '使用 ARM / Bicep 自動佈建一致的 Dev / QA / Prod 目標環境' },
+          { id: 'ch10', reason: '上線前後透過 Playwright 自動化 UI 測試與單元測試覆蓋率把關交付品質' }
         ],
         downstream: [
-          { id: 'ch04', reason: '【回饋閉環】上線監控結果與新缺陷回寫 Azure Boards，啟動下一輪迭代' }
+          { id: 'ch04', reason: '【回饋閉環】上線監控結果與新缺陷回寫 Azure Boards，啟動下一輪迭代' },
+          { id: 'ch10', reason: '部署完成後的 Web App 端點可直接作為 Playwright E2E 自動化 UI 驗證目標' }
         ],
         tech: ['Release Pipeline', 'Approvals', 'Release Gates', 'Blue-Green Slots', 'Multi-Stage YAML', 'ADO Environments', 'Deployment Groups (IIS)'],
         insight: '本章是整份 AZ-400 講義的核心收斂點：從人工簽核 (Lab 22) 進化為數據驅動閘門 (Lab 23)，從直接覆寫進化為零停機藍綠切換 (Lab 24)，從 Classic UI 進化為單檔 Multi-Stage YAML (Lab 25)，同時兼顧傳統 VM/IIS 叢集 (Lab 26)！',
@@ -1443,7 +1447,7 @@ output QAWebApp object = qaWebApp`
               '透過 environment: \'production\' 自動連結 ADO Environments，集中設定該環境的 Approvals、Gates 與完整部署稽核紀錄。'
             ],
             steps: [
-              '1. 建立 Team Project、匯入 dotNet8BMISample 並建立 ARM Service Connection。',
+              '1. 建立 Team Project、匯入 dotNet8BMISample，建立 Azure Web App 並在 ADO Project 的 Service Connections 建立 ARM 連線。',
               '2. 建立 Multi-Stage azure-pipelines.yml（填入 azureServiceConnection 與 webAppName）。',
               '3. 至 Pipelines → Environments 建立 production 環境並設定 Approvals & Checks。',
               '4. 執行管線，驗證 Build 自動執行並在進入 Deploy Stage 前觸發環境簽核。'
@@ -1483,6 +1487,123 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
 # 接著執行 Azure DevOps Deployment Group 自動產生的註冊腳本`
           }
         ]
+      },
+      {
+        id: 'ch10',
+        num: 'Ch 10',
+        short: '自動化測試與覆蓋率',
+        title: '自動化測試與覆蓋率治理 (Playwright E2E & Code Coverage)',
+        stages: ['test', 'build', 'deploy'],
+        stageRole: 'Build → Test → Deploy 品質驗證中樞｜整合 E2E 自動化 UI 測試與單元測試覆蓋率報表',
+        summary: '導入 Microsoft Playwright 錄製並於 Azure Pipelines 自動執行跨瀏覽器 UI 測試，並搭配 XPlat Code Coverage (Cobertura) 與 ReportGenerator 在本機與 CI 管線可視化單元測試覆蓋率。',
+        upstream: [
+          { id: 'ch01', reason: '熟悉 Azure Pipelines 建置與單元測試 Task 基本配置' },
+          { id: 'ch03', reason: '承接 CI 品質防線，將自動化驗證從靜態分析延伸至動態 E2E UI 與覆蓋率指標' },
+          { id: 'ch05', reason: '於 YAML / Agent 環境透過 PowerShell 安裝 Playwright CLI 與瀏覽器核心' }
+        ],
+        downstream: [
+          { id: 'ch09', reason: '為 CD 上線前後提供可重複的自動化回歸與 UI 煙霧驗證，提高發布信心' },
+          { id: 'ch04', reason: '【回饋閉環】將測試通過率與覆蓋率數據回饋至團隊品質指標，驅動技術債改善' }
+        ],
+        tech: ['Microsoft.Playwright', 'Playwright CLI', 'playwright codegen', 'MSTest', 'XPlat Code Coverage', 'Cobertura', 'ReportGenerator', 'Publish Code Coverage v1.0'],
+        insight: '自動化測試上雲兩大關鍵地雷：(1) Playwright 跑在雲端 Build Agent 時，除了安裝 Microsoft.Playwright.CLI，還必須執行 playwright install 下載無頭瀏覽器核心，否則 dotnet test 會找不到瀏覽器而失敗；(2) Publish Code Coverage Results 任務須選 v1.0、工具選 Cobertura，並將 Summary File 指向 $(Agent.TempDirectory)/**/coverage.cobertura.xml！',
+        labs: [
+          {
+            id: 'lab-27-1',
+            label: 'Lab 27-1: Playwright 本機 UI 測試',
+            stages: ['code', 'test'],
+            points: [
+              '導入現代端對端自動化 UI 測試框架 Microsoft Playwright，透過 MSTest 測試專案整合跨瀏覽器互動驗證。',
+              '全域安裝 Microsoft.Playwright.CLI 後，專案加入 Microsoft.Playwright 套件並執行 dotnet build 與 playwright install 下載瀏覽器核心。',
+              '善用 playwright codegen 互動式錄製器，實際操作目標網頁（如 td-testplan.azurewebsites.net）即自動產生標準化 C# 測試腳本。',
+              '透過 dotnet test 在本機一鍵重播 UI 操作與斷言驗證，快速建立可重複執行的回歸測試（參考範例 isdaviddong/PlaywrightAutoUITest）。'
+            ],
+            steps: [
+              '1. 預先全域安裝 CLI：dotnet tool install --global Microsoft.Playwright.CLI。',
+              '2. 建立 autotest 資料夾並執行 dotnet new mstest、dotnet add package Microsoft.Playwright、dotnet build 與 playwright install。',
+              '3. 執行 playwright codegen 錄製操作流程，將產出的 C# 腳本整合進 UnitTest1.cs。',
+              '4. 執行 dotnet test 驗證自動化 UI 測試全數通過並留存測試結果。'
+            ],
+            codeTitle: 'Playwright 本機初始化、錄製與執行指令',
+            code: `# 0. 預先全域安裝 Playwright CLI
+dotnet tool install --global Microsoft.Playwright.CLI
+
+# 1. 建立資料夾與 MSTest 專案，安裝套件與瀏覽器執行檔
+mkdir autotest && cd autotest
+dotnet new mstest
+dotnet add package Microsoft.Playwright
+dotnet build
+playwright install
+
+# 2. 啟動錄製器產生 UI 測試腳本，完成後執行自動化驗證
+playwright codegen https://td-testplan.azurewebsites.net/
+dotnet test`
+          },
+          {
+            id: 'lab-27-2',
+            label: 'Lab 27-2: Playwright CI Pipeline',
+            stages: ['build', 'test', 'deploy'],
+            points: [
+              '匯入 PlaywrightAutoUITest 範例專案並於 Azure Pipelines (vmImage: windows-latest) 建立全自動 UI 測試管線。',
+              '依序配置 UseDotNet@2（指定對應 SDK 版本 5.0.408）與 DotNetCoreCLI@2 執行 **/*.csproj 的 restore 與 build。',
+              '核心關鍵步驟：透過兩道 PowerShell@2 任務在每次乾淨的 Build Agent 安裝 Microsoft.Playwright.CLI 並執行 playwright install 下載執行期瀏覽器。',
+              '最後以 DotNetCoreCLI@2 (command: test) 指定 **/PlaywrightAutoUITest.csproj 執行全自動 E2E UI 測試並回報結果至 Build Summary。'
+            ],
+            steps: [
+              '1. 建立新 Team Project 並匯入 https://github.com/isdaviddong/PlaywrightAutoUITest.git。',
+              '2. 建立 Pipeline，依序加入 UseDotNet@2 (5.0.408)、dotnet restore (**/*.csproj) 與 dotnet build。',
+              '3. 新增兩個 PowerShell Task，分別執行 dotnet tool install --global Microsoft.Playwright.CLI 與 playwright install。',
+              '4. 加入 dotnet test Task 指定 **/PlaywrightAutoUITest.csproj，執行管線驗證自動化 UI 測試通過。'
+            ],
+            codeTitle: 'Azure Pipelines 執行 Playwright UI 測試核心 YAML',
+            code: `pool:
+  vmImage: windows-latest
+steps:
+- task: UseDotNet@2
+  inputs: { version: '5.0.408' }
+- task: DotNetCoreCLI@2
+  inputs: { command: restore, projects: '**/*.csproj' }
+- task: DotNetCoreCLI@2
+  inputs: { command: build, projects: '**/*.csproj', arguments: '--configuration $(BuildConfiguration)' }
+- task: PowerShell@2
+  displayName: Install Playwright CLI
+  inputs: { targetType: inline, script: 'dotnet tool install --global Microsoft.Playwright.CLI' }
+- task: PowerShell@2
+  displayName: Install Playwright Browsers
+  inputs: { targetType: inline, script: 'playwright install' }
+- task: DotNetCoreCLI@2
+  displayName: Run Playwright UI Test
+  inputs: { command: test, projects: '**/PlaywrightAutoUITest.csproj', arguments: '--configuration $(BuildConfiguration)' }`
+          },
+          {
+            id: 'lab-28',
+            label: 'Lab 28: Unit Test Code Coverage',
+            stages: ['build', 'test', 'monitor'],
+            points: [
+              '本機覆蓋率建置流程：Clone dotNet8BMISample，安裝 dotnet-reportgenerator-globaltool 並執行 dotnet test --collect:"XPlat Code Coverage" 產出 Cobertura XML。',
+              '透過 reportgenerator 指令將 coverage.cobertura.xml 轉換為互動式 HTML 報表 (coveragereport/index.html)，逐行檢視程式碼覆蓋盲區。',
+              'Azure Pipelines 整合：於基礎 .NET Web App Build Pipeline 修改 dotnet test 任務參數，加入 --collect:"XPlat Code Coverage"。',
+              '新增「Publish Code Coverage Results v1.0」任務，工具選 Cobertura、Summary File 設為 $(Agent.TempDirectory)/**/coverage.cobertura.xml，於 ADO Build Summary 直接呈現覆蓋率視覺化分頁。'
+            ],
+            steps: [
+              '1. 本機 Clone dotNet8BMISample 並執行 dotnet tool install -g dotnet-reportgenerator-globaltool。',
+              '2. 執行 dotnet test --collect:"XPlat Code Coverage"，再以 reportgenerator 產出 HTML 並檢視 index.html。',
+              '3. 建立 Team Project 匯入專案並建立基礎 .NET Web App Pipeline，於 dotnet test Task 加上 --collect:"XPlat Code Coverage"。',
+              '4. 加入 Publish Code Coverage Results v1.0 (Cobertura + $(Agent.TempDirectory)/**/coverage.cobertura.xml)，執行建置並檢視 Code Coverage 報表。'
+            ],
+            codeTitle: '本機 HTML 覆蓋率報表 & Pipeline 發佈設定',
+            code: `# === 本機手動建置 HTML 覆蓋率報表 ===
+dotnet tool install -g dotnet-reportgenerator-globaltool
+dotnet test --collect:"XPlat Code Coverage"
+reportgenerator -reports:"<path>\\coverage.cobertura.xml" -targetdir:"coveragereport" -reporttypes:Html
+
+# === Azure Pipelines 關鍵 Task 設定 ===
+# 1) dotnet test 參數：--collect:"XPlat Code Coverage"
+# 2) Publish Code Coverage Results (task version: v1.0)
+#    code coverage tool: cobertura
+#    summary file: $(Agent.TempDirectory)/**/coverage.cobertura.xml`
+          }
+        ]
       }
     ];
 
@@ -1490,16 +1611,17 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
     // 2. INTERACTIVE DAG LAYOUT & REFERENCE DATA
     // =========================================================================
     const DAG_NODES = [
-      { id: 'ch00', x: 75,  y: 230, lane: 'Foundation', stageColor: '--muted-foreground', label: 'Ch 00', sub: '環境初始化' },
-      { id: 'ch04', x: 215, y: 115, lane: 'Plan / Monitor', stageColor: '--chart-1', label: 'Ch 04', sub: '敏捷與看板' },
-      { id: 'ch02', x: 215, y: 345, lane: 'Code', stageColor: '--chart-2', label: 'Ch 02', sub: 'Git & PR 流' },
-      { id: 'ch01', x: 375, y: 230, lane: 'Build 入門', stageColor: '--chart-3', label: 'Ch 01', sub: '初探 ADO' },
-      { id: 'ch03', x: 540, y: 95,  lane: 'CI / Test', stageColor: '--chart-4', label: 'Ch 03', sub: 'PR-CI / 安全' },
-      { id: 'ch05', x: 540, y: 195, lane: 'Engine', stageColor: '--chart-3', label: 'Ch 05', sub: 'Agent / YAML' },
-      { id: 'ch07', x: 540, y: 295, lane: 'Artifacts', stageColor: '--chart-5', label: 'Ch 07', sub: 'NuGet 套件' },
-      { id: 'ch08', x: 540, y: 395, lane: 'IaC', stageColor: '--chart-6', label: 'Ch 08', sub: 'ARM / Bicep' },
-      { id: 'ch06', x: 695, y: 295, lane: 'DevSecOps', stageColor: '--primary', label: 'Ch 06', sub: '機密與旗標' },
-      { id: 'ch09', x: 805, y: 175, lane: 'Release / Deploy', stageColor: '--success', label: 'Ch 09', sub: 'CD 多元部署' }
+      { id: 'ch00', x: 70,  y: 235, lane: 'Foundation', stageColor: '--muted-foreground', label: 'Ch 00', sub: '環境初始化' },
+      { id: 'ch04', x: 210, y: 115, lane: 'Plan / Monitor', stageColor: '--chart-1', label: 'Ch 04', sub: '敏捷與看板' },
+      { id: 'ch02', x: 210, y: 350, lane: 'Code', stageColor: '--chart-2', label: 'Ch 02', sub: 'Git & PR 流' },
+      { id: 'ch01', x: 355, y: 235, lane: 'Build 入門', stageColor: '--chart-3', label: 'Ch 01', sub: '初探 ADO' },
+      { id: 'ch03', x: 510, y: 95,  lane: 'CI / Security', stageColor: '--chart-4', label: 'Ch 03', sub: 'PR-CI / 安全' },
+      { id: 'ch05', x: 510, y: 195, lane: 'Engine', stageColor: '--chart-3', label: 'Ch 05', sub: 'Agent / YAML' },
+      { id: 'ch07', x: 510, y: 295, lane: 'Artifacts', stageColor: '--chart-5', label: 'Ch 07', sub: 'NuGet 套件' },
+      { id: 'ch08', x: 510, y: 395, lane: 'IaC', stageColor: '--chart-6', label: 'Ch 08', sub: 'ARM / Bicep' },
+      { id: 'ch10', x: 675, y: 140, lane: 'Auto Test / QA', stageColor: '--chart-4', label: 'Ch 10', sub: '自動化測試' },
+      { id: 'ch06', x: 675, y: 310, lane: 'DevSecOps', stageColor: '--primary', label: 'Ch 06', sub: '機密與旗標' },
+      { id: 'ch09', x: 840, y: 225, lane: 'Release / Deploy', stageColor: '--success', label: 'Ch 09', sub: 'CD 多元部署' }
     ];
 
     const DAG_EDGES = [
@@ -1516,6 +1638,10 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
       { from: 'ch02', to: 'ch08', group: 'sec' },
       { from: 'ch05', to: 'ch06', group: 'sec' },
       { from: 'ch02', to: 'ch06', group: 'sec' },
+      { from: 'ch03', to: 'ch10', group: 'ci' },
+      { from: 'ch05', to: 'ch10', group: 'ci' },
+      { from: 'ch10', to: 'ch09', group: 'cd' },
+      { from: 'ch10', to: 'ch04', group: 'agile', feedback: true },
       { from: 'ch03', to: 'ch09', group: 'cd' },
       { from: 'ch04', to: 'ch09', group: 'agile' },
       { from: 'ch05', to: 'ch09', group: 'cd' },
@@ -1732,11 +1858,25 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
             code: `Add-WindowsFeature Web-Server\nSet-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from host $($env:computername) !"`
           }
         ]
+      },
+      {
+        id: 'playwright-cov',
+        label: 'Playwright & 覆蓋率',
+        items: [
+          {
+            title: 'Playwright 本機建立、錄製與 Pipeline 安裝 (Lab 27)',
+            code: `# 本機或 Pipeline Agent 全域安裝 CLI 與瀏覽器\ndotnet tool install --global Microsoft.Playwright.CLI\ndotnet new mstest && dotnet add package Microsoft.Playwright\ndotnet build && playwright install\n\n# 互動式錄製 UI 測試腳本並執行\nplaywright codegen https://td-testplan.azurewebsites.net/\ndotnet test`
+          },
+          {
+            title: 'XPlat Code Coverage 與 ReportGenerator (Lab 28)',
+            code: `# 本機產生 Cobertura XML 並轉為互動式 HTML 報表\ndotnet tool install -g dotnet-reportgenerator-globaltool\ndotnet test --collect:"XPlat Code Coverage"\nreportgenerator -reports:"<path>\\coverage.cobertura.xml" -targetdir:"coveragereport" -reporttypes:Html\n\n# Pipeline Publish Code Coverage Results v1.0\n# Tool: Cobertura | Summary: $(Agent.TempDirectory)/**/coverage.cobertura.xml`
+          }
+        ]
       }
     ];
 
     // =========================================================================
-    // 2B. AZ-400 EXAM QUESTIONS (20 SCENARIO MCQS) & FLASHCARDS (16 CARDS)
+    // 2B. AZ-400 EXAM QUESTIONS (23 SCENARIO MCQS) & FLASHCARDS (18 CARDS)
     // =========================================================================
     const QUIZ_DOMAINS = [
       { id: 'plan_code', label: 'Plan & Code', colorVar: '--chart-1' },
@@ -1985,6 +2125,42 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
         ],
         answer: 1,
         explain: 'Lab 2 關鍵設定：$(build.artifactstagingdirectory) 指向建置 Agent 打包完成的成品暫存目錄，搭配萬用字元 /**/*.zip 可精準抓取壓縮後的 Web 部署套件。'
+      },
+      {
+        id: 'q21', domain: 'ci_test', stageId: 'test', chapterId: 'ch10', labIndex: 0,
+        q: '在 .NET MSTest 專案導入 Microsoft Playwright 撰寫自動化 UI 測試 (Lab 27-1) 時，若想透過實際操作網頁自動錄製並產生測試腳本，應使用哪個 CLI 指令？',
+        options: [
+          'dotnet tool publish --ui-record',
+          'playwright codegen',
+          'az webapp slot swap --record',
+          'reportgenerator -reporttypes:Html'
+        ],
+        answer: 1,
+        explain: 'Lab 27-1 核心步驟：安裝 Microsoft.Playwright.CLI 並執行 playwright install 後，透過 playwright codegen 開啟互動錄製器，即可邊操作目標網站邊產生 C# Playwright 測試程式碼，再以 dotnet test 執行驗證。'
+      },
+      {
+        id: 'q22', domain: 'ci_test', stageId: 'test', chapterId: 'ch10', labIndex: 1,
+        q: '在 Azure Pipelines (windows-latest) 執行 PlaywrightAutoUITest 專案 (Lab 27-2) 時，僅做完 dotnet restore 與 dotnet build 就直接跑 dotnet test 會失敗，其間必須補上哪兩道 PowerShell 步驟？',
+        options: [
+          '執行 Add-WindowsFeature Web-Server 與開啟 Port 80 防火牆',
+          '安裝 Microsoft.Playwright.CLI 全域工具，並執行 playwright install 下載執行期瀏覽器',
+          '建立 Azure Key Vault Secret 與綁定 Variable Group',
+          '執行 git init 與建立 .gitignore'
+        ],
+        answer: 1,
+        explain: 'Lab 27-2 關鍵要點：Microsoft-Hosted Build Agent 每次皆為乾淨環境，未預載 Playwright 瀏覽器核心。因此必須透過 PowerShell@2 依序執行 dotnet tool install --global Microsoft.Playwright.CLI 與 playwright install，之後 dotnet test 才能啟動瀏覽器完成 UI 測試。'
+      },
+      {
+        id: 'q23', domain: 'ci_test', stageId: 'test', chapterId: 'ch10', labIndex: 2,
+        q: '於 .NET Web App Build Pipeline 導入單元測試程式碼覆蓋率 (Lab 28)，並希望在 ADO Build Summary 直接查看覆蓋率視覺化報表，正確的兩項設定組合為何？',
+        options: [
+          '於 dotnet build 加上 --zip，並使用 ArchiveFiles@2 發佈',
+          '於 dotnet test 加上 --collect:"XPlat Code Coverage"，並加入 Publish Code Coverage Results v1.0（工具選 Cobertura、路徑設 $(Agent.TempDirectory)/**/coverage.cobertura.xml）',
+          '於 UseDotNet@2 改用 .NET 5.0.408，並關閉 CI Trigger',
+          '於 Release Pipeline 啟用 Pre-Deployment Approval 並查詢 All Bugs Shared Query'
+        ],
+        answer: 1,
+        explain: 'Lab 28 管線標準配置：--collect:"XPlat Code Coverage" 會將 Cobertura 格式的覆蓋率 XML 輸出至 Agent 暫存目錄，再由 Publish Code Coverage Results v1.0 抓取 $(Agent.TempDirectory)/**/coverage.cobertura.xml 發佈至建置摘要報表。'
       }
     ];
 
@@ -2068,6 +2244,16 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
         id: 'fc16', domain: 'cd_deploy', stageId: 'release', chapterId: 'ch09', labIndex: 4,
         front: 'Multi-Stage YAML Pipeline 中，deployment job 的 environment 欄位有什麼關鍵用途？',
         back: '它將 YAML 部署階段直接綁定至 Azure DevOps Environments（如 production），讓團隊能在 UI 集中配置該環境的 Approvals 人工簽核、自動 Checks/Gates 並完整保留每次部署的稽核紀錄。'
+      },
+      {
+        id: 'fc17', domain: 'ci_test', stageId: 'test', chapterId: 'ch10', labIndex: 1,
+        front: '在 Azure Pipelines (windows-latest) 執行 Playwright 自動化 UI 測試時，dotnet test 前必做的兩道 PowerShell 步驟為何？',
+        back: '因為雲端 Build Agent 每次都是全新環境，除了還原與建置外，必須先透過 PowerShell 執行 (1) dotnet tool install --global Microsoft.Playwright.CLI，以及 (2) playwright install 下載執行期無頭瀏覽器核心。'
+      },
+      {
+        id: 'fc18', domain: 'ci_test', stageId: 'test', chapterId: 'ch10', labIndex: 2,
+        front: '如何在 Azure Pipelines 收集 .NET 單元測試程式碼覆蓋率並呈現在 Build Summary 報表中？',
+        back: '在 dotnet test Task 加入參數 --collect:"XPlat Code Coverage" 產出 Cobertura XML，接著新增 Publish Code Coverage Results v1.0 Task，工具選 Cobertura 並將 Summary file 設為 $(Agent.TempDirectory)/**/coverage.cobertura.xml。'
       }
     ];
 
@@ -2543,13 +2729,13 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
 
       return `
         <div class="h-full min-h-0 flex flex-col lg:flex-row gap-2.5 lg:gap-3.5 overflow-hidden">
-          <!-- DESKTOP LEFT RAIL (255px): ALL 10 CHAPTERS -->
+          <!-- DESKTOP LEFT RAIL (255px): ALL 11 CHAPTERS -->
           <aside class="hidden lg:flex w-64 shrink-0 bg-[var(--sidebar)] border border-[var(--border)] rounded-xl p-2.5 flex-col min-h-0 overflow-hidden">
             <div class="px-2 pb-2 mb-1.5 border-b border-[var(--border)] flex items-center justify-between shrink-0">
-              <span class="t-ui font-bold text-[var(--foreground)]">課程 10 大章節</span>
-              <span class="t-micro font-mono text-[var(--muted-foreground)]">${chIdx + 1} / 10</span>
+              <span class="t-ui font-bold text-[var(--foreground)]">課程 ${CHAPTERS.length} 大章節</span>
+              <span class="t-micro font-mono text-[var(--muted-foreground)]">${chIdx + 1} / ${CHAPTERS.length}</span>
             </div>
-            <div class="flex-1 min-h-0 grid grid-rows-[repeat(10,minmax(0,1fr))] gap-1 overflow-hidden">
+            <div class="flex-1 min-h-0 grid grid-rows-[repeat(11,minmax(0,1fr))] gap-1 overflow-hidden">
               ${CHAPTERS.map(item => {
                 const active = item.id === ch.id;
                 const primaryStage = stageMap[item.stages[0]];
@@ -2809,7 +2995,7 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
             </div>
 
             <div class="flex-1 min-h-0 overflow-x-auto lg:overflow-hidden touch-scroll flex items-center">
-              <svg viewBox="0 0 890 465" class="min-w-[760px] lg:min-w-0 w-full h-full" role="img" aria-label="AZ-400 DevOps 章節相依性拓撲圖">
+              <svg viewBox="0 0 920 465" class="min-w-[780px] lg:min-w-0 w-full h-full" role="img" aria-label="AZ-400 DevOps 章節相依性拓撲圖">
                 <defs>
                   <marker id="arrow-muted" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                     <path d="M 0 1 L 10 5 L 0 9 z" fill="var(--border)" />
@@ -2825,13 +3011,13 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
                   </marker>
                 </defs>
 
-                <text x="75" y="452" text-anchor="middle" fill="var(--muted-foreground)" font-size="13.5">前置基礎</text>
-                <text x="215" y="452" text-anchor="middle" fill="var(--muted-foreground)" font-size="13.5">Plan / Code</text>
-                <text x="375" y="452" text-anchor="middle" fill="var(--muted-foreground)" font-size="13.5">CI/CD 入門</text>
-                <text x="540" y="452" text-anchor="middle" fill="var(--muted-foreground)" font-size="13.5">Build / Test / Pkg / IaC</text>
-                <text x="695" y="452" text-anchor="middle" fill="var(--muted-foreground)" font-size="13.5">DevSecOps</text>
-                <text x="805" y="452" text-anchor="middle" fill="var(--muted-foreground)" font-size="13.5">Release / Deploy</text>
-                <text x="515" y="22" text-anchor="middle" fill="var(--muted-foreground)" font-size="13.5">Monitor 線上指標與缺陷回饋閉環 (CD → Plan)</text>
+                <text x="70" y="452" text-anchor="middle" fill="var(--muted-foreground)" font-size="13.5">前置基礎</text>
+                <text x="210" y="452" text-anchor="middle" fill="var(--muted-foreground)" font-size="13.5">Plan / Code</text>
+                <text x="355" y="452" text-anchor="middle" fill="var(--muted-foreground)" font-size="13.5">CI/CD 入門</text>
+                <text x="510" y="452" text-anchor="middle" fill="var(--muted-foreground)" font-size="13.5">CI / Agent / Pkg / IaC</text>
+                <text x="675" y="452" text-anchor="middle" fill="var(--muted-foreground)" font-size="13.5">Test / DevSecOps</text>
+                <text x="840" y="452" text-anchor="middle" fill="var(--muted-foreground)" font-size="13.5">Release / Deploy</text>
+                <text x="525" y="22" text-anchor="middle" fill="var(--muted-foreground)" font-size="13.5">Monitor 線上指標與測試回饋閉環 (CD / QA → Plan)</text>
 
                 ${edgesSvg}
                 ${nodesSvg}
@@ -3114,25 +3300,25 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
               }">${state.confirmResetProgress ? '再點確認清除' : '重置進度'}</button>
             </div>
 
-            <div class="flex-1 min-h-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 lg:grid-rows-2 gap-2.5 lg:gap-3 overflow-y-auto lg:overflow-hidden touch-scroll">
+            <div class="flex-1 min-h-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 lg:grid-rows-3 gap-2 lg:gap-2.5 overflow-y-auto lg:overflow-hidden touch-scroll">
               ${CHAPTERS.map(ch => {
                 const cp = getChapterProgress(ch);
                 return `
-                  <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-3 flex flex-col justify-between min-h-0">
+                  <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-2.5 lg:p-3 flex flex-col justify-between min-h-0">
                     <div class="min-h-0">
-                      <div class="flex items-center justify-between gap-1 pb-1.5 mb-2 border-b border-[var(--border)]">
-                        <button data-toggle-chapter="${ch.id}" title="切換本章全部完成" class="font-mono t-ui font-bold cursor-pointer ${cp.allDone ? 'text-[var(--success)]' : 'text-[var(--primary)]'}">${cp.allDone ? '✓ ' : ''}${ch.num} ${ch.short}</button>
+                      <div class="flex items-center justify-between gap-1 pb-1 mb-1.5 border-b border-[var(--border)]">
+                        <button data-toggle-chapter="${ch.id}" title="切換本章全部完成" class="font-mono t-ui font-bold cursor-pointer truncate ${cp.allDone ? 'text-[var(--success)]' : 'text-[var(--primary)]'}">${cp.allDone ? '✓ ' : ''}${ch.num} ${ch.short}</button>
                         <span class="t-micro font-mono font-semibold text-[var(--muted-foreground)] shrink-0">${cp.done}/${cp.total}</span>
                       </div>
-                      <div class="flex flex-wrap gap-1.5">
+                      <div class="flex flex-wrap gap-1">
                         ${ch.labs.map((l, idx) => {
                           const done = isLabDone(l.id);
                           return `
                             <span class="inline-flex items-center rounded-md border t-micro max-w-full overflow-hidden ${
                               done ? 'tint-success border-[var(--success)]' : 'bg-[var(--background)] border-[var(--border)]'
                             }">
-                              <button data-toggle-lab="${l.id}" title="勾選完成" class="px-2 py-1 lg:px-1.5 lg:py-0.5 cursor-pointer font-bold ${done ? 'text-[var(--success)]' : 'text-[var(--muted-foreground)] hover:text-[var(--foreground)]'}">${done ? '✓' : '☐'}</button>
-                              <button data-open-lab="${ch.id}|${idx}" class="pr-2 py-1 lg:py-0.5 text-[var(--foreground)] hover:underline truncate cursor-pointer">${l.label.replace(/^Lab\s+/, 'L')}</button>
+                              <button data-toggle-lab="${l.id}" title="勾選完成" class="px-1.5 py-0.5 cursor-pointer font-bold ${done ? 'text-[var(--success)]' : 'text-[var(--muted-foreground)] hover:text-[var(--foreground)]'}">${done ? '✓' : '☐'}</button>
+                              <button data-open-lab="${ch.id}|${idx}" class="pr-1.5 py-0.5 text-[var(--foreground)] hover:underline truncate cursor-pointer">${l.label.replace(/^Lab\s+/, 'L')}</button>
                             </span>
                           `;
                         }).join('')}
@@ -3141,6 +3327,16 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
                   </div>
                 `;
               }).join('')}
+              <div class="bg-[var(--sidebar)] border border-[var(--border)] rounded-xl p-2.5 lg:p-3 flex flex-col justify-between min-h-0">
+                <div>
+                  <div class="t-ui font-bold text-[var(--foreground)] mb-1">最新同步 · Ch 10 自動化測試</div>
+                  <p class="t-micro text-[var(--muted-foreground)]">已涵蓋 HackMD 最新 Playwright E2E UI 測試 (Lab 27) 與 Cobertura 覆蓋率報表 (Lab 28)。</p>
+                </div>
+                <div class="flex items-center gap-1.5 pt-2">
+                  <button data-open-lab="ch10|0" class="flex-1 py-1.5 px-2 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] t-micro font-bold cursor-pointer">直達 Ch 10</button>
+                  <button data-open-lab="ch09|4" class="py-1.5 px-2.5 rounded-lg border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)] t-micro font-semibold cursor-pointer">YAML CD</button>
+                </div>
+              </div>
             </div>
           </div>
         `;
@@ -3196,7 +3392,7 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
             <div class="flex-1 min-h-0 bg-[var(--card)] border border-[var(--border)] rounded-xl p-6 lg:p-8 flex flex-col items-center justify-center text-center gap-4">
               <div class="t-title font-bold text-[var(--foreground)]">太棒了！目前沒有錯題需要複習</div>
               <p class="t-body text-[var(--muted-foreground)]">您可以切換回「全部」挑戰考題，或切換至「翻轉記憶卡」模式加強關鍵觀念。</p>
-              <button data-quiz-filter="all" class="px-4 py-2 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] t-ui font-bold cursor-pointer">檢視全部 20 道考題</button>
+              <button data-quiz-filter="all" class="px-4 py-2 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] t-ui font-bold cursor-pointer">檢視全部 ${QUIZ_QUESTIONS.length} 道考題</button>
             </div>
           `;
         } else {
@@ -3289,7 +3485,7 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
           `;
 
           navGridHtml = `
-            <div class="grid grid-cols-5 gap-2">
+            <div class="grid grid-cols-6 gap-1.5">
               ${list.map((item, idx) => {
                 const p = progress.quizAnswers[item.id];
                 const isCurr = idx === state.quizIdx;
@@ -3300,7 +3496,7 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
                     : 'tint-error border-[var(--error)] text-[var(--error)] font-bold';
                 }
                 if (isCurr) cls += ' ring-2 ring-[var(--primary)] text-[var(--foreground)] font-bold';
-                return `<button data-jump-quiz="${idx}" class="py-2 rounded-lg border t-ui font-mono cursor-pointer transition-colors ${cls}">${idx + 1}</button>`;
+                return `<button data-jump-quiz="${idx}" class="py-1.5 rounded-lg border t-ui font-mono cursor-pointer transition-colors ${cls}">${idx + 1}</button>`;
               }).join('')}
             </div>
           `;
@@ -3315,7 +3511,7 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
             <div class="flex-1 min-h-0 bg-[var(--card)] border border-[var(--border)] rounded-xl p-6 lg:p-8 flex flex-col items-center justify-center text-center gap-4">
               <div class="t-title font-bold text-[var(--foreground)]">全部記憶卡都已標記為「已掌握」！</div>
               <p class="t-body text-[var(--muted-foreground)]">您可以切回「全部」再次複習，或前往「模擬單選測驗」實戰檢驗。</p>
-              <button data-quiz-filter="all" class="px-4 py-2 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] t-ui font-bold cursor-pointer">檢視全部 16 張記憶卡</button>
+              <button data-quiz-filter="all" class="px-4 py-2 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] t-ui font-bold cursor-pointer">檢視全部 ${FLASHCARDS.length} 張記憶卡</button>
             </div>
           `;
         } else {
@@ -3387,7 +3583,7 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
           `;
 
           navGridHtml = `
-            <div class="grid grid-cols-4 gap-2">
+            <div class="grid grid-cols-6 gap-1.5">
               ${list.map((item, idx) => {
                 const st = progress.flashcardStatus[item.id];
                 const isCurr = idx === state.fcIdx;
@@ -3395,7 +3591,7 @@ Set-Content -Path "C:\\inetpub\\wwwroot\\Default.htm" -Value "Hello world from h
                 if (st === 'mastered') cls = 'tint-success border-[var(--success)] text-[var(--success)] font-bold';
                 else if (st === 'review') cls = 'tint-warning border-[var(--warning)] text-[var(--foreground)] font-bold';
                 if (isCurr) cls += ' ring-2 ring-[var(--primary)] text-[var(--foreground)] font-bold';
-                return `<button data-jump-fc="${idx}" class="py-2 rounded-lg border t-ui font-mono cursor-pointer transition-colors ${cls}">C${idx + 1}</button>`;
+                return `<button data-jump-fc="${idx}" class="py-1.5 rounded-lg border t-ui font-mono cursor-pointer transition-colors ${cls}">C${idx + 1}</button>`;
               }).join('')}
             </div>
           `;
