@@ -435,35 +435,35 @@ flowchart LR
 
 | 日期 | Lab 編號 | 所屬章節 | 實作主題 | 全班完成數 | Jerry 狀態與實證亮點 |
 | :---: | :---: | :--- | :--- | :---: | :--- |
-| **Day 1**<br>11/17 | Lab 1 | Ch 01 | Create a pipeline (CI Trigger) | 11/11 | ✅ 完成 — 打通首次 Classic CI 自動建置 |
-| **Day 1**<br>11/17 | Lab 2 | Ch 01 | CI & Deploy to Web App | 11/11 | ✅ 完成 — 串接 App Service Deploy 自動上線 |
-| **Day 1**<br>11/17 | Lab 3 | Ch 02 | Local Git & Push to Azure Repo | 11/11 | ✅ 完成 — 完成 `.gitignore`、Push 與 Clone 驗證 |
-| **Day 1**<br>11/17 | Lab 4 | Ch 02 | GitHub Flow & PR | 11/11 | ✅ 完成 — 串聯 Task→Branch→PR→Auto-Done |
-| **Day 2**<br>11/18 | Lab 5 | Ch 03 | PR-CI & Branch Policy | 11/11 | ✅ 完成 — 建立雙管線與 Build Validation 保護 |
-| **Day 2**<br>11/18 | Lab 6 | Ch 03 | Auto Code Review with GPT | 11/11 | ✅ 完成 — PR #828 AI 精準抓出全部 4 項缺陷 |
-| **Day 2**<br>11/18 | Lab 7 | Ch 03 | SonarCloud (SAST) | 11/11 | ✅ 完成 — 掃出 23 議題（8 Top Issues / 1h 5m） |
-| **Day 2**<br>11/18 | Lab 8 | Ch 03 | Package Scan (WhiteSource/Mend) | 11/11 | ✅ 完成 — 產出第三方套件 CVE 與授權合規報告 |
-| **Day 3**<br>11/19 | Lab 9 | Ch 05 | Azure Boards Backlogs (HR Sys) | 11/11 | ✅ 完成 — 規劃請假系統 User Story 與迭代 |
-| **Day 3**<br>11/19 | Lab 10 | Ch 05 | Planning Works & Capacity | 11/11 | ✅ 完成 — 展開 Tasks、Capacity 與燃盡圖 |
-| **Day 3**<br>11/19 | Lab 11 | Ch 05 | Dashboard 戰情儀表板 | 11/11 | ✅ 完成 — 完整配置 7 大 Agile/CI 指標 Widget |
-| **Day 3**<br>11/19 | Lab 12 | Ch 05 | Azure Wiki (Mermaid & `#ID`) | 11/11 | ✅ 完成 — 建立圖文與工作項雙向關聯活文件 |
-| **Day 3**<br>11/19 | Lab 13 | Ch 06 | Linux Self-Hosted Agent | 11/11 | ✅ 完成 — `linuxvm` 註冊 `testpool` Online 接單 |
-| **Day 3**<br>11/19 | Lab 14 | Ch 06 | YAML Pipeline (ASP.NET Core) | 11/11 | ✅ 完成 — 實作 Pipeline-as-Code 版控管線 |
-| **Day 3**<br>11/19 | Lab 14-2 | Ch 06 | GitHub Actions & Codespaces | 11/11 | ✅ 完成 — 跨平台 GitHub Actions 自動建置 |
-| **Day 4**<br>11/24 | Lab 15 | Ch 07 | Azure Key Vault & Variable Group | 11/11 | ✅ 完成 — `testjerry` 機密注入並自動遮罩 `***` |
-| **Day 4**<br>11/24 | Lab 16 | Ch 07 | Azure App Configuration | 11/11 | ✅ 完成 — 動態變更 `Page:SubTitle` 免重佈 |
-| **Day 4**<br>11/24 | Lab 17 | Ch 07 | Feature Toggle 功能開關 | 11/11 | ✅ 完成 — 即時切換 `toggle01` 驗證解耦發佈 |
-| **Day 4**<br>11/24 | Lab 19 | Ch 08 | NuGet Build & Push Private Feed | 11/11 | ✅ 完成 — 發佈 `HealthMgr-jerry-20261124a` v1.1.1 |
-| **Day 4**<br>11/24 | Lab 20 | Ch 09 | ARM Template (JSON) + AZ CLI | 11/11 | ✅ 完成 — 宣告式批次建立多環境 Web App |
-| **Day 5**<br>11/25 | **Lab 20-1** | Ch 09 | **Bicep 宣告式 IaC** | **10/11** | 🏆 **攻克！** 完整部署 Dev/QA/Prod 三站台 |
-| **Day 5**<br>11/25 | Lab 21 | Ch 10 | Classic CD (Dev→QA→Prod) | 11/11 | ✅ 完成 — 三環境自動連鎖部署 |
-| **Day 5**<br>11/25 | Lab 22 | Ch 10 | Pre-Deployment Approver | 11/11 | ✅ 完成 — 導入正式環境前人工簽核覆核 |
-| **Day 5**<br>11/25 | Lab 23 | Ch 10 | Release Gate (`Bugs < 5`) | 11/11 | ✅ 完成 — 實測 `18:58❌ → 19:03❌ → 19:08✅` 自動放行 |
-| **Day 5**<br>11/25 | Lab 24 | Ch 10 | Blue-Green Deploy (Slot Swap) | 11/11 | ✅ 完成 — `pre-bgslot ↔ production` 零停機切換 |
-| **Day 5**<br>11/25 | Lab 25 | Ch 10 | Multi-Stage YAML + Env Approval | 11/11 | ✅ 完成 — Build(100% 測試)→Deploy(Checks Passed) |
-| **Day 5**<br>11/25 | **Lab 27-1** | Ch 11 | **Playwright Auto UI Test** | **10/11** | 🏆 **攻克！** `.NET 8` `dotnet test` 2 秒 Pass |
-| **Day 5**<br>11/25 | Lab 28 | Ch 11 | Unit Test Code Coverage | 11/11 | ✅ 完成 — Cobertura 報表 **Line Coverage 83.3%** |
-| **Day 5**<br>11/25 | Lab 30 | Ch 12 | Docker Build & Push to ACR | 11/11 | ✅ 完成 — `acrjerrytestname` 成功推入 `acrjerry` |
+| **Day 1**<br>11/17 | Lab 1 | Ch 01 | Create a pipeline (CI Trigger) | 11/11 | ✅ 完成 — 打通首次 Classic CI 自動建置 （[截圖](../images/lab1.png)）|
+| **Day 1**<br>11/17 | Lab 2 | Ch 01 | CI & Deploy to Web App | 11/11 | ✅ 完成 — 串接 App Service Deploy 自動上線 （[截圖](../images/lab2.png)）|
+| **Day 1**<br>11/17 | Lab 3 | Ch 02 | Local Git & Push to Azure Repo | 11/11 | ✅ 完成 — 完成 `.gitignore`、Push 與 Clone 驗證 （[截圖](../images/lab3.png)）|
+| **Day 1**<br>11/17 | Lab 4 | Ch 02 | GitHub Flow & PR | 11/11 | ✅ 完成 — 串聯 Task→Branch→PR→Auto-Done （[截圖](../images/lab4.png)）|
+| **Day 2**<br>11/18 | Lab 5 | Ch 03 | PR-CI & Branch Policy | 11/11 | ✅ 完成 — 建立雙管線與 Build Validation 保護 （[截圖](../images/lab5.png)）|
+| **Day 2**<br>11/18 | Lab 6 | Ch 03 | Auto Code Review with GPT | 11/11 | ✅ 完成 — PR #828 AI 精準抓出全部 4 項缺陷 （[截圖](../images/lab6.png)）|
+| **Day 2**<br>11/18 | Lab 7 | Ch 03 | SonarCloud (SAST) | 11/11 | ✅ 完成 — 掃出 23 議題（8 Top Issues / 1h 5m） （[截圖](../images/lab7.png)）|
+| **Day 2**<br>11/18 | Lab 8 | Ch 03 | Package Scan (WhiteSource/Mend) | 11/11 | ✅ 完成 — 產出第三方套件 CVE 與授權合規報告 （[截圖](../images/lab8.png)）|
+| **Day 3**<br>11/19 | Lab 9 | Ch 05 | Azure Boards Backlogs (HR Sys) | 11/11 | ✅ 完成 — 規劃請假系統 User Story 與迭代 （[截圖](../images/lab9.png)）|
+| **Day 3**<br>11/19 | Lab 10 | Ch 05 | Planning Works & Capacity | 11/11 | ✅ 完成 — 展開 Tasks、Capacity 與燃盡圖 （[截圖](../images/lab10.png)）|
+| **Day 3**<br>11/19 | Lab 11 | Ch 05 | Dashboard 戰情儀表板 | 11/11 | ✅ 完成 — 完整配置 7 大 Agile/CI 指標 Widget （[截圖](../images/lab11.png)）|
+| **Day 3**<br>11/19 | Lab 12 | Ch 05 | Azure Wiki (Mermaid & `#ID`) | 11/11 | ✅ 完成 — 建立圖文與工作項雙向關聯活文件 （[截圖](../images/lab12.png)）|
+| **Day 3**<br>11/19 | Lab 13 | Ch 06 | Linux Self-Hosted Agent | 11/11 | ✅ 完成 — `linuxvm` 註冊 `testpool` Online 接單 （[截圖](../images/lab13.png)）|
+| **Day 3**<br>11/19 | Lab 14 | Ch 06 | YAML Pipeline (ASP.NET Core) | 11/11 | ✅ 完成 — 實作 Pipeline-as-Code 版控管線 （[截圖](../images/lab14.png)）|
+| **Day 3**<br>11/19 | Lab 14-2 | Ch 06 | GitHub Actions & Codespaces | 11/11 | ✅ 完成 — 跨平台 GitHub Actions 自動建置 （[截圖](../images/lab14-2.png)）|
+| **Day 4**<br>11/24 | Lab 15 | Ch 07 | Azure Key Vault & Variable Group | 11/11 | ✅ 完成 — `testjerry` 機密注入並自動遮罩 `***` （[截圖](../images/lab15.png)）|
+| **Day 4**<br>11/24 | Lab 16 | Ch 07 | Azure App Configuration | 11/11 | ✅ 完成 — 動態變更 `Page:SubTitle` 免重佈 （[截圖](../images/lab16.png)）|
+| **Day 4**<br>11/24 | Lab 17 | Ch 07 | Feature Toggle 功能開關 | 11/11 | ✅ 完成 — 即時切換 `toggle01` 驗證解耦發佈 （[截圖](../images/lab17.png)）|
+| **Day 4**<br>11/24 | Lab 19 | Ch 08 | NuGet Build & Push Private Feed | 11/11 | ✅ 完成 — 發佈 `HealthMgr-jerry-20261124a` v1.1.1 （[截圖](../images/lab19.png)）|
+| **Day 4**<br>11/24 | Lab 20 | Ch 09 | ARM Template (JSON) + AZ CLI | 11/11 | ✅ 完成 — 宣告式批次建立多環境 Web App （[截圖](../images/lab20.png)）|
+| **Day 5**<br>11/25 | **Lab 20-1** | Ch 09 | **Bicep 宣告式 IaC** | **10/11** | 🏆 **攻克！** 完整部署 Dev/QA/Prod 三站台 （[截圖](../images/lab20-1.png)）|
+| **Day 5**<br>11/25 | Lab 21 | Ch 10 | Classic CD (Dev→QA→Prod) | 11/11 | ✅ 完成 — 三環境自動連鎖部署 （[截圖](../images/lab21.png)）|
+| **Day 5**<br>11/25 | Lab 22 | Ch 10 | Pre-Deployment Approver | 11/11 | ✅ 完成 — 導入正式環境前人工簽核覆核 （[截圖](../images/lab22.png)）|
+| **Day 5**<br>11/25 | Lab 23 | Ch 10 | Release Gate (`Bugs < 5`) | 11/11 | ✅ 完成 — 實測 `18:58❌ → 19:03❌ → 19:08✅` 自動放行 （[截圖](../images/lab23.png)）|
+| **Day 5**<br>11/25 | Lab 24 | Ch 10 | Blue-Green Deploy (Slot Swap) | 11/11 | ✅ 完成 — `pre-bgslot ↔ production` 零停機切換 （[截圖](../images/lab24.png)）|
+| **Day 5**<br>11/25 | Lab 25 | Ch 10 | Multi-Stage YAML + Env Approval | 11/11 | ✅ 完成 — Build(100% 測試)→Deploy(Checks Passed) （[截圖](../images/lab25.png)）|
+| **Day 5**<br>11/25 | **Lab 27-1** | Ch 11 | **Playwright Auto UI Test** | **10/11** | 🏆 **攻克！** `.NET 8` `dotnet test` 2 秒 Pass （[截圖](../images/lab27-1.png)）|
+| **Day 5**<br>11/25 | Lab 28 | Ch 11 | Unit Test Code Coverage | 11/11 | ✅ 完成 — Cobertura 報表 **Line Coverage 83.3%** （[截圖](../images/lab28.png)）|
+| **Day 5**<br>11/25 | Lab 30 | Ch 12 | Docker Build & Push to ACR | 11/11 | ✅ 完成 — `acrjerrytestname` 成功推入 `acrjerry` （[截圖](../images/lab30.png)）|
 
 > [!TIP]
 > **課後精進優先序建議（針對 Jerry 身兼開發＋維運與壽險金融合規場景）**：

@@ -233,44 +233,69 @@
     </div>
   </div>
 
+  <!-- Screenshot Lightbox Modal -->
+  <div id="lightboxModal" class="no-print hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6" onclick="if(event.target===this) closeLightbox()">
+    <div class="w-full max-w-5xl max-h-[92vh] deck-card flex flex-col overflow-hidden shadow-2xl">
+      <div class="px-4 py-3 border-b border-[var(--border)] bg-[var(--content)] flex flex-wrap items-center justify-between gap-2 shrink-0">
+        <div class="min-w-0">
+          <div class="flex items-center gap-2">
+            <span id="lbBadge" class="px-2 py-0.5 rounded-md text-xs font-mono font-bold badge-soft-primary">Lab</span>
+            <h3 id="lbTitle" class="text-sm font-bold truncate"></h3>
+          </div>
+          <p id="lbNote" class="text-xs text-[var(--muted-foreground)] mt-0.5 truncate"></p>
+        </div>
+        <div class="flex items-center gap-1.5 shrink-0">
+          <button type="button" onclick="stepLightbox(-1)" title="上一張截圖 (←)" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[var(--card)] border border-[var(--border)] hover:border-[var(--primary)]">← 上一張</button>
+          <span id="lbCounter" class="text-xs font-mono text-[var(--muted-foreground)] px-1.5 tabular-nums">1 / 29</span>
+          <button type="button" onclick="stepLightbox(1)" title="下一張截圖 (→)" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[var(--card)] border border-[var(--border)] hover:border-[var(--primary)]">下一張 →</button>
+          <a id="lbRawLink" href="#" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 rounded-lg text-xs font-medium badge-soft-primary hover:opacity-90">原圖 ↗</a>
+          <button type="button" onclick="closeLightbox()" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[var(--card)] border border-[var(--border)] hover:border-[var(--primary)]">關閉 (Esc)</button>
+        </div>
+      </div>
+      <div class="p-3 sm:p-4 bg-[var(--background)] overflow-auto flex-1 flex items-center justify-center">
+        <img id="lbImg" src="" alt="" class="max-w-full max-h-[75vh] w-auto h-auto rounded-lg border border-[var(--border)] shadow-md object-contain" />
+      </div>
+    </div>
+  </div>
+
 <script>
 // ============================================================
 // DATA: Verified Jerry 38-Column Lab Portfolio + 14 Chapters
 // ============================================================
 const LABS_DATA = [
-  { id: 'Lab 1', ch: 'Ch 01', day: 'Day 1', date: '2026/11/17', title: 'Create a pipeline (CI Trigger)', done: true, classDone: 11, highlight: false, note: '建立 Team Project、匯入 dotNet8BMISample，透過 Classic Editor 開啟 CI Trigger。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/17/43ea7d8de8ae41cb88909a8b3369179e.png' },
-  { id: 'Lab 2', ch: 'Ch 01', day: 'Day 1', date: '2026/11/17', title: 'CI & Deploy to Web App', done: true, classDone: 11, highlight: false, note: '建立 Azure Web App 並加入 Azure App Service Deploy Task，自動部署 zip 成品上線。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/17/8cc75cd2782d49639f12a0dfa8bea42a.png' },
-  { id: 'Lab 3', ch: 'Ch 02', day: 'Day 1', date: '2026/11/17', title: 'Local Git & Push to Azure Repo (3-1/3-2)', done: true, classDone: 11, highlight: false, note: '本機建立 .NET WebApp、補齊 .gitignore、推上 Azure Repo 並刪除重 Clone 驗證。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/17/91029291b27044688d5422e7f71c31b4.png' },
-  { id: 'Lab 4', ch: 'Ch 02', day: 'Day 1', date: '2026/11/17', title: 'GitHub Flow & PR 協作閉環', done: true, classDone: 11, highlight: false, note: 'PBI→SBI→Task 建立 Feature Branch、修改 Index.cshtml 發起 PR，合併後自動 Done 並刪分支。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/17/4b76df76dbfb4008951d851c3ed5502f.png' },
-  { id: 'Lab 5', ch: 'Ch 03', day: 'Day 2', date: '2026/11/18', title: 'PR-CI 雙管線 & Branch Policy', done: true, classDone: 11, highlight: false, note: '區分 CI (Prod) 與 PR-CI (Dev/Test)，於 main 分支設定 Build Validation 強制審查。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/18/d2e813a3b5534bdd87fa6711ed3fe946.png' },
-  { id: 'Lab 6', ch: 'Ch 03', day: 'Day 2', date: '2026/11/18', title: 'Auto Code Review with GPT (PR-CI)', done: true, classDone: 11, highlight: true, note: '實證：test20261118jerry PR #828 AI 以繁中精準抓出硬編碼 pwd、除零、轉型截斷與 todo 共 4 項缺陷！', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/18/d06b601139c94bbdb0372b60a55f8747.png' },
-  { id: 'Lab 7', ch: 'Ch 03', day: 'Day 2', date: '2026/11/18', title: 'SonarCloud 靜態安全掃描 (SAST)', done: true, classDone: 11, highlight: true, note: '實證：SonarQube Cloud 掃出 PR 828 共 23 項議題（8 Top Issues / 1h 5m 工時），抓出 CSRF(High) 與 pwd(Medium)。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/18/b69481c96f5f4016aec222a55bb712ef.png' },
-  { id: 'Lab 8', ch: 'Ch 03', day: 'Day 2', date: '2026/11/18', title: 'Package Scan (WhiteSource / Mend SCA)', done: true, classDone: 11, highlight: false, note: '整合 WhiteSource Bolt v2 掃描開源套件已知 CVE 弱點與開源授權合規風險。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/18/42cd69eb47a546b29b7bbb8f03c1abeb.png' },
-  { id: 'Lab 9', ch: 'Ch 05', day: 'Day 3', date: '2026/11/19', title: 'Azure Boards Backlogs (HR 請假系統)', done: true, classDone: 11, highlight: false, note: '以 Scrum 範本規劃 20 項 HR 請假系統 Backlog、撰寫標準 User Story 與 Sprint 排程。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/19/927f973e0d614be3b1e08da301a1323e.png' },
-  { id: 'Lab 10', ch: 'Ch 05', day: 'Day 3', date: '2026/11/19', title: 'Planning Works & Capacity 燃盡圖', done: true, classDone: 11, highlight: false, note: '拆解 Tasks 與 Remaining Hours、配置成員每日 Capacity，檢視 Work Details 與 Sprint Burndown。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/19/86b76433f7e44db1987338ce89c71cd0.png' },
-  { id: 'Lab 11', ch: 'Ch 05', day: 'Day 3', date: '2026/11/19', title: 'Dashboard 敏捷數位戰情室', done: true, classDone: 11, highlight: true, note: '實證：test20261118jerry 完整組裝 7 大 Widget（Burndown 20h、CFD WIP 5、bug-new 紅牌、Done 綠牌、PR-CI、甜甜圈圖、Cycle/Lead Time）。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/19/6702c564c4c242b2a7e65c9139d9c18d.png' },
-  { id: 'Lab 12', ch: 'Ch 05', day: 'Day 3', date: '2026/11/19', title: 'Azure Wiki (Mermaid / @人 / #WorkItem)', done: true, classDone: 11, highlight: false, note: '建立含 Mermaid 架構圖、@成員標註與 #WorkItem 即時狀態連動的活文件。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/19/566a722627734754bec91e105f3bb201.png' },
-  { id: 'Lab 13', ch: 'Ch 06', day: 'Day 3', date: '2026/11/19', title: 'Linux Self-Hosted Agent (Ubuntu 24.04)', done: true, classDone: 11, highlight: true, note: '實證：superman@linuxvm 透過 PAT 成功註冊 Project-level testpool 顯示 Online 並執行 Agent job 1！', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/19/dc12b6f2d7fb4cc88c6d41a6392c5f3e.png' },
-  { id: 'Lab 14', ch: 'Ch 06', day: 'Day 3', date: '2026/11/19', title: 'YAML Pipeline (ASP.NET Core)', done: true, classDone: 11, highlight: false, note: '以 azure-pipelines.yml 實作 Pipeline-as-Code 建置流程，納入 Git 版控。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/19/9c96ba8492a44423b6662d8e091138fd.png' },
-  { id: 'Lab 14-2', ch: 'Ch 06', day: 'Day 3', date: '2026/11/19', title: 'GitHub Actions & Codespaces', done: true, classDone: 11, highlight: false, note: '跨平台於 GitHub 建立 Workflow，搭配 Codespaces 修改推送自動觸發 Action。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/19/412dcc4424b04f49ab28b227a5fa4fd7.png' },
-  { id: 'Lab 15', ch: 'Ch 07', day: 'Day 4', date: '2026/11/24', title: 'Azure Key Vault & Variable Groups', done: true, classDone: 11, highlight: true, note: '實證：20261124jerry-CI Run #198 成功下載 Key Vault (testjerry) 機密並於 Log 自動遮罩為 ***！', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/24/1a543b593f804373b77762ec209f1128.png' },
-  { id: 'Lab 16', ch: 'Ch 07', day: 'Day 4', date: '2026/11/24', title: 'Azure App Configuration (.NET Web App)', done: true, classDone: 11, highlight: false, note: '動態新增、修改與刪除 Page:SubTitle 鍵值，驗證免重編譯即時更新組態。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/24/41f1c130eaee4cda8fa7afd59156d986.png' },
-  { id: 'Lab 17', ch: 'Ch 07', day: 'Day 4', date: '2026/11/24', title: 'Feature Toggle 功能開關與快取調整', done: true, classDone: 11, highlight: false, note: '透過 App Config 切換 toggle01=true 實現部署與功能發佈解耦，並配置 5 秒快取效期。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/24/e30554ad61e648ce8686275c4f5a9766.png' },
+  { id: 'Lab 1', ch: 'Ch 01', day: 'Day 1', date: '2026/11/17', title: 'Create a pipeline (CI Trigger)', done: true, classDone: 11, highlight: false, note: '建立 Team Project、匯入 dotNet8BMISample，透過 Classic Editor 開啟 CI Trigger。', url: './images/lab1.png' },
+  { id: 'Lab 2', ch: 'Ch 01', day: 'Day 1', date: '2026/11/17', title: 'CI & Deploy to Web App', done: true, classDone: 11, highlight: false, note: '建立 Azure Web App 並加入 Azure App Service Deploy Task，自動部署 zip 成品上線。', url: './images/lab2.png' },
+  { id: 'Lab 3', ch: 'Ch 02', day: 'Day 1', date: '2026/11/17', title: 'Local Git & Push to Azure Repo (3-1/3-2)', done: true, classDone: 11, highlight: false, note: '本機建立 .NET WebApp、補齊 .gitignore、推上 Azure Repo 並刪除重 Clone 驗證。', url: './images/lab3.png' },
+  { id: 'Lab 4', ch: 'Ch 02', day: 'Day 1', date: '2026/11/17', title: 'GitHub Flow & PR 協作閉環', done: true, classDone: 11, highlight: false, note: 'PBI→SBI→Task 建立 Feature Branch、修改 Index.cshtml 發起 PR，合併後自動 Done 並刪分支。', url: './images/lab4.png' },
+  { id: 'Lab 5', ch: 'Ch 03', day: 'Day 2', date: '2026/11/18', title: 'PR-CI 雙管線 & Branch Policy', done: true, classDone: 11, highlight: false, note: '區分 CI (Prod) 與 PR-CI (Dev/Test)，於 main 分支設定 Build Validation 強制審查。', url: './images/lab5.png' },
+  { id: 'Lab 6', ch: 'Ch 03', day: 'Day 2', date: '2026/11/18', title: 'Auto Code Review with GPT (PR-CI)', done: true, classDone: 11, highlight: true, note: '實證：test20261118jerry PR #828 AI 以繁中精準抓出硬編碼 pwd、除零、轉型截斷與 todo 共 4 項缺陷！', url: './images/lab6.png' },
+  { id: 'Lab 7', ch: 'Ch 03', day: 'Day 2', date: '2026/11/18', title: 'SonarCloud 靜態安全掃描 (SAST)', done: true, classDone: 11, highlight: true, note: '實證：SonarQube Cloud 掃出 PR 828 共 23 項議題（8 Top Issues / 1h 5m 工時），抓出 CSRF(High) 與 pwd(Medium)。', url: './images/lab7.png' },
+  { id: 'Lab 8', ch: 'Ch 03', day: 'Day 2', date: '2026/11/18', title: 'Package Scan (WhiteSource / Mend SCA)', done: true, classDone: 11, highlight: false, note: '整合 WhiteSource Bolt v2 掃描開源套件已知 CVE 弱點與開源授權合規風險。', url: './images/lab8.png' },
+  { id: 'Lab 9', ch: 'Ch 05', day: 'Day 3', date: '2026/11/19', title: 'Azure Boards Backlogs (HR 請假系統)', done: true, classDone: 11, highlight: false, note: '以 Scrum 範本規劃 20 項 HR 請假系統 Backlog、撰寫標準 User Story 與 Sprint 排程。', url: './images/lab9.png' },
+  { id: 'Lab 10', ch: 'Ch 05', day: 'Day 3', date: '2026/11/19', title: 'Planning Works & Capacity 燃盡圖', done: true, classDone: 11, highlight: false, note: '拆解 Tasks 與 Remaining Hours、配置成員每日 Capacity，檢視 Work Details 與 Sprint Burndown。', url: './images/lab10.png' },
+  { id: 'Lab 11', ch: 'Ch 05', day: 'Day 3', date: '2026/11/19', title: 'Dashboard 敏捷數位戰情室', done: true, classDone: 11, highlight: true, note: '實證：test20261118jerry 完整組裝 7 大 Widget（Burndown 20h、CFD WIP 5、bug-new 紅牌、Done 綠牌、PR-CI、甜甜圈圖、Cycle/Lead Time）。', url: './images/lab11.png' },
+  { id: 'Lab 12', ch: 'Ch 05', day: 'Day 3', date: '2026/11/19', title: 'Azure Wiki (Mermaid / @人 / #WorkItem)', done: true, classDone: 11, highlight: false, note: '建立含 Mermaid 架構圖、@成員標註與 #WorkItem 即時狀態連動的活文件。', url: './images/lab12.png' },
+  { id: 'Lab 13', ch: 'Ch 06', day: 'Day 3', date: '2026/11/19', title: 'Linux Self-Hosted Agent (Ubuntu 24.04)', done: true, classDone: 11, highlight: true, note: '實證：superman@linuxvm 透過 PAT 成功註冊 Project-level testpool 顯示 Online 並執行 Agent job 1！', url: './images/lab13.png' },
+  { id: 'Lab 14', ch: 'Ch 06', day: 'Day 3', date: '2026/11/19', title: 'YAML Pipeline (ASP.NET Core)', done: true, classDone: 11, highlight: false, note: '以 azure-pipelines.yml 實作 Pipeline-as-Code 建置流程，納入 Git 版控。', url: './images/lab14.png' },
+  { id: 'Lab 14-2', ch: 'Ch 06', day: 'Day 3', date: '2026/11/19', title: 'GitHub Actions & Codespaces', done: true, classDone: 11, highlight: false, note: '跨平台於 GitHub 建立 Workflow，搭配 Codespaces 修改推送自動觸發 Action。', url: './images/lab14-2.png' },
+  { id: 'Lab 15', ch: 'Ch 07', day: 'Day 4', date: '2026/11/24', title: 'Azure Key Vault & Variable Groups', done: true, classDone: 11, highlight: true, note: '實證：20261124jerry-CI Run #198 成功下載 Key Vault (testjerry) 機密並於 Log 自動遮罩為 ***！', url: './images/lab15.png' },
+  { id: 'Lab 16', ch: 'Ch 07', day: 'Day 4', date: '2026/11/24', title: 'Azure App Configuration (.NET Web App)', done: true, classDone: 11, highlight: false, note: '動態新增、修改與刪除 Page:SubTitle 鍵值（實證畫面顯示 I\'m SubTitle ^^^ <<<<<<），驗證免重編譯即時更新組態。', url: './images/lab16.png' },
+  { id: 'Lab 17', ch: 'Ch 07', day: 'Day 4', date: '2026/11/24', title: 'Feature Toggle 功能開關與快取調整', done: true, classDone: 11, highlight: false, note: '透過 App Config 切換 toggle01=true（實證畫面 testToggle 顯示「新功能」區塊），並配置 5 秒快取效期。', url: './images/lab17.png' },
   { id: 'Lab 18', ch: 'Ch 08', day: '未指派', date: '-', title: '手動打包與上傳 NuGet Package', done: false, classDone: 0, highlight: false, note: '全班未要求繳交（0/11），課堂直接推進至全自動化 Lab 19。', url: '' },
-  { id: 'Lab 19', ch: 'Ch 08', day: 'Day 4', date: '2026/11/24', title: 'NuGet Package 自動 Build & Push (Private Feed)', done: true, classDone: 11, highlight: true, note: '實證：私有 Feed myfeed-jerry-20261124a 成功發佈 HealthMgr-jerry-20261124a (v1.1.1)！', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/24/be51124aa09d487086c34a72f3df512d.png' },
-  { id: 'Lab 20', ch: 'Ch 09', day: 'Day 4', date: '2026/11/24', title: 'ARM Template (JSON) + AZ CLI 建置多環境', done: true, classDone: 11, highlight: false, note: '撰寫 ARM JSON 宣告式範本並以 AZ CLI 批次建立多環境 Web App。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/24/e8e70ff3e2204480ba608ea4cf10f2c5.png' },
-  { id: 'Lab 20-1', ch: 'Ch 09', day: 'Day 5', date: '2026/11/25', title: 'Bicep 現代宣告式 IaC（全班 10/11）', done: true, classDone: 10, highlight: true, note: '🏆 攻克難關！test20261124arm-jerry 完整佈建 Dev / QA / Prod 三座 App Service + App Service Plan！', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/25/e0afce0537a847fe86f1311f4a648289.png' },
-  { id: 'Lab 21', ch: 'Ch 10', day: 'Day 5', date: '2026/11/25', title: 'Classic CD 三環境連續交付 (Dev→QA→Prod)', done: true, classDone: 11, highlight: false, note: '建立 Release Pipeline，修改程式碼後自動連鎖部署三座環境站台。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/25/3b304091e6994a4aa732256b6c5d37f5.png' },
-  { id: 'Lab 22', ch: 'Ch 10', day: 'Day 5', date: '2026/11/25', title: 'Pre-Deployment Approver 人工簽核關卡', done: true, classDone: 11, highlight: false, note: '於上線前配置人工覆核簽核機制，落實變更管理稽核軌跡。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/25/2ca10eb67a694b3d8a844fe7008322be.png' },
-  { id: 'Lab 23', ch: 'Ch 10', day: 'Day 5', date: '2026/11/25', title: 'Release Gate 自動品質閘門 (Bugs < 5)', done: true, classDone: 11, highlight: true, note: '實證：rel-CD Release-3 真實呈現 18:58 ❌ → 19:03 ❌（超標攔截）→ 19:08 ✅（自動放行 Prod）！', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/25/ea48e98ba7d74db1ae5b059cdd903909.png' },
-  { id: 'Lab 24', ch: 'Ch 10', day: 'Day 5', date: '2026/11/25', title: 'Blue-Green Deployment (Staging Slot Swap)', done: true, classDone: 11, highlight: true, note: '實證：20261125DepolyJerry-Prod 完成 Warming-up 與 pre-bgslot ↔ production 零停機切換！', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/25/ca16746403974677986377bafea47ac0.png' },
-  { id: 'Lab 25', ch: 'Ch 10', day: 'Day 5', date: '2026/11/25', title: 'Multi-Stage YAML + Environment Approval', done: true, classDone: 11, highlight: true, note: '實證：20261125-jerry Run #20261125.3 Build(54s, 100% passed) → Deploy(1m 14s, 1 checks passed) 全綠！', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/25/fa45a6acaef1482eb3c76d31c6f78ad3.png' },
+  { id: 'Lab 19', ch: 'Ch 08', day: 'Day 4', date: '2026/11/24', title: 'NuGet Package 自動 Build & Push (Private Feed)', done: true, classDone: 11, highlight: true, note: '實證：私有 Feed myfeed-jerry-20261124a 成功發佈 HealthMgr-jerry-20261124a (v1.1.1)！', url: './images/lab19.png' },
+  { id: 'Lab 20', ch: 'Ch 09', day: 'Day 4', date: '2026/11/24', title: 'ARM Template (JSON) + AZ CLI 建置多環境', done: true, classDone: 11, highlight: false, note: '撰寫 ARM JSON 宣告式範本並以 AZ CLI 批次建立多環境 Web App。', url: './images/lab20.png' },
+  { id: 'Lab 20-1', ch: 'Ch 09', day: 'Day 5', date: '2026/11/25', title: 'Bicep 現代宣告式 IaC（全班 10/11）', done: true, classDone: 10, highlight: true, note: '🏆 攻克難關！test20261124arm-jerry 完整佈建 Dev / QA / Prod 三座 App Service + App Service Plan！', url: './images/lab20-1.png' },
+  { id: 'Lab 21', ch: 'Ch 10', day: 'Day 5', date: '2026/11/25', title: 'Classic CD 三環境連續交付 (Dev→QA→Prod)', done: true, classDone: 11, highlight: false, note: '建立 Release Pipeline，修改程式碼後自動連鎖部署三座環境站台。', url: './images/lab21.png' },
+  { id: 'Lab 22', ch: 'Ch 10', day: 'Day 5', date: '2026/11/25', title: 'Pre-Deployment Approver 人工簽核關卡', done: true, classDone: 11, highlight: false, note: '於上線前配置人工覆核簽核機制，落實變更管理稽核軌跡。', url: './images/lab22.png' },
+  { id: 'Lab 23', ch: 'Ch 10', day: 'Day 5', date: '2026/11/25', title: 'Release Gate 自動品質閘門 (Bugs < 5)', done: true, classDone: 11, highlight: true, note: '實證：rel-CD Release-3 真實呈現 18:58 ❌ → 19:03 ❌（超標攔截）→ 19:08 ✅（自動放行 Prod）！', url: './images/lab23.png' },
+  { id: 'Lab 24', ch: 'Ch 10', day: 'Day 5', date: '2026/11/25', title: 'Blue-Green Deployment (Staging Slot Swap)', done: true, classDone: 11, highlight: true, note: '實證：20261125DepolyJerry-Prod 完成 Warming-up 與 pre-bgslot ↔ production 零停機切換！', url: './images/lab24.png' },
+  { id: 'Lab 25', ch: 'Ch 10', day: 'Day 5', date: '2026/11/25', title: 'Multi-Stage YAML + Environment Approval', done: true, classDone: 11, highlight: true, note: '實證：20261125-jerry Run #20261125.3 Build(54s, 100% passed) → Deploy(1m 14s, 1 checks passed) 全綠！', url: './images/lab25.png' },
   { id: 'Lab 26', ch: 'Ch 10', day: '未指派', date: '-', title: 'Deployment Group 部署多台 IIS VM', done: false, classDone: 0, highlight: false, note: '全班未要求繳交（0/11），建議作為地端/混合雲 Windows IIS 自動部署延伸實作。', url: '' },
-  { id: 'Lab 27-1', ch: 'Ch 11', day: 'Day 5', date: '2026/11/25', title: 'Playwright 自動化 UI 測試（全班 10/11）', done: true, classDone: 10, highlight: true, note: '🏆 攻克難關！.NET 8.0 執行 dotnet test 驗證 UI 自動化：Passed 1, Failed 0, Duration 2s！', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/25/c8ec881505bc4655a7c5e87b29c67830.png' },
+  { id: 'Lab 27-1', ch: 'Ch 11', day: 'Day 5', date: '2026/11/25', title: 'Playwright 自動化 UI 測試（全班 10/11）', done: true, classDone: 10, highlight: true, note: '🏆 攻克難關！.NET 8.0 執行 dotnet test 驗證 UI 自動化：Passed 1, Failed 0, Duration 2s！', url: './images/lab27-1.png' },
   { id: 'Lab 27-2', ch: 'Ch 11', day: '未指派', date: '-', title: 'Playwright 整合進 Azure CI Pipeline', done: false, classDone: 0, highlight: false, note: '全班未要求繳交（0/11），建議課後將 Lab 27-1 接續整合進 CI YAML。', url: '' },
-  { id: 'Lab 28', ch: 'Ch 11', day: 'Day 5', date: '2026/11/25', title: 'Unit Test Code Coverage (Cobertura)', done: true, classDone: 11, highlight: true, note: '實證：20261125-jerryunit Run #20261125.1 雲端呈現 MultiReport，Line Coverage 達 83.3% (5/6 行)！', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/25/30d23bf2ec4346548781496635785da8.png' },
+  { id: 'Lab 28', ch: 'Ch 11', day: 'Day 5', date: '2026/11/25', title: 'Unit Test Code Coverage (Cobertura)', done: true, classDone: 11, highlight: true, note: '實證：20261125-jerryunit Run #20261125.1 雲端呈現 MultiReport，Line Coverage 達 83.3% (5/6 行)！', url: './images/lab28.png' },
   { id: 'Lab 29', ch: 'Ch 12', day: '未指派', date: '-', title: 'VS 2022 Docker Support 手動發佈至 ACR', done: false, classDone: 0, highlight: false, note: '全班未要求繳交（0/11），課堂直接聚焦自動化管線 Lab 30。', url: '' },
-  { id: 'Lab 30', ch: 'Ch 12', day: 'Day 5', date: '2026/11/25', title: 'Pipeline Docker Build & Push ACR + ACI', done: true, classDone: 11, highlight: true, note: '實證：Azure Portal 建置 acrjerrytestname 成功推入 acrjerry 容器映像倉儲！', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/25/18a783ba8d6441899540251c95cf1f6b.png' },
+  { id: 'Lab 30', ch: 'Ch 12', day: 'Day 5', date: '2026/11/25', title: 'Pipeline Docker Build & Push ACR + ACI', done: true, classDone: 11, highlight: true, note: '實證：Azure Portal 建置 acrjerrytestname 成功推入 acrjerry 容器映像倉儲！', url: './images/lab30.png' },
   { id: 'Lab 31', ch: 'Ch 13', day: '課後延伸', date: '-', title: '.NET 9 Web App 安裝與串接 App Insights', done: false, classDone: 0, highlight: false, note: 'Ch 13 監控單元（全班 0/11）— 課後第一優先補強主題。', url: '' },
   { id: 'Lab 32', ch: 'Ch 13', day: '課後延伸', date: '-', title: 'TelemetryClient DI 注入與 TrackTrace + KQL', done: false, classDone: 0, highlight: false, note: 'Ch 13 監控單元（全班 0/11）— 練習 traces KQL 過濾查詢。', url: '' },
   { id: 'Lab 33', ch: 'Ch 13', day: '課後延伸', date: '-', title: 'TrackEvent 自訂事件/指標 + KQL 趨勢圖', done: false, classDone: 0, highlight: false, note: 'Ch 13 監控單元（全班 0/11）— 掌握 bin() + summarize + render timechart。', url: '' },
@@ -281,6 +306,7 @@ const LABS_DATA = [
 
 // Helper to lookup Lab object by id
 const labById = Object.fromEntries(LABS_DATA.map(l => [l.id, l]));
+const DONE_LABS = LABS_DATA.filter(l => l.done && l.url);
 
 // Helper to build verified lab items HTML
 function renderLabCard(labRef, promptText, extraBadge) {
@@ -298,7 +324,10 @@ function renderLabCard(labRef, promptText, extraBadge) {
     : '';
 
   const linkHtml = (rec && rec.url)
-    ? `<a href="${rec.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs font-medium text-[var(--link)] hover:underline mt-1.5">檢視 Jerry 實作截圖 ↗</a>`
+    ? `<div class="mt-2 flex flex-wrap items-center gap-3">
+         <button type="button" onclick="openLightbox('${rec.id}')" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold badge-soft-primary hover:opacity-90 cursor-pointer">🖼️ 檢視 Jerry 實作截圖</button>
+         <a href="${rec.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs font-medium text-[var(--muted-foreground)] hover:text-[var(--link)] hover:underline">原圖 ↗</a>
+       </div>`
     : '';
 
   return `
@@ -1189,7 +1218,7 @@ if [ ! -z "$matches" ]; then echo "Error: Blacklist words found!"; exit 1; fi</p
             <span class="text-xs font-bold uppercase tracking-wider text-[var(--primary)]">19 / VERIFIED LAB PORTFOLIO</span>
             <h2 class="text-xl sm:text-2xl font-bold mt-0.5">Jerry 全課程 Lab 作業成果與原始截圖索引</h2>
           </div>
-          <span class="text-xs text-[var(--muted-foreground)]">點擊「查看截圖 ↗」可直接檢視 Jerry 提交於 Azure Blob 的原始成果圖</span>
+          <span class="text-xs text-[var(--muted-foreground)]">點擊「檢視截圖」即時彈窗預覽網站 <code class="font-mono">images/</code> 實作圖，或點擊「原圖 ↗」另開視窗</span>
         </div>
 
         <!-- Filter Controls -->
@@ -1428,6 +1457,13 @@ function initDeck() {
   document.addEventListener('keydown', (e) => {
     const tag = (e.target && e.target.tagName || '').toLowerCase();
     if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+    const lbOpen = !document.getElementById('lightboxModal').classList.contains('hidden');
+    if (lbOpen) {
+      if (e.key === 'Escape') { e.preventDefault(); closeLightbox(); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); stepLightbox(1); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); stepLightbox(-1); }
+      return;
+    }
     if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goToSlide(currentSlide + 1); }
     else if (e.key === 'ArrowLeft') { e.preventDefault(); goToSlide(currentSlide - 1); }
     else if (e.key === 'Home') { e.preventDefault(); goToSlide(0); }
@@ -1450,6 +1486,35 @@ function initDeck() {
   }, { passive: true });
 
   goToSlide(0);
+}
+
+let currentLightboxIdx = 0;
+function openLightbox(labId) {
+  const idx = DONE_LABS.findIndex(l => l.id === labId);
+  if (idx < 0) return;
+  currentLightboxIdx = idx;
+  renderLightbox();
+  document.getElementById('lightboxModal').classList.remove('hidden');
+}
+function closeLightbox() {
+  document.getElementById('lightboxModal').classList.add('hidden');
+}
+function stepLightbox(delta) {
+  if (!DONE_LABS.length) return;
+  currentLightboxIdx = (currentLightboxIdx + delta + DONE_LABS.length) % DONE_LABS.length;
+  renderLightbox();
+}
+function renderLightbox() {
+  const item = DONE_LABS[currentLightboxIdx];
+  if (!item) return;
+  document.getElementById('lbBadge').textContent = `${item.id} · ${item.ch}`;
+  document.getElementById('lbTitle').textContent = item.title;
+  document.getElementById('lbNote').textContent = `${item.day} (${item.date}) — ${item.note}`;
+  document.getElementById('lbCounter').textContent = `${currentLightboxIdx + 1} / ${DONE_LABS.length}`;
+  const img = document.getElementById('lbImg');
+  img.src = item.url;
+  img.alt = `${item.id} ${item.title} Jerry 實作截圖`;
+  document.getElementById('lbRawLink').href = item.url;
 }
 
 function goToSlide(idx) {
@@ -1539,7 +1604,10 @@ function renderLabTable() {
         ${r.done
           ? `<div class="flex flex-col items-end gap-1">
                <span class="px-2 py-0.5 rounded-full font-semibold badge-soft-success">${r.classDone === 10 ? '🏆 攻克' : '✅ 完成'}</span>
-               <a href="${r.url}" target="_blank" rel="noopener noreferrer" class="text-[var(--link)] hover:underline">查看截圖 ↗</a>
+               <div class="flex items-center gap-2">
+                 <button type="button" onclick="openLightbox('${r.id}')" class="text-[var(--primary)] font-semibold hover:underline cursor-pointer">檢視截圖</button>
+                 <a href="${r.url}" target="_blank" rel="noopener noreferrer" class="text-[var(--muted-foreground)] hover:text-[var(--link)] hover:underline">原圖 ↗</a>
+               </div>
              </div>`
           : `<span class="px-2 py-0.5 rounded-full badge-soft-muted">${r.day}</span>`
         }
