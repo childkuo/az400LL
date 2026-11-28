@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AZ-400 Azure DevOps 知識體系 × Jerry 實戰成果簡報</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --background: #f8fafc;
+      --sidebar: #f1f5f9;
+      --card: #ffffff;
+      --content: #f8fafc;
+      --border: #e2e8f0;
+      --card-border: #e2e8f0;
+      --foreground: #0f172a;
+      --muted-foreground: #475569;
+      --placeholder: #94a3b8;
+      --code-foreground: #0f172a;
+      --primary: #0369a1;
+      --primary-foreground: #ffffff;
+      --secondary: #e2e8f0;
+      --secondary-foreground: #0f172a;
+      --accent: #e0f2fe;
+      --link: #0284c7;
+      --success: #15803d;
+      --warning: #b45309;
+      --error: #dc2626;
+      --chart-1: #0284c7;
+      --chart-2: #0d9488;
+      --chart-3: #d97706;
+      --chart-4: #e11d48;
+      --chart-5: #2563eb;
+      --chart-6: #059669;
+      color-scheme: light;
+    }
+    [data-theme="dark"] {
+      --background: #0b1120;
+      --sidebar: #0f172a;
+      --card: #131c31;
+      --content: #0f172a;
+      --border: #23304a;
+      --card-border: #23304a;
+      --foreground: #f1f5f9;
+      --muted-foreground: #94a3b8;
+      --placeholder: #64748b;
+      --code-foreground: #e2e8f0;
+      --primary: #38bdf8;
+      --primary-foreground: #082f49;
+      --secondary: #1e293b;
+      --secondary-foreground: #f1f5f9;
+      --accent: #1e293b;
+      --link: #38bdf8;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --error: #f87171;
+      --chart-1: #38bdf8;
+      --chart-2: #2dd4bf;
+      --chart-3: #fbbf24;
+      --chart-4: #fb7185;
+      --chart-5: #60a5fa;
+      --chart-6: #34d399;
+      color-scheme: dark;
+    }
+    html, body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+    }
+    .slide-fade {
+      animation: fadeSlideIn 0.24s ease-out;
+    }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .badge-soft-primary {
+      background: color-mix(in srgb, var(--primary) 14%, transparent);
+      color: var(--primary);
+      border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
+    }
+    .badge-soft-success {
+      background: color-mix(in srgb, var(--success) 14%, transparent);
+      color: var(--success);
+      border: 1px solid color-mix(in srgb, var(--success) 32%, transparent);
+    }
+    .badge-soft-warning {
+      background: color-mix(in srgb, var(--warning) 16%, transparent);
+      color: var(--warning);
+      border: 1px solid color-mix(in srgb, var(--warning) 35%, transparent);
+    }
+    .badge-soft-error {
+      background: color-mix(in srgb, var(--error) 14%, transparent);
+      color: var(--error);
+      border: 1px solid color-mix(in srgb, var(--error) 32%, transparent);
+    }
+    .badge-soft-muted {
+      background: color-mix(in srgb, var(--muted-foreground) 12%, transparent);
+      color: var(--muted-foreground);
+      border: 1px solid var(--border);
+    }
+    .surface-tint-primary {
+      background: color-mix(in srgb, var(--primary) 7%, var(--card));
+    }
+    .surface-tint-warning {
+      background: color-mix(in srgb, var(--warning) 8%, var(--card));
+    }
+    .surface-tint-success {
+      background: color-mix(in srgb, var(--success) 8%, var(--card));
+    }
+    .deck-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+    .kbd-key {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1px 6px;
+      border-radius: 5px;
+      border: 1px solid var(--border);
+      background: var(--content);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+    @media print {
+      .no-print { display: none !important; }
+      #printAllContainer { display: block !important; }
+      #stageWrapper { display: none !important; }
+      .print-slide {
+        page-break-after: always;
+        break-after: page;
+        padding: 16px 0;
+      }
+    }
+  </style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased">
+
+  <!-- Top Progress Line -->
+  <div class="no-print fixed top-0 left-0 right-0 h-1 bg-[var(--border)] z-40">
+    <div id="topProgress" class="h-full bg-[var(--primary)] transition-all duration-300" style="width: 5%"></div>
+  </div>
+
+  <!-- Top Presentation Chrome -->
+  <header class="no-print sticky top-1 z-30 border-b border-[var(--border)] bg-[var(--background)]/95 backdrop-blur">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 h-14 flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg badge-soft-primary font-bold text-xs shrink-0">AZ</span>
+        <div class="min-w-0">
+          <div class="text-sm font-semibold truncate">AZ-400 DevOps 知識簡報 × Jerry 實戰成果</div>
+          <div id="headerSub" class="text-xs text-[var(--muted-foreground)] truncate hidden sm:block">恆逸 2026/11 五日實戰班・14 大章節全解析・29/29 堂課作業 100% 達標</div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <select id="slideJump" aria-label="跳轉投影片" class="max-w-[140px] sm:max-w-[240px] text-xs px-2.5 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-[var(--foreground)] focus:outline-none focus:border-[var(--primary)]">
+        </select>
+
+        <a href="./index.html" title="返回章節互動教學網站" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[var(--card)] border border-[var(--border)] hover:border-[var(--primary)] transition-colors hidden sm:inline-flex items-center gap-1">
+          <span>← 教學網站</span>
+        </a>
+
+        <button id="btnTheme" type="button" title="切換淺色 / 深色主題" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[var(--card)] border border-[var(--border)] hover:border-[var(--primary)] transition-colors">深色</button>
+
+        <button id="btnGrid" type="button" title="投影片總覽 (G)" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[var(--card)] border border-[var(--border)] hover:border-[var(--primary)] transition-colors flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          <span class="hidden sm:inline">總覽</span>
+        </button>
+
+        <button id="btnPrint" type="button" title="列印或匯出整份簡報 PDF" class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[var(--card)] border border-[var(--border)] hover:border-[var(--primary)] transition-colors hidden md:flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          <span>匯出 PDF</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Interactive Slide Stage -->
+  <div id="stageWrapper" class="max-w-7xl mx-auto px-3 sm:px-6 pt-5 pb-24">
+    <main id="slideStage" class="slide-fade"></main>
+  </div>
+
+  <!-- Print-All Container (only visible during print) -->
+  <div id="printAllContainer" class="hidden max-w-6xl mx-auto px-6"></div>
+
+  <!-- Bottom Floating Navigation Bar -->
+  <footer class="no-print fixed bottom-0 left-0 right-0 z-30 border-t border-[var(--border)] bg-[var(--background)]/95 backdrop-blur">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 h-14 flex items-center justify-between gap-3">
+      <div class="hidden md:flex items-center gap-2 text-xs text-[var(--muted-foreground)]">
+        <span>快捷鍵</span>
+        <span class="kbd-key">←</span><span class="kbd-key">→</span><span>翻頁</span>
+        <span class="kbd-key">G</span><span>總覽</span>
+      </div>
+
+      <div class="flex items-center gap-2 mx-auto md:mx-0">
+        <button id="btnPrev" type="button" class="px-3.5 py-1.5 rounded-lg text-xs font-medium bg-[var(--card)] border border-[var(--border)] hover:border-[var(--primary)] disabled:opacity-40 transition-colors flex items-center gap-1">
+          <span>←</span><span>上一頁</span>
+        </button>
+
+        <div class="px-3 py-1 rounded-lg bg-[var(--card)] border border-[var(--border)] text-xs font-mono tabular-nums">
+          <span id="slideNum" class="font-bold text-[var(--primary)]">01</span>
+          <span class="text-[var(--muted-foreground)]"> / </span>
+          <span id="slideTotal" class="text-[var(--muted-foreground)]">20</span>
+        </div>
+
+        <button id="btnNext" type="button" class="px-3.5 py-1.5 rounded-lg text-xs font-medium bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90 disabled:opacity-40 transition-opacity flex items-center gap-1">
+          <span>下一頁</span><span>→</span>
+        </button>
+      </div>
+
+      <div class="hidden sm:flex items-center gap-1.5">
+        <button onclick="goToSlide(2)" type="button" class="px-2.5 py-1 rounded-md text-xs badge-soft-success hover:opacity-90">Jerry 儀表板</button>
+        <button onclick="goToSlide(18)" type="button" class="px-2.5 py-1 rounded-md text-xs badge-soft-primary hover:opacity-90">29 Lab 索引</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Slide Grid Overview Modal -->
+  <div id="gridModal" class="no-print hidden fixed inset-0 z-50 bg-[var(--background)]/95 backdrop-blur-sm overflow-y-auto p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex items-center justify-between pb-4 mb-6 border-b border-[var(--border)]">
+        <div>
+          <h2 class="text-lg font-bold">簡報投影片總覽（共 20 頁）</h2>
+          <p class="text-xs text-[var(--muted-foreground)]">點擊任一張投影片立即跳轉，或按 Esc 關閉</p>
+        </div>
+        <button id="btnCloseGrid" type="button" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--card)] border border-[var(--border)] hover:border-[var(--primary)]">關閉 (Esc)</button>
+      </div>
+      <div id="gridCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
+    </div>
+  </div>
+
+<script>
+// ============================================================
+// DATA: Verified Jerry 38-Column Lab Portfolio + 14 Chapters
+// ============================================================
+const LABS_DATA = [
+  { id: 'Lab 1', ch: 'Ch 01', day: 'Day 1', date: '2026/11/17', title: 'Create a pipeline (CI Trigger)', done: true, classDone: 11, highlight: false, note: '建立 Team Project、匯入 dotNet8BMISample，透過 Classic Editor 開啟 CI Trigger。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/17/43ea7d8de8ae41cb88909a8b3369179e.png' },
+  { id: 'Lab 2', ch: 'Ch 01', day: 'Day 1', date: '2026/11/17', title: 'CI & Deploy to Web App', done: true, classDone: 11, highlight: false, note: '建立 Azure Web App 並加入 Azure App Service Deploy Task，自動部署 zip 成品上線。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/17/8cc75cd2782d49639f12a0dfa8bea42a.png' },
+  { id: 'Lab 3', ch: 'Ch 02', day: 'Day 1', date: '2026/11/17', title: 'Local Git & Push to Azure Repo (3-1/3-2)', done: true, classDone: 11, highlight: false, note: '本機建立 .NET WebApp、補齊 .gitignore、推上 Azure Repo 並刪除重 Clone 驗證。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/17/91029291b27044688d5422e7f71c31b4.png' },
+  { id: 'Lab 4', ch: 'Ch 02', day: 'Day 1', date: '2026/11/17', title: 'GitHub Flow & PR 協作閉環', done: true, classDone: 11, highlight: false, note: 'PBI→SBI→Task 建立 Feature Branch、修改 Index.cshtml 發起 PR，合併後自動 Done 並刪分支。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/17/4b76df76dbfb4008951d851c3ed5502f.png' },
+  { id: 'Lab 5', ch: 'Ch 03', day: 'Day 2', date: '2026/11/18', title: 'PR-CI 雙管線 & Branch Policy', done: true, classDone: 11, highlight: false, note: '區分 CI (Prod) 與 PR-CI (Dev/Test)，於 main 分支設定 Build Validation 強制審查。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/18/d2e813a3b5534bdd87fa6711ed3fe946.png' },
+  { id: 'Lab 6', ch: 'Ch 03', day: 'Day 2', date: '2026/11/18', title: 'Auto Code Review with GPT (PR-CI)', done: true, classDone: 11, highlight: true, note: '實證：test20261118jerry PR #828 AI 以繁中精準抓出硬編碼 pwd、除零、轉型截斷與 todo 共 4 項缺陷！', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/18/d06b601139c94bbdb0372b60a55f8747.png' },
+  { id: 'Lab 7', ch: 'Ch 03', day: 'Day 2', date: '2026/11/18', title: 'SonarCloud 靜態安全掃描 (SAST)', done: true, classDone: 11, highlight: true, note: '實證：SonarQube Cloud 掃出 PR 828 共 23 項議題（8 Top Issues / 1h 5m 工時），抓出 CSRF(High) 與 pwd(Medium)。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/18/b69481c96f5f4016aec222a55bb712ef.png' },
+  { id: 'Lab 8', ch: 'Ch 03', day: 'Day 2', date: '2026/11/18', title: 'Package Scan (WhiteSource / Mend SCA)', done: true, classDone: 11, highlight: false, note: '整合 WhiteSource Bolt v2 掃描開源套件已知 CVE 弱點與開源授權合規風險。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/18/42cd69eb47a546b29b7bbb8f03c1abeb.png' },
+  { id: 'Lab 9', ch: 'Ch 05', day: 'Day 3', date: '2026/11/19', title: 'Azure Boards Backlogs (HR 請假系統)', done: true, classDone: 11, highlight: false, note: '以 Scrum 範本規劃 20 項 HR 請假系統 Backlog、撰寫標準 User Story 與 Sprint 排程。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/19/927f973e0d614be3b1e08da301a1323e.png' },
+  { id: 'Lab 10', ch: 'Ch 05', day: 'Day 3', date: '2026/11/19', title: 'Planning Works & Capacity 燃盡圖', done: true, classDone: 11, highlight: false, note: '拆解 Tasks 與 Remaining Hours、配置成員每日 Capacity，檢視 Work Details 與 Sprint Burndown。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/19/86b76433f7e44db1987338ce89c71cd0.png' },
+  { id: 'Lab 11', ch: 'Ch 05', day: 'Day 3', date: '2026/11/19', title: 'Dashboard 敏捷數位戰情室', done: true, classDone: 11, highlight: true, note: '實證：test20261118jerry 完整組裝 7 大 Widget（Burndown 20h、CFD WIP 5、bug-new 紅牌、Done 綠牌、PR-CI、甜甜圈圖、Cycle/Lead Time）。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/19/6702c564c4c242b2a7e65c9139d9c18d.png' },
+  { id: 'Lab 12', ch: 'Ch 05', day: 'Day 3', date: '2026/11/19', title: 'Azure Wiki (Mermaid / @人 / #WorkItem)', done: true, classDone: 11, highlight: false, note: '建立含 Mermaid 架構圖、@成員標註與 #WorkItem 即時狀態連動的活文件。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/19/566a722627734754bec91e105f3bb201.png' },
+  { id: 'Lab 13', ch: 'Ch 06', day: 'Day 3', date: '2026/11/19', title: 'Linux Self-Hosted Agent (Ubuntu 24.04)', done: true, classDone: 11, highlight: true, note: '實證：superman@linuxvm 透過 PAT 成功註冊 Project-level testpool 顯示 Online 並執行 Agent job 1！', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/19/dc12b6f2d7fb4cc88c6d41a6392c5f3e.png' },
+  { id: 'Lab 14', ch: 'Ch 06', day: 'Day 3', date: '2026/11/19', title: 'YAML Pipeline (ASP.NET Core)', done: true, classDone: 11, highlight: false, note: '以 azure-pipelines.yml 實作 Pipeline-as-Code 建置流程，納入 Git 版控。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/19/9c96ba8492a44423b6662d8e091138fd.png' },
+  { id: 'Lab 14-2', ch: 'Ch 06', day: 'Day 3', date: '2026/11/19', title: 'GitHub Actions & Codespaces', done: true, classDone: 11, highlight: false, note: '跨平台於 GitHub 建立 Workflow，搭配 Codespaces 修改推送自動觸發 Action。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/19/412dcc4424b04f49ab28b227a5fa4fd7.png' },
+  { id: 'Lab 15', ch: 'Ch 07', day: 'Day 4', date: '2026/11/24', title: 'Azure Key Vault & Variable Groups', done: true, classDone: 11, highlight: true, note: '實證：20261124jerry-CI Run #198 成功下載 Key Vault (testjerry) 機密並於 Log 自動遮罩為 ***！', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/24/1a543b593f804373b77762ec209f1128.png' },
+  { id: 'Lab 16', ch: 'Ch 07', day: 'Day 4', date: '2026/11/24', title: 'Azure App Configuration (.NET Web App)', done: true, classDone: 11, highlight: false, note: '動態新增、修改與刪除 Page:SubTitle 鍵值，驗證免重編譯即時更新組態。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/24/41f1c130eaee4cda8fa7afd59156d986.png' },
+  { id: 'Lab 17', ch: 'Ch 07', day: 'Day 4', date: '2026/11/24', title: 'Feature Toggle 功能開關與快取調整', done: true, classDone: 11, highlight: false, note: '透過 App Config 切換 toggle01=true 實現部署與功能發佈解耦，並配置 5 秒快取效期。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/24/e30554ad61e648ce8686275c4f5a9766.png' },
+  { id: 'Lab 18', ch: 'Ch 08', day: '未指派', date: '-', title: '手動打包與上傳 NuGet Package', done: false, classDone: 0, highlight: false, note: '全班未要求繳交（0/11），課堂直接推進至全自動化 Lab 19。', url: '' },
+  { id: 'Lab 19', ch: 'Ch 08', day: 'Day 4', date: '2026/11/24', title: 'NuGet Package 自動 Build & Push (Private Feed)', done: true, classDone: 11, highlight: true, note: '實證：私有 Feed myfeed-jerry-20261124a 成功發佈 HealthMgr-jerry-20261124a (v1.1.1)！', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/24/be51124aa09d487086c34a72f3df512d.png' },
+  { id: 'Lab 20', ch: 'Ch 09', day: 'Day 4', date: '2026/11/24', title: 'ARM Template (JSON) + AZ CLI 建置多環境', done: true, classDone: 11, highlight: false, note: '撰寫 ARM JSON 宣告式範本並以 AZ CLI 批次建立多環境 Web App。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/24/e8e70ff3e2204480ba608ea4cf10f2c5.png' },
+  { id: 'Lab 20-1', ch: 'Ch 09', day: 'Day 5', date: '2026/11/25', title: 'Bicep 現代宣告式 IaC（全班 10/11）', done: true, classDone: 10, highlight: true, note: '🏆 攻克難關！test20261124arm-jerry 完整佈建 Dev / QA / Prod 三座 App Service + App Service Plan！', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/25/e0afce0537a847fe86f1311f4a648289.png' },
+  { id: 'Lab 21', ch: 'Ch 10', day: 'Day 5', date: '2026/11/25', title: 'Classic CD 三環境連續交付 (Dev→QA→Prod)', done: true, classDone: 11, highlight: false, note: '建立 Release Pipeline，修改程式碼後自動連鎖部署三座環境站台。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/25/3b304091e6994a4aa732256b6c5d37f5.png' },
+  { id: 'Lab 22', ch: 'Ch 10', day: 'Day 5', date: '2026/11/25', title: 'Pre-Deployment Approver 人工簽核關卡', done: true, classDone: 11, highlight: false, note: '於上線前配置人工覆核簽核機制，落實變更管理稽核軌跡。', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/25/2ca10eb67a694b3d8a844fe7008322be.png' },
+  { id: 'Lab 23', ch: 'Ch 10', day: 'Day 5', date: '2026/11/25', title: 'Release Gate 自動品質閘門 (Bugs < 5)', done: true, classDone: 11, highlight: true, note: '實證：rel-CD Release-3 真實呈現 18:58 ❌ → 19:03 ❌（超標攔截）→ 19:08 ✅（自動放行 Prod）！', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/25/ea48e98ba7d74db1ae5b059cdd903909.png' },
+  { id: 'Lab 24', ch: 'Ch 10', day: 'Day 5', date: '2026/11/25', title: 'Blue-Green Deployment (Staging Slot Swap)', done: true, classDone: 11, highlight: true, note: '實證：20261125DepolyJerry-Prod 完成 Warming-up 與 pre-bgslot ↔ production 零停機切換！', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/25/ca16746403974677986377bafea47ac0.png' },
+  { id: 'Lab 25', ch: 'Ch 10', day: 'Day 5', date: '2026/11/25', title: 'Multi-Stage YAML + Environment Approval', done: true, classDone: 11, highlight: true, note: '實證：20261125-jerry Run #20261125.3 Build(54s, 100% passed) → Deploy(1m 14s, 1 checks passed) 全綠！', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/25/fa45a6acaef1482eb3c76d31c6f78ad3.png' },
+  { id: 'Lab 26', ch: 'Ch 10', day: '未指派', date: '-', title: 'Deployment Group 部署多台 IIS VM', done: false, classDone: 0, highlight: false, note: '全班未要求繳交（0/11），建議作為地端/混合雲 Windows IIS 自動部署延伸實作。', url: '' },
+  { id: 'Lab 27-1', ch: 'Ch 11', day: 'Day 5', date: '2026/11/25', title: 'Playwright 自動化 UI 測試（全班 10/11）', done: true, classDone: 10, highlight: true, note: '🏆 攻克難關！.NET 8.0 執行 dotnet test 驗證 UI 自動化：Passed 1, Failed 0, Duration 2s！', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/25/c8ec881505bc4655a7c5e87b29c67830.png' },
+  { id: 'Lab 27-2', ch: 'Ch 11', day: '未指派', date: '-', title: 'Playwright 整合進 Azure CI Pipeline', done: false, classDone: 0, highlight: false, note: '全班未要求繳交（0/11），建議課後將 Lab 27-1 接續整合進 CI YAML。', url: '' },
+  { id: 'Lab 28', ch: 'Ch 11', day: 'Day 5', date: '2026/11/25', title: 'Unit Test Code Coverage (Cobertura)', done: true, classDone: 11, highlight: true, note: '實證：20261125-jerryunit Run #20261125.1 雲端呈現 MultiReport，Line Coverage 達 83.3% (5/6 行)！', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/25/30d23bf2ec4346548781496635785da8.png' },
+  { id: 'Lab 29', ch: 'Ch 12', day: '未指派', date: '-', title: 'VS 2022 Docker Support 手動發佈至 ACR', done: false, classDone: 0, highlight: false, note: '全班未要求繳交（0/11），課堂直接聚焦自動化管線 Lab 30。', url: '' },
+  { id: 'Lab 30', ch: 'Ch 12', day: 'Day 5', date: '2026/11/25', title: 'Pipeline Docker Build & Push ACR + ACI', done: true, classDone: 11, highlight: true, note: '實證：Azure Portal 建置 acrjerrytestname 成功推入 acrjerry 容器映像倉儲！', url: 'https://istms.blob.core.windows.net/exercise-submissions/2026/11/25/18a783ba8d6441899540251c95cf1f6b.png' },
+  { id: 'Lab 31', ch: 'Ch 13', day: '課後延伸', date: '-', title: '.NET 9 Web App 安裝與串接 App Insights', done: false, classDone: 0, highlight: false, note: 'Ch 13 監控單元（全班 0/11）— 課後第一優先補強主題。', url: '' },
+  { id: 'Lab 32', ch: 'Ch 13', day: '課後延伸', date: '-', title: 'TelemetryClient DI 注入與 TrackTrace + KQL', done: false, classDone: 0, highlight: false, note: 'Ch 13 監控單元（全班 0/11）— 練習 traces KQL 過濾查詢。', url: '' },
+  { id: 'Lab 33', ch: 'Ch 13', day: '課後延伸', date: '-', title: 'TrackEvent 自訂事件/指標 + KQL 趨勢圖', done: false, classDone: 0, highlight: false, note: 'Ch 13 監控單元（全班 0/11）— 掌握 bin() + summarize + render timechart。', url: '' },
+  { id: 'Lab 34', ch: 'Ch 13', day: '課後延伸', date: '-', title: '監測 Login 成功/失敗事件 + Columnchart', done: false, classDone: 0, highlight: false, note: 'Ch 13 監控單元（全班 0/11）— 結合業務行為與安全監測。', url: '' },
+  { id: 'Lab 35', ch: 'Ch 13', day: '課後延伸', date: '-', title: '建立 Azure Monitor 警示規則與 Action Group', done: false, classDone: 0, highlight: false, note: 'Ch 13 監控單元（全班 0/11）— 15 秒登入失敗 >3 次自動發簡訊/電話/Email。', url: '' },
+  { id: 'Lab 36', ch: 'Ch 13', day: '課後延伸', date: '-', title: 'Azure Load Testing 雲端負載壓力測試', done: false, classDone: 0, highlight: false, note: 'Ch 13 壓測單元（全班 0/11）— 上線前驗證系統吞吐量與延遲瓶頸。', url: '' }
+];
+
+// Helper to lookup Lab object by id
+const labById = Object.fromEntries(LABS_DATA.map(l => [l.id, l]));
+
+// Helper to build verified lab items HTML
+function renderLabCard(labRef, promptText, extraBadge) {
+  const rec = labById[labRef];
+  const isDone = rec && rec.done;
+  const isBonus = rec && rec.classDone === 10;
+  const statusPill = isDone
+    ? (isBonus
+        ? `<span class="px-2 py-0.5 rounded-full text-xs font-semibold badge-soft-success shrink-0">🏆 Jerry 攻克 (${rec.classDone}/11)</span>`
+        : `<span class="px-2 py-0.5 rounded-full text-xs font-semibold badge-soft-success shrink-0">✅ Jerry 完成・${rec.day}</span>`)
+    : `<span class="px-2 py-0.5 rounded-full text-xs font-medium badge-soft-muted shrink-0">${extraBadge || '📌 課後延伸 (0/11)'}</span>`;
+
+  const evidenceHtml = (rec && rec.done && rec.highlight)
+    ? `<div class="mt-2 px-2.5 py-1.5 rounded-lg surface-tint-success border border-[var(--border)] text-xs text-[var(--foreground)]"><span class="font-semibold text-[var(--success)]">實證亮點：</span>${rec.note}</div>`
+    : '';
+
+  const linkHtml = (rec && rec.url)
+    ? `<a href="${rec.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs font-medium text-[var(--link)] hover:underline mt-1.5">檢視 Jerry 實作截圖 ↗</a>`
+    : '';
+
+  return `
+    <div class="p-3 rounded-xl bg-[var(--content)] border border-[var(--border)]">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+        <span class="text-xs font-bold text-[var(--primary)]">${labRef}${rec ? '｜' + rec.title : ''}</span>
+        ${statusPill}
+      </div>
+      <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">${promptText}</p>
+      ${evidenceHtml}
+      ${linkHtml}
+    </div>
+  `;
+}
+
+// ============================================================
+// SLIDES DEFINITION (20 Executive Slides)
+// ============================================================
+const SLIDES = [
+  // ---------- SLIDE 01: COVER ----------
+  {
+    id: 'cover',
+    navTitle: '01｜封面：AZ-400 × Jerry 成果簡報',
+    tag: 'EXECUTIVE BRIEFING',
+    render: () => `
+      <section class="deck-card p-6 sm:p-10 lg:p-12 relative overflow-hidden">
+        <div class="flex flex-wrap items-center gap-2 mb-6">
+          <span class="px-3 py-1 rounded-full text-xs font-semibold badge-soft-primary">Microsoft AZ-400 實戰知識簡報</span>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold badge-soft-success">Jerry（台壽）挑戰賽 29/29 滿貫</span>
+          <span class="px-3 py-1 rounded-full text-xs font-medium badge-soft-muted">2026/11/17–25・恆逸 uuu 五日班</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div class="lg:col-span-7 space-y-5">
+            <h1 class="text-2xl sm:text-4xl lg:text-[40px] font-extrabold tracking-tight leading-tight">
+              Azure DevOps 全生命週期<br/>
+              <span class="text-[var(--primary)]">知識體系分析 × 實作成果報告</span>
+            </h1>
+            <p class="text-sm sm:text-base text-[var(--muted-foreground)] leading-relaxed max-w-2xl">
+              深度重構 1,809 行 AZ-400 課程講義為 <strong class="text-[var(--foreground)]">14 大知識模組（Ch 00–Ch 13）</strong>，完整剖析每章主旨、學習目標、核心知識點、實戰避坑與 Lab 1–36 題目；並結合 <strong class="text-[var(--foreground)]">Jerry 29 項實證作業截圖</strong>，轉化為可立即落地的企業 DevOps 藍圖。
+            </p>
+
+            <div class="flex flex-wrap gap-3 pt-2">
+              <button onclick="goToSlide(1)" type="button" class="px-5 py-2.5 rounded-xl text-sm font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90 transition-opacity">
+                開始瀏覽簡報 →
+              </button>
+              <button onclick="goToSlide(2)" type="button" class="px-5 py-2.5 rounded-xl text-sm font-semibold bg-[var(--content)] border border-[var(--border)] hover:border-[var(--primary)] transition-colors">
+                直達 Jerry 成果儀表板
+              </button>
+              <button onclick="goToSlide(18)" type="button" class="px-4 py-2.5 rounded-xl text-sm font-medium text-[var(--link)] hover:underline">
+                檢視 29 份作業截圖索引 ↗
+              </button>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 grid grid-cols-2 gap-3">
+            <div class="p-4 rounded-xl surface-tint-primary border border-[var(--border)]">
+              <div class="text-xs text-[var(--muted-foreground)]">課程結構重構</div>
+              <div class="text-3xl font-extrabold text-[var(--primary)] mt-1 tabular-nums">14 <span class="text-sm font-semibold">章</span></div>
+              <div class="text-xs text-[var(--muted-foreground)] mt-1">Ch 00 環境 → Ch 13 監控壓測</div>
+            </div>
+            <div class="p-4 rounded-xl surface-tint-success border border-[var(--border)]">
+              <div class="text-xs text-[var(--muted-foreground)]">課堂指派達成率</div>
+              <div class="text-3xl font-extrabold text-[var(--success)] mt-1 tabular-nums">100%</div>
+              <div class="text-xs text-[var(--muted-foreground)] mt-1">29 / 29 題全破・並列第 1</div>
+            </div>
+            <div class="p-4 rounded-xl bg-[var(--content)] border border-[var(--border)]">
+              <div class="text-xs text-[var(--muted-foreground)]">高難度差異化關卡</div>
+              <div class="text-3xl font-extrabold text-[var(--foreground)] mt-1 tabular-nums">2 / 2</div>
+              <div class="text-xs text-[var(--muted-foreground)] mt-1">Bicep & Playwright 雙攻克</div>
+            </div>
+            <div class="p-4 rounded-xl bg-[var(--content)] border border-[var(--border)]">
+              <div class="text-xs text-[var(--muted-foreground)]">學員職責定位</div>
+              <div class="text-xl font-extrabold text-[var(--foreground)] mt-2">開發＋維運</div>
+              <div class="text-xs text-[var(--muted-foreground)] mt-1">台壽・全端 DevOps 視角</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 pt-5 border-t border-[var(--border)] flex flex-wrap items-center justify-between gap-3 text-xs text-[var(--muted-foreground)]">
+          <div class="flex flex-wrap gap-4">
+            <span>講義來源：<a href="https://hackmd.io/@twdeveloper/ByykzFuAGx" target="_blank" rel="noopener noreferrer" class="text-[var(--link)] hover:underline">HackMD @twdeveloper/ByykzFuAGx ↗</a></span>
+            <span>作業紀錄：<a href="https://docs.google.com/spreadsheets/d/1tKMEZCayTNYGCPBlZ-LN9rafCvD0B7JHyEEZvccHNbs/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer" class="text-[var(--link)] hover:underline">AZ-400 挑戰賽 Sheet ↗</a></span>
+          </div>
+          <span>🔒 已自動移除原講義之課堂臨時測試帳密、Token 與 API Key</span>
+        </div>
+      </section>
+    `
+  },
+
+  // ---------- SLIDE 02: DEVOPS LIFECYCLE MAP ----------
+  {
+    id: 'lifecycle',
+    navTitle: '02｜課程全覽：DevOps 8 階段生命週期地圖',
+    tag: 'ARCHITECTURE MAP',
+    render: () => `
+      <section class="space-y-4">
+        <div class="flex flex-wrap items-end justify-between gap-2">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-[var(--primary)]">02 / COURSE ARCHITECTURE</span>
+            <h2 class="text-xl sm:text-2xl font-bold mt-0.5">AZ-400 全課程 14 章 × DevOps 八大階段關聯地圖</h2>
+          </div>
+          <div class="flex items-center gap-2 text-xs">
+            <span class="px-2.5 py-1 rounded-full badge-soft-success">● Jerry 課堂全破章節</span>
+            <span class="px-2.5 py-1 rounded-full badge-soft-warning">● 課後進階延伸章節</span>
+          </div>
+        </div>
+
+        <!-- SVG Pipeline Flow Diagram -->
+        <div class="deck-card p-4 overflow-x-auto">
+          <svg viewBox="0 0 980 230" class="w-full min-w-[680px] h-auto" role="img" aria-label="AZ-400 DevOps 八階段架構圖">
+            <defs>
+              <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1 L 10 5 L 0 9 z" fill="var(--muted-foreground)" />
+              </marker>
+            </defs>
+
+            <!-- Foundation bar -->
+            <rect x="20" y="18" width="940" height="36" rx="8" fill="color-mix(in srgb, var(--primary) 10%, transparent)" stroke="var(--primary)" stroke-width="1.2" />
+            <text x="490" y="41" text-anchor="middle" font-size="13" font-weight="700" fill="var(--primary)">Ch 00 課前環境與帳號基礎（MSA / ADO Org / Free Parallelism / Go Deploy LMS）</text>
+
+            <!-- 8 Stage Boxes -->
+            ${[
+              { x: 20, label: '1. PLAN', ch: 'Ch 05 敏捷Boards', sub: 'Lab 9–12 ✅', color: 'var(--chart-1)' },
+              { x: 140, label: '2. CODE', ch: 'Ch 02/04 Git+Hook', sub: 'Lab 3–4 ✅', color: 'var(--chart-2)' },
+              { x: 260, label: '3. BUILD', ch: 'Ch 01/03/06/08', sub: 'Lab 1,5-8,13-14,19 ✅', color: 'var(--chart-3)' },
+              { x: 380, label: '4. TEST', ch: 'Ch 11 自動化測試', sub: 'Lab 27-1, 28 ✅', color: 'var(--chart-4)' },
+              { x: 500, label: '5. RELEASE', ch: 'Ch 09/10/12 IaC', sub: 'Lab 20–25, 30 ✅', color: 'var(--chart-5)' },
+              { x: 620, label: '6. DEPLOY', ch: 'Ch 10 藍綠/YAML', sub: 'Approver/Gate ✅', color: 'var(--success)' },
+              { x: 740, label: '7. OPERATE', ch: 'Ch 07 Secret/Cfg', sub: 'Lab 15–17 ✅', color: 'var(--primary)' },
+              { x: 860, label: '8. MONITOR', ch: 'Ch 13 AppInsights', sub: 'Lab 31–36 📌', color: 'var(--warning)' }
+            ].map((s, i) => `
+              <g>
+                <rect x="${s.x}" y="76" width="102" height="92" rx="10" fill="var(--content)" stroke="${s.color}" stroke-width="1.8" />
+                <rect x="${s.x}" y="76" width="102" height="24" rx="10" fill="color-mix(in srgb, ${s.color} 18%, transparent)" />
+                <text x="${s.x + 51}" y="92" text-anchor="middle" font-size="12" font-weight="700" fill="${s.color}">${s.label}</text>
+                <text x="${s.x + 51}" y="122" text-anchor="middle" font-size="12" font-weight="600" fill="var(--foreground)">${s.ch.split(' ')[0]}</text>
+                <text x="${s.x + 51}" y="139" text-anchor="middle" font-size="12" fill="var(--muted-foreground)">${s.ch.split(' ').slice(1).join(' ')}</text>
+                <text x="${s.x + 51}" y="159" text-anchor="middle" font-size="12" font-weight="600" fill="${s.color}">${s.sub.split(' ')[0]} ${s.sub.split(' ')[1] || ''}</text>
+                ${i < 7 ? `<line x1="${s.x + 104}" y1="122" x2="${s.x + 118}" y2="122" stroke="var(--muted-foreground)" stroke-width="1.5" marker-end="url(#arr)" />` : ''}
+              </g>
+            `).join('')}
+
+            <!-- Feedback Loop -->
+            <path d="M 911 170 L 911 205 L 71 205 L 71 172" fill="none" stroke="var(--warning)" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arr)" />
+            <rect x="335" y="191" width="310" height="24" rx="12" fill="var(--card)" stroke="var(--warning)" stroke-width="1" />
+            <text x="490" y="207" text-anchor="middle" font-size="12" font-weight="600" fill="var(--warning)">持續回饋閉環：KQL 遙測 / 告警 / Bug 轉入下個 Sprint</text>
+          </svg>
+        </div>
+
+        <!-- 4 Phase Grouping Cards (Clickable Jump) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          ${[
+            { phase: '階段一｜協作與品質左移', color: 'badge-soft-primary', items: [
+              { s: 3, t: 'Ch 00 環境與帳號初始化', st: '✅' },
+              { s: 4, t: 'Ch 01 初探 ADO (Lab 1–2)', st: '✅' },
+              { s: 5, t: 'Ch 02 Git 工作流 (Lab 3–4)', st: '✅' },
+              { s: 6, t: 'Ch 03 CI 安全左移 (Lab 5–8)', st: '✅' },
+              { s: 7, t: 'Ch 04 Git Hook 本機防線', st: '📌' }
+            ]},
+            { phase: '階段二｜敏捷管理與管線引擎', color: 'badge-soft-success', items: [
+              { s: 8, t: 'Ch 05 敏捷/儀表板/Wiki (9–12)', st: '✅' },
+              { s: 9, t: 'Ch 06 Agent & YAML (13–14-2)', st: '✅' }
+            ]},
+            { phase: '階段三｜DevSecOps 與基礎設施', color: 'badge-soft-primary', items: [
+              { s: 10, t: 'Ch 07 Key Vault/組態 (15–17)', st: '✅' },
+              { s: 11, t: 'Ch 08 NuGet 私有庫 (18–19)', st: '✅' },
+              { s: 12, t: 'Ch 09 ARM & Bicep (20, 20-1)', st: '🏆' }
+            ]},
+            { phase: '階段四｜交付・測試・容器・監控', color: 'badge-soft-warning', items: [
+              { s: 13, t: 'Ch 10 CD 治理/YAML (21–26)', st: '✅' },
+              { s: 15, t: 'Ch 11 Playwright/覆蓋率 (27–28)', st: '🏆' },
+              { s: 16, t: 'Ch 12 Docker/ACR/ACI (29–30)', st: '✅' },
+              { s: 17, t: 'Ch 13 AppInsights/壓測 (31–36)', st: '📌' }
+            ]}
+          ].map(g => `
+            <div class="deck-card p-3.5 space-y-2">
+              <div class="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold ${g.color}">${g.phase}</div>
+              <div class="space-y-1">
+                ${g.items.map(it => `
+                  <button onclick="goToSlide(${it.s})" type="button" class="w-full text-left px-2 py-1.5 rounded-lg text-xs hover:bg-[var(--content)] flex items-center justify-between gap-2 transition-colors">
+                    <span class="truncate font-medium">${it.t}</span>
+                    <span class="shrink-0">${it.st}</span>
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </section>
+    `
+  },
+
+  // ---------- SLIDE 03: JERRY PERFORMANCE DASHBOARD ----------
+  {
+    id: 'jerry-analytics',
+    navTitle: '03｜Jerry 挑戰賽成果數據分析儀表板',
+    tag: 'PORTFOLIO ANALYTICS',
+    render: () => `
+      <section class="space-y-4">
+        <div class="flex flex-wrap items-end justify-between gap-2">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-[var(--success)]">03 / JERRY LAB PERFORMANCE</span>
+            <h2 class="text-xl sm:text-2xl font-bold mt-0.5">Jerry 挑戰賽五日實戰表現深度剖析</h2>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold badge-soft-success">全班 11 位學員・並列第 1 梯隊</span>
+        </div>
+
+        <!-- 4 KPI Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <div class="deck-card p-4 surface-tint-success">
+            <div class="text-xs text-[var(--muted-foreground)]">課堂指派達成率</div>
+            <div class="text-3xl font-extrabold text-[var(--success)] mt-1 tabular-nums">100%</div>
+            <div class="text-xs text-[var(--muted-foreground)] mt-1">29 / 29 課堂指派全數交卷</div>
+          </div>
+          <div class="deck-card p-4 surface-tint-primary">
+            <div class="text-xs text-[var(--muted-foreground)]">總表欄位達成率</div>
+            <div class="text-3xl font-extrabold text-[var(--primary)] mt-1 tabular-nums">76.3%</div>
+            <div class="text-xs text-[var(--muted-foreground)] mt-1">29 / 38 欄（另 9 欄全班皆 0 筆）</div>
+          </div>
+          <div class="deck-card p-4">
+            <div class="text-xs text-[var(--muted-foreground)]">高難度關卡全破</div>
+            <div class="text-3xl font-extrabold text-[var(--foreground)] mt-1 tabular-nums">2 / 2</div>
+            <div class="text-xs text-[var(--muted-foreground)] mt-1">Lab 20-1 Bicep & Lab 27-1 Playwright</div>
+          </div>
+          <div class="deck-card p-4">
+            <div class="text-xs text-[var(--muted-foreground)]">單日最高產出</div>
+            <div class="text-3xl font-extrabold text-[var(--warning)] mt-1 tabular-nums">9 Labs</div>
+            <div class="text-xs text-[var(--muted-foreground)] mt-1">Day 5 (11/25) 爆發式收官</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          <!-- Day 1-5 Bar Chart -->
+          <div class="deck-card p-5 lg:col-span-7 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-bold">五日 Lab 繳交節奏分佈（總計 29 題）</h3>
+              <span class="text-xs text-[var(--muted-foreground)]">依 Blob 提交日期實證</span>
+            </div>
+            <div class="space-y-3 pt-1">
+              ${[
+                { day: 'Day 1 (11/17)', count: 4, pct: 44, topics: 'Lab 1–4：初探 Pipeline、Web App 部署、Local Git、GitHub Flow PR', color: 'var(--chart-1)' },
+                { day: 'Day 2 (11/18)', count: 4, pct: 44, topics: 'Lab 5–8：PR-CI、GPT Code Review、SonarCloud SAST、WhiteSource SCA', color: 'var(--chart-2)' },
+                { day: 'Day 3 (11/19)', count: 7, pct: 78, topics: 'Lab 9–14-2：Scrum Boards、Dashboard、Wiki、Linux Agent、YAML、GH Actions', color: 'var(--chart-3)' },
+                { day: 'Day 4 (11/24)', count: 5, pct: 56, topics: 'Lab 15–17, 19–20：Key Vault、App Config、Feature Toggle、Private Feed、ARM', color: 'var(--chart-4)' },
+                { day: 'Day 5 (11/25)', count: 9, pct: 100, topics: 'Lab 20-1, 21–25, 27-1, 28, 30：Bicep、Classic/YAML CD、Gate、藍綠、Playwright、覆蓋率、ACR', color: 'var(--success)' }
+              ].map(d => `
+                <div class="space-y-1">
+                  <div class="flex items-center justify-between text-xs">
+                    <span class="font-semibold">${d.day}</span>
+                    <span class="font-mono font-bold tabular-nums" style="color:${d.color}">${d.count} Labs</span>
+                  </div>
+                  <div class="h-3 rounded-full bg-[var(--content)] overflow-hidden border border-[var(--border)]">
+                    <div class="h-full rounded-full transition-all" style="width:${d.pct}%; background:${d.color}"></div>
+                  </div>
+                  <div class="text-xs text-[var(--muted-foreground)]">${d.topics}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- Class Insights + Real Verified Highlights -->
+          <div class="deck-card p-5 lg:col-span-5 flex flex-col justify-between space-y-4">
+            <div class="space-y-2.5">
+              <h3 class="text-sm font-bold">實證截圖關鍵亮點（已逐一查核）</h3>
+              <ul class="space-y-2 text-xs text-[var(--muted-foreground)]">
+                <li class="flex gap-2"><span class="text-[var(--success)] font-bold">✓</span><span><strong class="text-[var(--foreground)]">真實 Gate 攔截放行</strong>：Lab 23 紀錄 18:58❌ → 19:03❌ → 19:08✅，完整驗證 Bugs&lt;5 自動放行機制。</span></li>
+                <li class="flex gap-2"><span class="text-[var(--success)] font-bold">✓</span><span><strong class="text-[var(--foreground)]">主動補齊三環境 Bicep</strong>：Lab 20-1 超越講義範例，實際部署 Dev / QA / Prod 三座站台。</span></li>
+                <li class="flex gap-2"><span class="text-[var(--success)] font-bold">✓</span><span><strong class="text-[var(--foreground)]">零停機藍綠 + Multi-Stage YAML</strong>：Lab 24 成功 Swap、Lab 25 達成 100% 測試通過與 Environment Approval。</span></li>
+                <li class="flex gap-2"><span class="text-[var(--success)] font-bold">✓</span><span><strong class="text-[var(--foreground)]">自動化測試雙指標</strong>：Lab 27-1 Playwright 2 秒 Pass、Lab 28 Cobertura 覆蓋率達 <strong class="text-[var(--foreground)]">83.3%</strong>。</span></li>
+                <li class="flex gap-2"><span class="text-[var(--success)] font-bold">✓</span><span><strong class="text-[var(--foreground)]">安全防線到位</strong>：Lab 6 GPT 抓 4 缺陷、Lab 7 SonarCloud 抓 23 議題、Lab 15 機密 Log 遮罩 <code class="font-mono">***</code>。</span></li>
+              </ul>
+            </div>
+
+            <div class="p-3 rounded-xl bg-[var(--content)] border border-[var(--border)] space-y-1.5">
+              <div class="text-xs font-bold">全班 11 位學員組成與對照</div>
+              <div class="grid grid-cols-2 gap-2 text-xs text-[var(--muted-foreground)]">
+                <div>• 開發＋維運「都有」：<strong>4 人（含 Jerry）</strong></div>
+                <div>• 純開發人員：<strong>4 人</strong></div>
+                <div>• 純維運人員：<strong>2 人</strong></div>
+                <div>• 管理人員：<strong>1 人</strong></div>
+              </div>
+              <div class="text-xs text-[var(--primary)] font-medium pt-1">→ 跨界「開發＋維運」背景讓 Jerry 在 IaC、Agent、CI/CD 與測試全數零死角通關！</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    `
+  },
+
+  // ---------- SLIDE 04: CH 00 ----------
+  {
+    id: 'ch00',
+    navTitle: '04｜Ch 00 課前帳號準備與實戰環境建置',
+    tag: 'CH 00・FOUNDATION',
+    render: () => renderChapterSlide({
+      num: 'CH 00',
+      stage: 'Foundation 前置基礎',
+      title: '課前帳號準備與實戰環境建置',
+      theme: '統一本機開發工具鏈、雲端身分（MSA / Azure / ADO）與 Go Deploy 虛擬實驗室，消除環境落差導致的實作阻礙。',
+      objectives: [
+        '註冊 Microsoft Account (MSA)，開通 Azure Portal 與 Azure DevOps Organization 並建立首個 Team Project。',
+        '申請 Azure Pipelines 免費平行作業額度（Free Parallelism），解鎖雲端 Microsoft-Hosted Agent。',
+        '完成本機 .NET SDK、VS 2022、VS Code 套件、Git、Docker Desktop 與 Go Deploy LMS 實驗室啟用。'
+      ],
+      knowledge: [
+        { k: '雲端核心入口', v: 'portal.azure.com、dev.azure.com、aex.dev.azure.com、aka.ms/azpipelines-parallelism-request。' },
+        { k: '開發與容器工具', v: '.NET Core SDK (3.x–9.x)、VS 2022 Community、VS Code、Git、Docker Desktop（需虛擬化）、Postman、Windows Terminal。' },
+        { k: 'VS Code 必裝套件', v: 'Azure Repos、gitignore、C#、繁體中文語言包、GitHub Copilot & Chat、HTML Snippets。' },
+        { k: '快速範例環境', v: 'Go Deploy LMS（lms.godeploy.it）沙盒環境與 Azure DevOps Demo Generator 範本匯入器。' }
+      ],
+      pitfalls: [
+        '新申請的個人 Azure DevOps 組織預設「無免費平行管線額度」，務必提前 2–3 天填表申請 Free Parallelism。',
+        '安裝 VS 2022 時須確實勾選 ASP.NET Web、Azure 開發與容器工作負載，否則後續 Docker / App Insights Lab 會缺模組。',
+        'Go Deploy 虛擬實驗室若需延長時間，必須於「到期前 15 分鐘內」點擊 Extend 按鈕，逾時將自動銷毀。'
+      ],
+      labsHtml: `
+        <div class="p-3.5 rounded-xl surface-tint-success border border-[var(--border)] space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-[var(--success)]">前置環境開通檢核（Lab Access）</span>
+            <span class="px-2 py-0.5 rounded-full text-xs font-semibold badge-soft-success">✅ Jerry Lab Access = 1</span>
+          </div>
+          <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+            Jerry 於 Day 1 開課即順利完成 MSA 關聯、Go Deploy LMS 虛擬實驗室兌換與本機環境就緒，為後續五日 29 題 100% 滿貫奠定零阻礙基礎。
+          </p>
+        </div>
+        <div class="p-3 rounded-xl bg-[var(--content)] border border-[var(--border)]">
+          <div class="text-xs font-bold mb-1.5">課前必檢清單（Checklist）</div>
+          <div class="grid grid-cols-2 gap-1.5 text-xs text-[var(--muted-foreground)]">
+            <div>☑ MSA 帳號與 ADO Org</div>
+            <div>☑ Free Parallelism 申請</div>
+            <div>☑ .NET 8/9 SDK + Git</div>
+            <div>☑ VS 2022 + VS Code 7 套件</div>
+            <div>☑ Docker Desktop 虛擬化</div>
+            <div>☑ Go Deploy LMS 綁定</div>
+          </div>
+        </div>
+      `
+    })
+  },
+
+  // ---------- SLIDE 05: CH 01 ----------
+  {
+    id: 'ch01',
+    navTitle: '05｜Ch 01 Meet Azure DevOps（CI/CD 最小閉環）',
+    tag: 'CH 01・BUILD → DEPLOY',
+    render: () => renderChapterSlide({
+      num: 'CH 01',
+      stage: 'Build → Deploy（Go Deploy Lab 06）',
+      title: 'Meet Azure DevOps：初探 CI/CD 最小閉環',
+      theme: '以最短路徑走完「匯入 Git 程式碼 → 自動建置（CI）→ 自動部署至 Azure Web App（CD）」，建立 Azure Pipelines 端到端體感。',
+      objectives: [
+        '在 Azure DevOps 建立 Team Project 並從外部 GitHub Repo（dotNet8BMISample）直接匯入原始碼。',
+        '透過 Classic Editor 建立 Build Pipeline，啟用 Continuous Integration（CI）觸發器。',
+        '於 Azure Portal 建立 App Service，並串接 Azure App Service Deploy 任務完成自動化部署上線。'
+      ],
+      knowledge: [
+        { k: 'Repo Import 機制', v: '直接跨平台將外部 GitHub 專案複製進 Azure Repos，快速展開團隊管線開發。' },
+        { k: 'Classic Editor & CI Trigger', v: '以視覺化任務組裝 Restore / Build / Publish，勾選 Enable continuous integration 達成改碼即自動建置。' },
+        { k: '預定義管線變數', v: '使用 $(build.artifactstagingdirectory)/**/*.zip 將編譯封裝後的壓縮檔精準交付給部署任務。' },
+        { k: 'Azure App Service', v: 'PaaS 託管網站服務（如 Canada Central、F1/S1 方案），支援由 Pipelines 直接推播部署套件。' }
+      ],
+      pitfalls: [
+        '新版 Azure DevOps 組織預設隱藏 Classic Editor，需至 Organization / Project Settings → Pipelines → Settings 關閉停用選項。',
+        'Azure App Service Deploy 的「Package or folder」務必修改為 $(build.artifactstagingdirectory)/**/*.zip，避免抓錯舊路徑導致部署空檔。',
+        '操作 Git 前務必先設定 git config --global user.name 與 user.email，否則提交將被拒絕。'
+      ],
+      labsHtml: `
+        ${renderLabCard('Lab 1', '建立 ADO Team Project → 匯入 dotNet8BMISample → 以 Classic Editor 建立管線並開啟 CI Trigger → 修改程式碼驗證 Pipeline 自動觸發運行。')}
+        ${renderLabCard('Lab 2', '於 Azure Portal 建立 Web App → 在既有管線加入「Azure App Service Deploy」任務並修正成品 zip 路徑 → 修改 Repo 程式碼確認網站自動更新部署。')}
+      `
+    })
+  },
+
+  // ---------- SLIDE 06: CH 02 ----------
+  {
+    id: 'ch02',
+    navTitle: '06｜Ch 02 Azure Repos 與 Git 工作流',
+    tag: 'CH 02・CODE & PLAN',
+    render: () => renderChapterSlide({
+      num: 'CH 02',
+      stage: 'Code ↔ Plan（Go Deploy Lab 02）',
+      title: 'Azure Repos 與現代 Git 工作流（GitHub Flow）',
+      theme: '建立嚴謹的 Git 版本控制紀律，並以「短命 Feature Branch + Pull Request + Work Item 連動」取代容易產生合併地獄的長分支開發模式。',
+      objectives: [
+        '熟練本機 Git 初始化、.gitignore 防護、推送至 Azure Repos 與刪除後重新 Clone 還原驗證。',
+        '串聯完整協作鏈：PBI → SBI → Task → 由 Task 建立 Feature Branch → 修改推送 → PR 審查 → Merge。',
+        '吸收 Martin Fowler《Continuous Integration》與 Dave Farley《Git Flow Is A Bad Idea》精髓，理解短分支高頻整合價值。'
+      ],
+      knowledge: [
+        { k: 'Git 基礎與 SSOT', v: 'git init / add / commit / log / remote add / push -u origin --all / clone，確保遠端 Repo 為唯一真相來源。' },
+        { k: '.gitignore 優先治理', v: '透過 VS Code 套件或範本排除 bin/、obj/ 與敏感設定檔，維持版本庫輕量與乾淨。' },
+        { k: 'GitHub Flow & PR 閉環', v: '主幹 main 永遠保持可部署狀態；所有變更皆透過短命 Feature Branch 與 Pull Request 經同儕審查後合入。' },
+        { k: 'Boards × Repos 自動連動', v: 'PR 合併後自動完成三件事：(1) 程式碼更新、(2) 關聯 Task 自動轉為 Done、(3) Feature Branch 自動刪除。' }
+      ],
+      pitfalls: [
+        '核心面試/考題思考：為何分支要關聯「Task」而非「PBI / Bug」？因一個 PBI 常跨多個 Task，若 PR 直接綁定 PBI 並勾選自動完成，會誤把尚未全部完工的 PBI 提前關閉！',
+        '務必在首次 git add . 之前就放好 .gitignore；已進入追蹤的雜訊檔事後補 .gitignore 不會自動移除。',
+        'PR 合併時務必勾選「Delete branch after merging」，避免長期殘留過期殭屍分支。'
+      ],
+      labsHtml: `
+        ${renderLabCard('Lab 3', '【Lab 3-1 & 3-2】本機建立 .NET WebApp、設定 git global、加入 .gitignore 並 Commit → Push 至 Azure Repo → 刪除本機原始碼再 git clone 驗證還原。')}
+        ${renderLabCard('Lab 4', '匯入 dotNet8BMISample → 建立 PBI → 移至 SBI → 建 Task → 由 Task 建 Feature Branch → 改 /WebBMI/Pages/Index.cshtml → 發 PR 指定 Reviewer 核准合併並驗證三項自動連動。')}
+      `
+    })
+  },
+
+  // ---------- SLIDE 07: CH 03 ----------
+  {
+    id: 'ch03',
+    navTitle: '07｜Ch 03 CI 持續整合與品質安全左移',
+    tag: 'CH 03・DEVSECOPS CI',
+    render: () => renderChapterSlide({
+      num: 'CH 03',
+      stage: 'Code → Build → Test（Shift-Left DevSecOps）',
+      title: 'CI 持續整合與品質安全左移（PR-CI / AI / SAST / SCA）',
+      theme: '在 Pull Request 合併進 main 之前築起四重自動化品質防線：編譯驗證、GPT AI 審查、SonarCloud 靜態掃描與 WhiteSource 套件稽核。',
+      objectives: [
+        '建立 CI（Prod）與 PR-CI（Dev/Test）雙管線架構，於 main 分支啟用 Branch Policy Build Validation。',
+        '整合 Azure OpenAI（GPT PR Reviewer）在 PR 介面自動以行內留言抓出程式臭蟲與安全隱患。',
+        '導入 SonarCloud（SAST）分析弱點與技術債，及 WhiteSource Bolt / Mend（SCA）把關開源套件 CVE 與授權合規。'
+      ],
+      knowledge: [
+        { k: '雙管線與 Branch Policy', v: 'PR-CI 關閉 CI Trigger 僅由 main 分支的 Build Validation 觸發；PR 過關合併後再觸發正式 CI。' },
+        { k: 'AI Code Review (GPT)', v: '透過 tw-developer.GPTPRReviewer 擴充串接 Azure OpenAI，自動指出硬編碼密碼、除零風險、型別截斷與不良註解。' },
+        { k: 'SAST 靜態分析 (SonarCloud)', v: '檢測 Bugs、Vulnerabilities、Security Hotspots、Code Smells 與修復工時（Effort），搭配 Quality Gate 擋關。' },
+        { k: 'SCA 套件掃描 (WhiteSource)', v: '分析專案第三方 NuGet/npm 相依樹，揭露已知 CVE 漏洞與開源授權（MIT/GPL 等）法務風險。' }
+      ],
+      pitfalls: [
+        'PR-CI 複製自 CI 後，務必移除 CI Trigger！否則每次推送分支會重複執行兩條管線浪費資源。',
+        'GPT PR Reviewer 必設「雙重權限」：(1) Repo 權限賦予 Build Service 可對 PR 留言；(2) Pipeline Agent Job 勾選 Allow scripts to access the OAuth token。',
+        '實務切勿把 Azure OpenAI Key 或 SonarCloud Token 明碼寫進管線設定，應轉存入 Secret Variable 或 Key Vault。'
+      ],
+      extraVisual: `
+        <div class="p-3 rounded-xl bg-[var(--content)] border border-[var(--border)]">
+          <div class="text-xs font-bold mb-2 text-[var(--primary)]">PR-CI 四重安全左移防線架構</div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs text-center">
+            <div class="p-2 rounded-lg bg-[var(--card)] border border-[var(--border)]"><div class="font-bold">① Build Validation</div><div class="text-[var(--muted-foreground)]">Lab 5 編譯把關</div></div>
+            <div class="p-2 rounded-lg bg-[var(--card)] border border-[var(--border)]"><div class="font-bold">② GPT AI Review</div><div class="text-[var(--muted-foreground)]">Lab 6 語意抓錯</div></div>
+            <div class="p-2 rounded-lg bg-[var(--card)] border border-[var(--border)]"><div class="font-bold">③ SonarCloud SAST</div><div class="text-[var(--muted-foreground)]">Lab 7 弱點/技術債</div></div>
+            <div class="p-2 rounded-lg bg-[var(--card)] border border-[var(--border)]"><div class="font-bold">④ Mend SCA</div><div class="text-[var(--muted-foreground)]">Lab 8 套件 CVE</div></div>
+          </div>
+        </div>
+      `,
+      labsHtml: `
+        ${renderLabCard('Lab 5', '建立 CI 與 PR-CI 雙管線 → 設定 main Branch Policy Build Validation → 由 Task 建分支改 int→Float → 驗證 PR 觸發 PR-CI、合併後觸發 CI。')}
+        ${renderLabCard('Lab 6', '在 PR-CI 加入 GPT PR Reviewer 並設妥雙重權限 → 在 BmiCalculator.cs 植入 pwd、除零、強轉與 todo → 檢視 PR AI 審查留言。')}
+        ${renderLabCard('Lab 7', '整合 SonarCloud 擴充與管線掃描任務 → 檢視雲端 PR 掃描報告與安全議題清單。')}
+        ${renderLabCard('Lab 8', '安裝 WhiteSource Bolt v2 擴充 → 加入套件掃描 Task → 執行管線檢視第三方相依弱點與授權報表。')}
+      `
+    })
+  },
+
+  // ---------- SLIDE 08: CH 04 ----------
+  {
+    id: 'ch04',
+    navTitle: '08｜Ch 04 Git Hook 本機提交前防線',
+    tag: 'CH 04・LOCAL SECURITY',
+    render: () => renderChapterSlide({
+      num: 'CH 04',
+      stage: 'Code（極致左移・本機端攔截）',
+      title: 'Git Hook：Commit 前自動化程式碼防線',
+      theme: '將安全檢查再往前推進至「本機 git commit 當下」，在敏感密碼、未完成標記或風險關鍵字寫入 Git 歷史前即刻阻擋，節省事後清理歷史的高昂代價。',
+      objectives: [
+        '理解 Git Client-Side Hooks（.git/hooks/pre-commit）的觸發時機與非零退出碼（exit 1）攔截機制。',
+        '實作 Shell Script 針對 git diff-index 新增行進行正則比對，自動擋下含 password、todo、sql 的提交。'
+      ],
+      knowledge: [
+        { k: 'Pre-Commit 攔截機制', v: '於 .git/hooks/ 建立無副檔名的 pre-commit 腳本；腳本回傳 exit 1 即立即中止 git commit。' },
+        { k: '精準增量比對指令', v: 'git diff-index --patch HEAD | grep "^+" | grep -Pi "password|todo|sql" 僅檢核新增內容，避免誤殺舊檔。' },
+        { k: '防禦縱深 (Defense in Depth)', v: '本機 Git Hook 提供毫秒級回饋（第一道防線），雲端 Branch Policy + PR-CI 負責不可繞過的強制把關（第二道防線）。' }
+      ],
+      pitfalls: [
+        '.git/hooks/ 目錄不會隨 git push 同步給其他隊友！企業實務應改將腳本放在專案內 .githooks/ 並執行 git config core.hooksPath .githooks，或採用 Husky / pre-commit 框架。',
+        '開發者可透過 git commit --no-verify 繞過本機 Hook，因此絕不可只靠本機 Hook 取代雲端 CI 與 Secret Scanning！',
+        'Windows 環境需留意 Shebang 路徑（#!C:/Program\\ Files/Git/usr/bin/sh.exe）與確認檔案「無副檔名」（避免存成 pre-commit.txt）。'
+      ],
+      labsHtml: `
+        <div class="p-3.5 rounded-xl bg-[var(--content)] border border-[var(--border)] space-y-2">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="text-xs font-bold text-[var(--primary)]">Lab｜使用 Git Hook 在 Commit 前進行程式碼檢查</span>
+            <span class="px-2 py-0.5 rounded-full text-xs font-medium badge-soft-warning">📌 課堂示範 / 延伸實作</span>
+          </div>
+          <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+            於專案 .git/hooks/ 建立 pre-commit 腳本偵測黑名單字詞（password|todo|sql）→ 刻意撰寫包含 sql 與 password 的測試程式 → 執行 git commit 驗證系統印出 Error 訊息並成功攔截提交。
+          </p>
+          <pre class="text-xs font-mono p-2.5 rounded-lg bg-[var(--card)] border border-[var(--border)] overflow-x-auto text-[var(--foreground)]">matches=$(git diff-index --patch HEAD | grep '^+' | grep -Pi 'password|todo|sql')
+if [ ! -z "$matches" ]; then echo "Error: Blacklist words found!"; exit 1; fi</pre>
+        </div>
+        <div class="p-3 rounded-xl surface-tint-primary border border-[var(--border)] text-xs text-[var(--muted-foreground)]">
+          <strong class="text-[var(--foreground)]">金融業落地加值：</strong>可將正規表達式擴充整合 <code class="font-mono">gitleaks</code> 或 <code class="font-mono">detect-secrets</code>，在開發者筆電端即攔截 Connection String、金鑰與個資樣式。
+        </div>
+      `
+    })
+  },
+
+  // ---------- SLIDE 09: CH 05 ----------
+  {
+    id: 'ch05',
+    navTitle: '09｜Ch 05 敏捷開發、需求追蹤與儀表板',
+    tag: 'CH 05・PLAN ↔ MONITOR',
+    render: () => renderChapterSlide({
+      num: 'CH 05',
+      stage: 'Plan ↔ Monitor（Azure Boards & Wiki）',
+      title: '敏捷開發、需求追蹤、數位儀表板與 Wiki',
+      theme: '將 Scrum 2020 與敏捷宣言具象化於 Azure Boards 與 Wiki，透過 Capacity、燃盡圖、CFD 與雙向工作項連結，讓需求到交付完全透明可追蹤。',
+      objectives: [
+        '建立 Scrum 專案，完成 HR 請假系統 Product Backlog、標準 User Story、Effort 與 Sprint Iteration 規劃。',
+        '將 PBI 拆解為 Tasks 並填寫 Remaining Hours、配置成員每日 Capacity，判讀 Work Details 與燃盡圖。',
+        '建置團隊 Shared Queries 與全維度數位儀表板（CFD、Cycle/Lead Time），並於 Wiki 嵌入 Mermaid 與 #WorkItem。'
+      ],
+      knowledge: [
+        { k: 'Scrum 需求階層', v: '依據 2020 Scrum Guide：PBI → SBI → Tasks；以標準格式撰寫 User Story 與驗收準則（AC）。' },
+        { k: '產能負荷平衡', v: '設定成員每日 Capacity 與休假，於 Work Details 即時監看紅/綠負荷條避免人員過載。' },
+        { k: '關鍵流動指標', v: 'Sprint Burndown（追蹤剩餘工時）、CFD（辨識瓶頸 WIP）、Cycle Time（工程效率）vs Lead Time（客戶等待總時長）。' },
+        { k: '活文件 Azure Wiki', v: '原生支援 Mermaid 流程圖、@人員通知、#工作項ID 即時顯示狀態（與 Notion 整合可透過 Unito 雙向同步）。' }
+      ],
+      pitfalls: [
+        'Query 務必存放在「Shared Queries」資料夾！存在 My Queries 無法釘選到團隊 Dashboard，也無法讓後續 Lab 23 Release Gate 讀取。',
+        '必須先於 Project Settings → Team Configuration 設定好 Iteration 起訖日期，否則 Capacity 與 Sprint Burndown 無法運作。',
+        '新專案剛建立時若尚無完工歷史紀錄，Cycle Time 與 Lead Time Widget 顯示 0 results 屬正常現象。'
+      ],
+      labsHtml: `
+        ${renderLabCard('Lab 9', '建立 Scrum 專案 → 建置 20 項 HR 請假系統 Backlogs → 挑選 1–3 張撰寫 User Story → 設定 Effort 並安排進 Sprint 迭代。')}
+        ${renderLabCard('Lab 10', '每張 Backlog 展開 3–5 個 Tasks 並設 Remaining Hours → 設定一週迭代與成員 Capacity → 分配任務檢視 Work Details 與燃盡圖。')}
+        ${renderLabCard('Lab 11', '建立「未完成工作項」Shared Query 與分組圖表 → 組裝含 Burndown、CFD、Build History、Cycle/Lead Time、Query Tile 之戰情室。')}
+        ${renderLabCard('Lab 12', '建立 Azure Wiki 頁面 → 嵌入 Mermaid 圖表、@標註人員與 #標註 Work Item 建立雙向追蹤活文件。')}
+      `
+    })
+  },
+
+  // ---------- SLIDE 10: CH 06 ----------
+  {
+    id: 'ch06',
+    navTitle: '10｜Ch 06 Build Agent 與 Pipeline-as-Code',
+    tag: 'CH 06・EXECUTION ENGINE',
+    render: () => renderChapterSlide({
+      num: 'CH 06',
+      stage: 'Build / Test / Deploy 執行層（Go Deploy Lab 03）',
+      title: 'Build Agent 與 Pipeline-as-Code（YAML & GitHub Actions）',
+      theme: '突破雲端託管主機的內網與工具限制，自建 Ubuntu 24.04 Linux Self-Hosted Agent，並將建置流程進化為可版控審查的 YAML Pipeline 與 GitHub Actions。',
+      objectives: [
+        '於 Ubuntu 24.04 Linux VM 使用 PAT 註冊 Project-Level Self-Hosted Agent，並掌握 Linux 套件相依排錯技巧。',
+        '使用 azure-pipelines.yml 建立 ASP.NET Core 建置管線，體驗 Pipeline-as-Code 優勢。',
+        '跨平台於 GitHub 建立 GitHub Actions Workflow 並結合 Codespaces 完成雲端修改自動觸發。'
+      ],
+      knowledge: [
+        { k: 'Microsoft-Hosted vs Self-Hosted', v: '雲端託管免維運但受限於內網防火牆與平行時數；自建 Agent 可存取地端資源、快取套件並客製 SDK 環境。' },
+        { k: 'Linux Agent 註冊與排錯', v: '透過 PAT 執行 ./config.sh 與 ./run.sh；遇新版 Ubuntu 缺 libssl1.1 等舊依賴時，改裝微軟套件源與新版 .NET SDK。' },
+        { k: 'Pipeline-as-Code (YAML)', v: '管線定義即程式碼，隨分支演進、可發 PR 審查變更並可抽離成共用 Template。' },
+        { k: 'GitHub Actions + Codespaces', v: '熟悉 .github/workflows YAML 語法與雲端即時 IDE 開發驗證流程，具備跨平台 DevOps 能力。' }
+      ],
+      pitfalls: [
+        'Go Deploy Module 3 關鍵陷阱：禁止使用 Org Level 的 Default Pool，必須自行建立「Project Level」的 Self-Hosted Agent Pool，並在 ./config.sh 明確輸入該 Pool Name！',
+        '在 Ubuntu 24.04 上強行安裝舊版 libssl1.1 具相容風險（不建議），應優先改用新版 .NET 6/8/9 SDK 或透過 apt-get install -f / dpkg --configure -a 修復。',
+        '正式營運的 Self-Hosted Agent 應使用 sudo ./svc.sh install 轉為系統常駐服務，避免關閉終端機後 Agent 離線。'
+      ],
+      labsHtml: `
+        ${renderLabCard('Lab 13', '於 Ubuntu 24.04 VM 建立 PAT → 在專案建立 Project-Level Agent Pool → 註冊並啟動 Linux Self-Hosted Agent 確認 Online 並接單。')}
+        ${renderLabCard('Lab 14', '於 Azure Pipelines 選用 YAML 範本建立 ASP.NET Core CI Pipeline，取代 Classic GUI 建置流程。')}
+        ${renderLabCard('Lab 14-2', '匯入 dotNet8BMISample 至 GitHub → 建立 GitHub Action Workflow → 使用 Codespaces 編輯 Push 並驗證自動觸發。')}
+      `
+    })
+  },
+
+  // ---------- SLIDE 11: CH 07 ----------
+  {
+    id: 'ch07',
+    navTitle: '11｜Ch 07 Security & Secret 資安與動態組態',
+    tag: 'CH 07・DEVSECOPS & CONFIG',
+    render: () => renderChapterSlide({
+      num: 'CH 07',
+      stage: 'DevSecOps & Operate（Go Deploy KV CS & Lab 11）',
+      title: 'Security & Secret：威脅建模、無金鑰與動態組態',
+      theme: '徹底根除硬編碼密碼與 API Key，整合威脅建模、Azure Key Vault、Managed Identity 無金鑰驗證、App Configuration 動態組態與 Feature Flags。',
+      objectives: [
+        '認識 Microsoft Threat Modeling Tool（STRIDE），於開發前預先盤點資料流安全風險。',
+        '將 Azure Key Vault 機密連結至 Azure Pipelines Variable Group，確保建置注入與日誌自動遮罩。',
+        '理解 DefaultAzureCredential + RBAC + Managed Identity 免 API Key 存取 MS Foundry LLM API 之零信任架構。',
+        '透過 Azure App Configuration 實作免重佈動態組態更新與 Feature Toggle（含 Cache 時間控制）。'
+      ],
+      knowledge: [
+        { k: '威脅建模 (STRIDE)', v: '使用 MS Threat Modeling Tool 繪製系統架構與信任邊界，於設計期即產出緩解對策清單。' },
+        { k: 'Key Vault × Variable Group', v: '配置 IAM 與保存庫存取原則，於 Library 綁定 Secret（如 testSecret01），執行時自動遮罩為 ***。' },
+        { k: '無金鑰驗證 (Managed Identity)', v: '本機開發走 az login、雲端正式環境走 Managed Identity + RBAC，呼叫 GPT-5 / Azure 服務完全不碰 API Key。' },
+        { k: 'App Config & Feature Toggle', v: '集中管理鍵值組態（Page:SubTitle）與功能開關（toggle01），透過 CacheExpirationInterval 控制刷新秒數。' }
+      ],
+      pitfalls: [
+        'Key Vault 存取設定須確認權限模型（Vault Access Policy vs Azure RBAC），並同時授予個人與 Pipeline Service Principal 權限，否則讀取報 403。',
+        'App Configuration 預設快取為 30 秒，實測修改鍵值或切換 Feature Toggle 若未立即生效，請調整 CacheExpirationInterval（如 5 秒），但正式環境勿設過短以免 API 成本暴增。',
+        '刪除 App Config 鍵值（Lab 16 步驟 9）後，程式須設計好 appsettings.json 預設值 Fallback，避免空值例外。'
+      ],
+      labsHtml: `
+        ${renderLabCard('Lab 15', '建立 Key Vault（設 IAM 與存取原則、建 testSecret01）→ 於 ADO Library 建立 Variable Group 連結 Key Vault → PowerShell 輸出驗證遮罩。')}
+        <div class="p-2.5 rounded-xl bg-[var(--content)] border border-[var(--border)] flex flex-wrap items-center justify-between gap-2">
+          <div class="text-xs"><span class="font-bold text-[var(--primary)]">延伸 Lab｜無金鑰存取 MS Foundry (GPT-5)：</span><span class="text-[var(--muted-foreground)]">使用 DefaultAzureCredential + az login（本機）與 Managed Identity + RBAC（Azure）完全取代 API Key。</span></div>
+          <span class="px-2 py-0.5 rounded-full text-xs badge-soft-warning shrink-0">📌 企業零信任重點</span>
+        </div>
+        ${renderLabCard('Lab 16', 'Clone DemoAppConfigWeb → 建立 App Configuration 啟用存取金鑰 → 新增、修改、刪除 Page:SubTitle 觀察 Web App 即時變化。')}
+        ${renderLabCard('Lab 17', '使用 AZ-204-testFeatureManagement → 建立 Feature Toggle (toggle01) → 切換 true 檢視首頁功能動態啟用與調整 Cache 時間。')}
+      `
+    })
+  },
+
+  // ---------- SLIDE 12: CH 08 ----------
+  {
+    id: 'ch08',
+    navTitle: '12｜Ch 08 Dependency Management 相依套件管理',
+    tag: 'CH 08・SUPPLY CHAIN',
+    render: () => renderChapterSlide({
+      num: 'CH 08',
+      stage: 'Code → Build → Release（Azure Artifacts）',
+      title: 'Dependency Management：套件解耦與私有 NuGet Feed',
+      theme: '將企業共用模組從緊耦合的「專案參考」抽離為獨立版控的 NuGet 套件，並建置自動化建置發佈管線推送至企業私有 Azure Artifacts Feed。',
+      objectives: [
+        '理解 Project Reference 與 NuGet Package Reference 在多團隊協作下的解耦與版本控管優勢。',
+        '於 .csproj 設定 GeneratePackageOnBuild、唯一 PackageId 與語意化版本號（SemVer）。',
+        '設計自動化 Pipeline 產出 .nupkg 並安全推送至公開 NuGet Gallery 與私有 Azure Artifacts Feed。'
+      ],
+      knowledge: [
+        { k: 'csproj 封裝宣告', v: '透過 GeneratePackageOnBuild=true、PackageId、Authors、Version 等屬性，編譯即自動產出 .nupkg。' },
+        { k: '私有套件庫 (Azure Artifacts)', v: '集中託管企業內部核心元件（不外流至公開網站），並可開啟 Upstream Sources 快取外部 NuGet 套件防斷鏈。' },
+        { k: '精準發佈萬用路徑', v: '於 Push Task 指定 Path to NuGet packages 為 **/HealthMgr*.nupkg，精準發佈目標元件。' },
+        { k: '套件不可變性 (Immutability)', v: '已發佈版號不可覆蓋，確保所有下游系統每次還原都取得完全一致的二進位檔。' }
+      ],
+      pitfalls: [
+        '重複推送相同 PackageId + Version 會被 NuGet Feed 拒絕！每次重新發佈務必遞增 Version（實務建議搭配自動化語意版號如 GitVersion）。',
+        '推送至 Private Feed 前，務必在 Feed Settings → Permissions 賦予 Project Collection Build Service「Contributor」權限，否則必噴 403。',
+        '講義特別提醒：推送至外部 NuGet Gallery 的管線環境建議選用 ubuntu-22.04（或指定相容 NuGet CLI 版本）避免相容錯誤。'
+      ],
+      labsHtml: `
+        ${renderLabCard('Lab 18', '將 HealthMgr 專案手動建置為 .nupkg → 移除 WebBMI 對 HealthMgr 的專案參考 → 手動上傳並改以 NuGet Package 參照。', '⏭️ 全班跳過 (0/11)・直上自動化')}
+        ${renderLabCard('Lab 19', '匯入 HealthMgrPackageDemo → 修改 HealthMgr.csproj 設定專屬 PackageId 與版號 → 建立 Private Feed 並設權限 → 以 Pipeline 自動 Build & Push **/HealthMgr*.nupkg。')}
+      `
+    })
+  },
+
+  // ---------- SLIDE 13: CH 09 ----------
+  {
+    id: 'ch09',
+    navTitle: '13｜Ch 09 IaC：ARM Template & Bicep',
+    tag: 'CH 09・INFRASTRUCTURE AS CODE',
+    render: () => renderChapterSlide({
+      num: 'CH 09',
+      stage: 'Code → Release / Deploy（IaC）',
+      title: 'Infrastructure as Code：ARM Template 與 Bicep',
+      theme: '終結容易出錯的人工點擊 Portal（ClickOps），以具冪等性的宣告式程式碼（ARM JSON → 現代化 Bicep）一鍵複製完全一致的 Dev / QA / Prod 環境。',
+      objectives: [
+        '掌握 ARM Template JSON 五大區塊（$schema、parameters、variables、resources、outputs）與 AZ CLI 部署指令。',
+        '理解 Bicep 如何作為 Azure 原生宣告式 DSL 取代冗長 JSON，提供強型別、字串插值與模組重用。',
+        '實際以 IaC 範本批次佈建 Dev / QA / Prod 三環境 App Service 並注入各自專屬 appSettings。'
+      ],
+      knowledge: [
+        { k: '宣告式與冪等性', v: '只需宣告資源最終狀態，重複部署同一份範本只會收斂至目標狀態，不會重複長出多餘資源。' },
+        { k: 'ARM Template (JSON)', v: 'Azure 底層原生部署規格，透過 [concat(parameters("webAppName"),"-QA")] 與 Reference() 處理相依與輸出。' },
+        { k: 'Bicep 現代語法', v: '語法精簡 40–60%，原生支援字串插值 "${webAppName}-QA"、VS Code 自動補全與編譯轉譯為標準 ARM JSON。' },
+        { k: '環境差異參數化', v: '透過 parameters 與 siteConfig.appSettings 區分 Dev / QA / Prod 環境組態，搭配 outputs 輸出供下游串接。' }
+      ],
+      pitfalls: [
+        'AZ CLI 語法更新：講義中的 az group deployment create 為舊版命令，新版已改為「az deployment group create」，建議先加 --what-if 預覽變更！',
+        'Web App 名稱須「全球唯一」（*.azurewebsites.net），命名務必帶日期與個人/專案前綴避免撞名失敗。',
+        '範本內切勿明碼寫死正式密碼（如示範之 AdminPwd），生產環境應使用 @secure() 參數並從 Key Vault 動態引用。',
+        '注意題目要求建置「3 座網站（Dev / QA / Prod）」，講義範例僅寫了 Dev 與 QA，須自行補齊 Prod 資源宣告！'
+      ],
+      extraVisual: `
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+          <div class="p-2.5 rounded-xl bg-[var(--content)] border border-[var(--border)]">
+            <div class="font-bold text-[var(--muted-foreground)] mb-1">ARM Template (JSON) — 較冗長</div>
+            <code class="font-mono block text-[var(--foreground)]">"name": "[concat(parameters('webAppName'),'-QA')]"</code>
+          </div>
+          <div class="p-2.5 rounded-xl surface-tint-primary border border-[var(--border)]">
+            <div class="font-bold text-[var(--primary)] mb-1">Bicep — 簡潔強型別（官方首推）</div>
+            <code class="font-mono block text-[var(--foreground)]">name: '\${webAppName}-QA'</code>
+          </div>
+        </div>
+      `,
+      labsHtml: `
+        ${renderLabCard('Lab 20', '撰寫 ARM Template JSON 建立 Dev / QA / Prod 三環境 Web App 與個別 appSettings → 以 AZ CLI 建立資源群組並部署範本。')}
+        ${renderLabCard('Lab 20-1', '改以宣告式 Bicep 語法重構等效多環境 Web App 範本並完成雲端佈建。')}
+      `
+    })
+  },
+
+  // ---------- SLIDE 14: CH 10 (Part 1) ----------
+  {
+    id: 'ch10-1',
+    navTitle: '14｜Ch 10 CD 持續交付（上）：Classic CD / 簽核 / Gate / 藍綠',
+    tag: 'CH 10・CD GOVERNANCE (1/2)',
+    render: () => renderChapterSlide({
+      num: 'CH 10 (上)',
+      stage: 'Release → Deploy（Classic CD 與零停機策略）',
+      title: 'CD 持續交付與企業部署治理：簽核、品質閘門與藍綠部署',
+      theme: '建構分階段、可稽核且零停機的企業交付管線——結合人工覆核（Approver）、自動缺陷閘門（Release Gate）與 Deployment Slot 藍綠切換，讓上線不再提心吊膽。',
+      objectives: [
+        '建置 Dev → QA → Prod 三階段 Classic Release Pipeline，驗證改碼後自動連鎖部署。',
+        '於正式環境前配置人工 Pre-Deployment Approver，並進階實作以 Shared Query 把關 Bugs < 5 的自動化 Release Gate。',
+        '利用 App Service Staging Slot 實作藍綠部署（Blue-Green Deployment），達成預熱驗證、零停機 Swap 與秒級回滾。'
+      ],
+      knowledge: [
+        { k: '多環境晉升管線', v: '單一建置產物（Build Artifact）依序通過 Dev → QA → Prod，確保測試過的版本與上線版本位元完全一致。' },
+        { k: 'Pre-Deployment Approver', v: '部署前強制暫停等待主管/維運人員簽核，保留完整「誰、何時、核准哪版」合規稽核軌跡。' },
+        { k: 'Release Gate 自動閘門', v: '依預設間隔自動輪詢 Work Item Query（如 Bugs < 5）、Azure Monitor 告警或外部 REST API，達標才放行。' },
+        { k: '藍綠部署 (Slot Swap)', v: '先佈署至 Staging Slot 驗證與預熱（Warm-up），再經簽核執行 Swap 無縫切換流量；異常可立即 Swap Back 回滾。' }
+      ],
+      pitfalls: [
+        'Lab 23 Release Gate 最常見失敗原因：(1) Query 未存為 Shared Query；(2) 未在 Shared Query 權限中開放給 Project Collection Build Service 讀取！',
+        'Azure App Service 的 Deployment Slots 必須使用 Standard (S1) 以上定價層，F1 / B1 無法建立 Staging Slot。',
+        '藍綠部署的環境差異設定（如正式 DB 連線字串）須勾選「Deployment slot setting（黏性設定）」，避免 Swap 時把測試連線交換到 Prod！'
+      ],
+      labsHtml: `
+        ${renderLabCard('Lab 21', '建立 CI + Classic Release Pipeline → 設定 Dev → QA → Prod 三階段 → 修改程式驗證自動連續部署三座網站。')}
+        ${renderLabCard('Lab 22', '在 Release Pipeline 關鍵階段前加入 Pre-Deployment Approver → Create Release 實測人工核准流程。')}
+        ${renderLabCard('Lab 23', '建立 All Bugs Shared Query 並開放權限 → 將簽核改為 Release Gate（條件 Bugs < 5）→ 驗證超標阻擋與修復後自動放行。')}
+        ${renderLabCard('Lab 24', '建立含 Staging Slot 的 Web App → 第一階段部署至 Staging → 加入 Approval → 第二階段 Swap 至 Production。')}
+      `
+    })
+  },
+
+  // ---------- SLIDE 15: CH 10 (Part 2) ----------
+  {
+    id: 'ch10-2',
+    navTitle: '15｜Ch 10 CD 持續交付（下）：Multi-Stage YAML & Deployment Group',
+    tag: 'CH 10・MODERN CD (2/2)',
+    render: () => renderChapterSlide({
+      num: 'CH 10 (下)',
+      stage: 'Release → Deploy → Operate（YAML CD & 混合雲 VM）',
+      title: '現代化 Multi-Stage YAML 與多主機 Deployment Group',
+      theme: '將分散的 Classic Build 與 Classic Release 合而為一，透過 Multi-Stage YAML + ADO Environments 實現端到端版控治理；並掌握針對傳統 IIS VM 的 Deployment Group 批次部署架構。',
+      objectives: [
+        '於 ADO 建立 ARM Service Connection，撰寫包含 Build Stage 與 Deploy Stage 的 Multi-Stage YAML Pipeline。',
+        '透過 Azure DevOps Environments（如 production）配置 Approvals and Checks，取代舊版 Classic Release 簽核。',
+        '了解透過 Deployment Group 註冊多台 Windows IIS VM 並進行批次自動化部署的混合雲實務模式。'
+      ],
+      knowledge: [
+        { k: 'Multi-Stage YAML 結構', v: '單一 azure-pipelines.yml 定義 stages: [Build → Deploy]，以 dependsOn 與 condition: succeeded() 嚴格串接。' },
+        { k: 'Artifact 跨階段傳遞', v: 'Build Stage 以 ArchiveFiles@2 + PublishBuildArtifacts@1 封裝 webapp.zip；Deploy Stage 以 DownloadPipelineArtifact@2 下載部署。' },
+        { k: 'Deployment Job & Environments', v: '使用 deployment job 綁定 environment: production 與 strategy: runOnce，集中管理跨管線的環境簽核與部署紀錄。' },
+        { k: 'Deployment Group (IIS VM)', v: '在多台地端/雲端 VM 安裝註冊代理並開啟 IIS，透過單一 Release Pipeline 同步或滾動更新多台實體/虛擬主機。' }
+      ],
+      pitfalls: [
+        'Multi-Stage YAML 必備兩個前置設定：(1) Project Settings 先建好 ARM Service Connection（如 MyAzureConn）；(2) Pipelines → Environments 建立對應名稱並配置簽核者。',
+        '初次執行 YAML 使用新 Service Connection / Environment 時，管線會跳出「Permit」授權確認按鈕，須點擊授權一次。',
+        '使用 Deployment Group 部署 IIS VM 時，別忘了在 Azure NSG 防火牆開啟 Port 80/443，且確認 VM 已執行 Add-WindowsFeature Web-Server。'
+      ],
+      extraVisual: `
+        <div class="p-3 rounded-xl bg-[var(--content)] border border-[var(--border)]">
+          <div class="text-xs font-bold mb-2 text-[var(--primary)]">Lab 25 Multi-Stage YAML 端到端執行管線（Jerry Run #20261125.3 實證）</div>
+          <div class="flex flex-wrap items-center gap-2 text-xs">
+            <span class="px-2.5 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)] font-semibold">① Stage: Build (54s)<br/><span class="text-[var(--success)] font-normal">Restore→Build→Test 100%→zip</span></span>
+            <span class="text-[var(--muted-foreground)] font-bold">→</span>
+            <span class="px-2.5 py-1.5 rounded-lg surface-tint-warning border border-[var(--border)] font-semibold">② Environment Gate<br/><span class="text-[var(--warning)] font-normal">production・1 checks passed</span></span>
+            <span class="text-[var(--muted-foreground)] font-bold">→</span>
+            <span class="px-2.5 py-1.5 rounded-lg surface-tint-success border border-[var(--border)] font-semibold">③ Stage: Deploy (1m 14s)<br/><span class="text-[var(--success)] font-normal">Download→AzureWebApp@1 ✅</span></span>
+          </div>
+        </div>
+      `,
+      labsHtml: `
+        ${renderLabCard('Lab 25', '建立 ARM Service Connection → 撰寫 Multi-Stage YAML（Build + Deploy）→ 於 ADO Environments 設定 production 簽核 → 執行並檢視跨階段全綠成果。')}
+        ${renderLabCard('Lab 26', '建立兩台 Azure Windows VM (vm01/vm02) 開啟 IIS 與 80 Port → 建立 Deployment Group 並於 VM 執行註冊指令 → 透過 CI/CD 批次部署靜態網站。', '⏭️ 全班未指派 (0/11)・混合雲 IIS 延伸')}
+      `
+    })
+  },
+
+  // ---------- SLIDE 16: CH 11 ----------
+  {
+    id: 'ch11',
+    navTitle: '16｜Ch 11 自動化 UI 測試與程式碼覆蓋率',
+    tag: 'CH 11・AUTOMATED QA',
+    render: () => renderChapterSlide({
+      num: 'CH 11',
+      stage: 'Build → Test → Deploy（Automated QA）',
+      title: '自動化 UI 測試（Playwright）與單元測試覆蓋率',
+      theme: '將重複耗時的手動點選驗證升級為跨瀏覽器自動化 E2E 測試（Playwright），並於 CI 管線中自動產出 Cobertura 程式碼覆蓋率報表，讓測試品質量化可視。',
+      objectives: [
+        '安裝 Microsoft.Playwright.CLI，利用 playwright codegen 錄製 UI 操作腳本並透過 MSTest (dotnet test) 自動回歸。',
+        '掌握於 Azure CI Pipeline 中自動安裝 Playwright 工具、下載無頭瀏覽器並執行 UI 測試的管線寫法。',
+        '以 --collect:"XPlat Code Coverage" 收集 Cobertura XML，於本機（reportgenerator）與雲端（Publish Code Coverage）呈現覆蓋率報告。'
+      ],
+      knowledge: [
+        { k: 'Playwright 現代 E2E 框架', v: '微軟主導之跨瀏覽器自動化工具（Chromium/Firefox/WebKit），支援自動等待、playwright codegen 錄製直接生成 C# 測試碼。' },
+        { k: 'UI 測試進 CI 管線', v: '在 windows-latest Agent 依序執行 UseDotNet → Restore → Build → 安裝 Playwright CLI → playwright install → dotnet test。' },
+        { k: 'XPlat Code Coverage', v: '透過 dotnet test --collect:"XPlat Code Coverage" 跨平台產生 coverage.cobertura.xml 覆蓋率數據。' },
+        { k: '覆蓋率視覺化發布', v: '本機以 dotnet-reportgenerator-globaltool 轉 HTML；雲端以 PublishCodeCoverageResults@1 直接渲染於 Build 頁籤。' }
+      ],
+      pitfalls: [
+        'Publish Code Coverage 版本注意：講義指定使用「v1.0」搭配 tool=cobertura 與路徑 $(Agent.TempDirectory)/**/coverage.cobertura.xml，避免版本參數差異導致報表未顯示。',
+        'Lab 27-2 舊範例指定 .NET 5.0.408，實務專案應統一升級至 .NET 8/9 LTS，且建議將瀏覽器快取或預裝於自訂容器以縮短 CI 時間。',
+        '覆蓋率應同時關注 Line Coverage 與 Branch Coverage（分支條件），避免為了衝高數字而寫出缺乏斷言（Assert）的空殼測試。'
+      ],
+      labsHtml: `
+        ${renderLabCard('Lab 27-1', '全域安裝 Microsoft.Playwright.CLI → 建立 MSTest 加入 Microsoft.Playwright → playwright install → playwright codegen 錄製並執行 dotnet test 驗證。')}
+        ${renderLabCard('Lab 27-2', '匯入 PlaywrightAutoUITest → 設計含 UseDotNet、Restore/Build、安裝 Playwright CLI 與瀏覽器、dotnet test 之自動化 UI 測試 CI 管線。', '⏭️ 全班未指派 (0/11)・CI 整合延伸')}
+        ${renderLabCard('Lab 28', '本機以 XPlat Code Coverage + reportgenerator 產出 HTML 報表；雲端管線於 dotnet test 加收集參數並搭配 Publish Code Coverage v1.0 呈現覆蓋率。')}
+      `
+    })
+  },
+
+  // ---------- SLIDE 17: CH 12 ----------
+  {
+    id: 'ch12',
+    navTitle: '17｜Ch 12 容器化與雲端映像交付（Docker / ACR / ACI）',
+    tag: 'CH 12・CONTAINERS',
+    render: () => renderChapterSlide({
+      num: 'CH 12',
+      stage: 'Build → Release → Deploy（Docker / ACR / ACI）',
+      title: '容器化交付：Docker、Azure Container Registry 與 ACI',
+      theme: '將應用程式與所有執行期依賴封裝為標準化不可變容器映像（Docker Image），消除「本機正常、上線異常」的環境漂移，並透過 CI/CD 自動推送 ACR 與部署至雲端容器服務。',
+      objectives: [
+        '驗證本機 Docker Desktop 運作，熟練 docker run 埠口映射啟動容器服務。',
+        '了解 Visual Studio Docker Support 手動發佈至 ACR，以及從 ACR 部署至 Azure Web App 的路徑。',
+        '建置全自動 CI/CD 管線完成 Docker Build & Push 至私有 ACR，並透過 AZ CLI 自動部署至 Azure Container Instances（ACI）。'
+      ],
+      knowledge: [
+        { k: 'Docker 基礎與埠口映射', v: 'docker run -p 8080:80 twdeveloper/web01 將主機 8080 埠對應至容器內 80 埠，快速跨環境重現一致應用。' },
+        { k: '私有映像倉庫 (ACR)', v: 'Azure Container Registry 安全託管企業私有映像，建議搭配 $(Build.BuildId) 標記唯一版本號取代 :latest。' },
+        { k: '自動化 Build & Push', v: '於 Azure Pipelines 編譯 Dockerfile 並直推 ACR，無須在開發者本機手動打包上傳。' },
+        { k: '雲端容器運行選擇', v: 'ACI（快速輕量無伺服器容器）vs Web App for Containers（內建 Slot/TLS）vs 進階 ACA / AKS 微服務編排。' }
+      ],
+      pitfalls: [
+        '高風險資安提醒：講義 Lab 30 範例之 az container create --registry-password 僅為教學語法示範，正式環境絕不可明碼硬編碼 ACR 密碼，應改用 Secret Variable 或 ACR Managed Identity（AcrPull 角色）！',
+        'VS 2022 手動發佈 Docker Image 至 ACR 若遇憑證或 BuildKit 錯誤，可參考講義列出的微軟 Developer Community 排除方案，或直接改走自動化管線（Lab 30）。',
+        '映像標籤務必採用不可變版號（如 $(Build.BuildId) 或 Git SHA），確保發生線上異常時能精準回滾。'
+      ],
+      labsHtml: `
+        <div class="p-2.5 rounded-xl bg-[var(--content)] border border-[var(--border)] flex flex-wrap items-center justify-between gap-2 text-xs">
+          <span><strong class="text-[var(--primary)]">入門實作：</strong>確認 <code class="font-mono">docker --version</code> 並執行 <code class="font-mono">docker run -p 8080:80 twdeveloper/web01</code> 驗證瀏覽器畫面；及延伸題「ACR 部署至 Web App」。</span>
+        </div>
+        ${renderLabCard('Lab 29', '建立 .NET 5 WebApp → 於 VS2022 加入 Docker Support → 建立 ACR 並由 IDE 手動發佈映像觀察 ACR Repo。', '⏭️ 全班跳過 (0/11)・直上自動化')}
+        ${renderLabCard('Lab 30', '建立 Azure ACR → 匯入 AzureDevOpsLab-DockerContainerSupport → 設計管線自動 Docker Build & Push 至 ACR → 以 az container create 部署至 ACI。')}
+      `
+    })
+  },
+
+  // ---------- SLIDE 18: CH 13 ----------
+  {
+    id: 'ch13',
+    navTitle: '18｜Ch 13 可觀測性、應用監控與負載測試',
+    tag: 'CH 13・MONITOR & LOAD TEST',
+    render: () => renderChapterSlide({
+      num: 'CH 13',
+      stage: 'Operate → Monitor（課後最高優先補強章節！）',
+      title: '可觀測性（App Insights / KQL / Alert）與 Azure Load Testing',
+      theme: '補齊 DevOps 最後一塊拼圖！透過程式埋點收集遙測、以 KQL 將離散事件轉化為視覺趨勢、設定異常即時通報告警（簡訊/電話/Email），並以雲端負載測試提前發掘系統瓶頸。',
+      objectives: [
+        '在 .NET 9 Web App 安裝 Application Insights，透過 DI 注入 TelemetryClient 紀錄 TrackTrace 與自訂 TrackEvent（Dimensions + Metrics）。',
+        '精通 KQL 核心語法（where、extend、summarize、bin()、render timechart / columnchart），繪製流量、CPU 門檻線與登入成敗對比圖。',
+        '設定 Azure Monitor 警示規則（15 秒登入失敗 > 3 次觸發 Action Group）並操作 Azure Load Testing 執行壓力測試。'
+      ],
+      knowledge: [
+        { k: 'TelemetryClient 遙測埋點', v: '透過 DI 注入 TelemetryConfiguration 建立 TelemetryClient，支援 TrackTrace、TrackEvent、TrackMetric、TrackException 等類型。' },
+        { k: 'KQL 核心心法', v: 'bin(timestamp, 15s) 是把「離散事件」變「連續趨勢」的關鍵；summarize 搭配 count/sum/avg，render 自動繪製折線/柱狀圖。' },
+        { k: '主動告警 (Alert + Action Group)', v: '針對安全/營運異常（如短時間多次登入失敗）每 1 分鐘自動評估，超標即觸發 Email、簡訊與語音電話通知。' },
+        { k: 'Azure Load Testing', v: '雲端全託管負載測試服務，快速建立測試計畫並模擬高併發流量，觀測回應延遲與後端資源瓶頸。' }
+      ],
+      pitfalls: [
+        '高優先程式修正：Lab 33 講義範例為簡化寫成「public async void OnGet()」，實務上 ASP.NET Core 務必改為「public async Task OnGetAsync()」，避免未攔截例外導致站台崩潰！',
+        'PerformanceCounter 僅支援 Windows 主機，跨平台 Linux 容器應改用 OpenTelemetry 或 Azure Monitor 內建主機指標。',
+        'KQL 讀取 customMeasurements / customDimensions 須以 todouble()、tostring() 轉型並加 where isfinite(...) 過濾；另遙測資料通常有 1–3 分鐘寫入延遲。'
+      ],
+      extraVisual: `
+        <div class="p-3 rounded-xl surface-tint-warning border border-[var(--border)]">
+          <div class="text-xs font-bold mb-1.5 text-[var(--warning)]">KQL 核心查詢管線速記（Lab 33–35 必考公式）</div>
+          <code class="text-xs font-mono block text-[var(--foreground)] overflow-x-auto whitespace-nowrap">customEvents | where name == "UserLogin" | summarize Cnt = count() by tostring(customDimensions.IsSuccess), bin(timestamp, 15s) | render columnchart</code>
+        </div>
+      `,
+      labsHtml: `
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          ${renderLabCard('Lab 31', '建立 App Insights 與 .NET 9 Web App → 透過 VS2022 安裝串接並觀測雲端即時遙測。')}
+          ${renderLabCard('Lab 32', '於 Privacy/Index 注入 TelemetryClient 寫入 TrackTrace → 以 KQL traces 查詢驗證。')}
+          ${renderLabCard('Lab 33', '改用 TrackEvent 記錄 User/IP/VisitCount/CPU% → 以 KQL bin()+summarize 畫折線與告警門檻線。')}
+          ${renderLabCard('Lab 34', '以 Copilot 建立 Login 頁並記錄登入成敗事件 → 以 KQL 繪製每 15 秒登入成敗柱狀圖。')}
+          ${renderLabCard('Lab 35', '設定「15 秒登入失敗 > 3 次」警示規則 + Action Group → 連錯 5 次實測簡訊/電話/Email。')}
+          ${renderLabCard('Lab 36', '部署 Web App → 建立 Azure Load Testing 測試計畫與條件 → 執行壓測檢視效能瓶頸。')}
+        </div>
+      `
+    })
+  },
+
+  // ---------- SLIDE 19: INTERACTIVE 38-LAB PORTFOLIO MATRIX ----------
+  {
+    id: 'portfolio',
+    navTitle: '19｜Jerry 全 29+9 項作業成果互動索引表',
+    tag: 'INTERACTIVE PORTFOLIO',
+    render: () => `
+      <section class="space-y-4">
+        <div class="flex flex-wrap items-end justify-between gap-2">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-[var(--primary)]">19 / VERIFIED LAB PORTFOLIO</span>
+            <h2 class="text-xl sm:text-2xl font-bold mt-0.5">Jerry 全課程 Lab 作業成果與原始截圖索引</h2>
+          </div>
+          <span class="text-xs text-[var(--muted-foreground)]">點擊「查看截圖 ↗」可直接檢視 Jerry 提交於 Azure Blob 的原始成果圖</span>
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="deck-card p-3.5 flex flex-wrap items-center justify-between gap-3">
+          <div id="labFilters" class="flex flex-wrap gap-1.5">
+            ${[
+              { key: 'all', label: '全部 (39)' },
+              { key: 'done', label: '✅ Jerry 已完成 (29)' },
+              { key: 'highlight', label: '🏆 重點實證 (13)' },
+              { key: 'Day 1', label: 'Day 1 (4)' },
+              { key: 'Day 2', label: 'Day 2 (4)' },
+              { key: 'Day 3', label: 'Day 3 (7)' },
+              { key: 'Day 4', label: 'Day 4 (5)' },
+              { key: 'Day 5', label: 'Day 5 (9)' },
+              { key: 'todo', label: '📌 課後延伸 (10)' }
+            ].map(f => `
+              <button type="button" data-filter="${f.key}" onclick="setLabFilter('${f.key}')" class="lab-filter-btn px-2.5 py-1 rounded-lg text-xs font-medium border border-[var(--border)] bg-[var(--content)] hover:border-[var(--primary)] transition-colors">${f.label}</button>
+            `).join('')}
+          </div>
+          <input id="labSearch" type="search" oninput="renderLabTable()" placeholder="搜尋 Lab、關鍵字（如 Bicep, YAML）..." class="w-full sm:w-64 text-xs px-3 py-1.5 rounded-lg bg-[var(--content)] border border-[var(--border)] text-[var(--foreground)] placeholder:text-[var(--placeholder)] focus:outline-none focus:border-[var(--primary)]" />
+        </div>
+
+        <!-- Table -->
+        <div class="deck-card overflow-hidden">
+          <div class="overflow-x-auto max-h-[52vh] overflow-y-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead class="sticky top-0 bg-[var(--content)] border-b border-[var(--border)] z-10">
+                <tr>
+                  <th class="py-2.5 px-3 font-bold whitespace-nowrap">Lab</th>
+                  <th class="py-2.5 px-3 font-bold whitespace-nowrap">章節</th>
+                  <th class="py-2.5 px-3 font-bold whitespace-nowrap">日期</th>
+                  <th class="py-2.5 px-3 font-bold">實作主題與 Jerry 實證摘要</th>
+                  <th class="py-2.5 px-3 font-bold whitespace-nowrap text-center">班級完成</th>
+                  <th class="py-2.5 px-3 font-bold whitespace-nowrap text-right">Jerry 成果</th>
+                </tr>
+              </thead>
+              <tbody id="labTableBody" class="divide-y divide-[var(--border)]"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    `
+  },
+
+  // ---------- SLIDE 20: ENTERPRISE ROADMAP & SUMMARY ----------
+  {
+    id: 'roadmap',
+    navTitle: '20｜總結、金融業落地藍圖與 AZ-400 衝刺計畫',
+    tag: 'ACTION ROADMAP',
+    render: () => `
+      <section class="space-y-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-[var(--primary)]">20 / SUMMARY & NEXT STEPS</span>
+          <h2 class="text-xl sm:text-2xl font-bold mt-0.5">企業級落地建議（金融壽險實務）× AZ-400 認證衝刺路線</h2>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <!-- Enterprise Governance Pillars for Taiwan Life / Finance -->
+          <div class="deck-card p-5 space-y-3.5">
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-bold">🏦 金融壽險業（台壽）四大 DevOps 落地支柱</h3>
+              <span class="px-2.5 py-0.5 rounded-full text-xs badge-soft-primary">開發＋維運雙視角</span>
+            </div>
+            <div class="space-y-2.5 text-xs">
+              <div class="p-3 rounded-xl bg-[var(--content)] border border-[var(--border)]">
+                <div class="font-bold text-[var(--foreground)]">1. 雙軌變更覆核與稽核軌跡（Ch 05 + Ch 10）</div>
+                <p class="text-[var(--muted-foreground)] mt-0.5">串聯 Boards Task → PR → Multi-Stage YAML Environments Approval ＋ Release Gate（Bugs&lt;5），天然滿足金融業「職責分離」與稽核舉證要求。</p>
+              </div>
+              <div class="p-3 rounded-xl bg-[var(--content)] border border-[var(--border)]">
+                <div class="font-bold text-[var(--foreground)]">2. 零信任與無金鑰架構（Ch 03 + Ch 04 + Ch 07）</div>
+                <p class="text-[var(--muted-foreground)] mt-0.5">本機 Git Hook + PR-CI（SonarCloud SAST / Mend SCA / AI Review）+ Key Vault + Managed Identity 取代明碼帳密與 API Key。</p>
+              </div>
+              <div class="p-3 rounded-xl bg-[var(--content)] border border-[var(--border)]">
+                <div class="font-bold text-[var(--foreground)]">3. 內網可控的供應鏈與執行層（Ch 06 + Ch 08 + Ch 12）</div>
+                <p class="text-[var(--muted-foreground)] mt-0.5">以內網 Self-Hosted Agent 建置、Azure Artifacts Private Feed（含 Upstream 快取）與私有 ACR 控管核心元件與容器映像。</p>
+              </div>
+              <div class="p-3 rounded-xl bg-[var(--content)] border border-[var(--border)]">
+                <div class="font-bold text-[var(--foreground)]">4. 零停機與秒級回滾上線（Ch 07 + Ch 09 + Ch 10）</div>
+                <p class="text-[var(--muted-foreground)] mt-0.5">Bicep 確保三環境組態一致，搭配 Deployment Slot 藍綠切換與 Feature Toggle，將新保險商品/系統上線風險降至最低。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3-Phase Post-Course Sprint Plan -->
+          <div class="deck-card p-5 flex flex-col justify-between space-y-4">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <h3 class="text-sm font-bold">🚀 Jerry 課後 3 階段精進與 AZ-400 衝刺計畫</h3>
+                <span class="px-2.5 py-0.5 rounded-full text-xs badge-soft-success">補齊最後 10 題延伸</span>
+              </div>
+
+              <div class="p-3.5 rounded-xl surface-tint-warning border border-[var(--border)] space-y-1">
+                <div class="flex items-center justify-between text-xs font-bold">
+                  <span class="text-[var(--warning)]">Phase 1｜立即補齊 Ch 13 監控與壓測（最高報酬）</span>
+                  <span class="font-mono">Week 1</span>
+                </div>
+                <p class="text-xs text-[var(--muted-foreground)]">實作 <strong>Lab 31–36</strong>：.NET 9 + App Insights、TelemetryClient、KQL（<code class="font-mono">bin()</code>/<code class="font-mono">summarize</code>/<code class="font-mono">render</code>）、登入失敗 Alert Rule 與 Azure Load Testing——同時補齊 DevOps 第 8 階段與 AZ-400 高頻考點。</p>
+              </div>
+
+              <div class="p-3.5 rounded-xl surface-tint-primary border border-[var(--border)] space-y-1">
+                <div class="flex items-center justify-between text-xs font-bold">
+                  <span class="text-[var(--primary)]">Phase 2｜深化零信任與混合雲自動化</span>
+                  <span class="font-mono">Week 2</span>
+                </div>
+                <p class="text-xs text-[var(--muted-foreground)]">實作 <strong>DefaultAzureCredential + Managed Identity 呼叫 LLM</strong>、<strong>Git Hook pre-commit</strong>、<strong>Lab 26 Deployment Group（地端 IIS）</strong> 與 <strong>Lab 27-2 Playwright 進 CI 管線</strong>。</p>
+              </div>
+
+              <div class="p-3.5 rounded-xl surface-tint-success border border-[var(--border)] space-y-1">
+                <div class="flex items-center justify-between text-xs font-bold">
+                  <span class="text-[var(--success)]">Phase 3｜AZ-400 認證情境題衝刺與團隊分享</span>
+                  <span class="font-mono">Week 3–4</span>
+                </div>
+                <p class="text-xs text-[var(--muted-foreground)]">複習高頻考點（Branch Policy、YAML Environments vs Classic Gates、NuGet Upstream、Key Vault RBAC、Slot Sticky Settings、KQL 告警），並以本簡報於公司內部進行技術內訓分享！</p>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-[var(--border)] flex flex-wrap items-center justify-between gap-2 text-xs">
+              <span class="font-semibold text-[var(--foreground)]">🎉 恭喜 Jerry 達成 29 / 29 課堂滿貫里程碑！</span>
+              <div class="flex gap-2">
+                <button onclick="goToSlide(0)" type="button" class="px-3 py-1 rounded-lg bg-[var(--content)] border border-[var(--border)] hover:border-[var(--primary)]">回到封面</button>
+                <button onclick="prepareAndPrint()" type="button" class="px-3 py-1 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90">列印 / 匯出 PDF</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    `
+  }
+];
+
+// ============================================================
+// REUSABLE 4-QUADRANT CHAPTER SLIDE RENDERER
+// ============================================================
+function renderChapterSlide(cfg) {
+  return `
+    <section class="space-y-4">
+      <!-- Slide Title Header -->
+      <div class="flex flex-wrap items-end justify-between gap-2">
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-md text-xs font-bold badge-soft-primary">${cfg.num}</span>
+            <span class="text-xs font-semibold text-[var(--muted-foreground)]">${cfg.stage}</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-bold mt-1">${cfg.title}</h2>
+        </div>
+      </div>
+
+      <!-- Optional Visual Strip -->
+      ${cfg.extraVisual || ''}
+
+      <!-- 2-Column 4-Quadrant Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <!-- Left Column: Theme + Objectives + Pitfalls -->
+        <div class="lg:col-span-5 space-y-4">
+          <!-- Quadrant 1: Core Theme & Objectives -->
+          <div class="deck-card p-4 space-y-3 surface-tint-primary">
+            <div>
+              <div class="text-xs font-bold text-[var(--primary)] mb-1">🎯 章節主旨</div>
+              <p class="text-xs sm:text-[13px] text-[var(--foreground)] leading-relaxed font-medium">${cfg.theme}</p>
+            </div>
+            <div class="pt-2 border-t border-[var(--border)]">
+              <div class="text-xs font-bold text-[var(--foreground)] mb-1.5">✅ 學習目標</div>
+              <ul class="space-y-1.5 text-xs text-[var(--muted-foreground)] leading-relaxed">
+                ${cfg.objectives.map((o, idx) => `<li class="flex gap-2"><span class="font-bold text-[var(--primary)] shrink-0">${idx + 1}.</span><span>${o}</span></li>`).join('')}
+              </ul>
+            </div>
+          </div>
+
+          <!-- Quadrant 3: Pitfalls & Cautions -->
+          <div class="deck-card p-4 space-y-2 surface-tint-warning">
+            <div class="text-xs font-bold text-[var(--warning)]">⚠️ 注意地方與實戰避坑</div>
+            <ul class="space-y-2 text-xs text-[var(--foreground)] leading-relaxed">
+              ${cfg.pitfalls.map(p => `<li class="flex gap-2"><span class="text-[var(--warning)] font-bold shrink-0">•</span><span>${p}</span></li>`).join('')}
+            </ul>
+          </div>
+        </div>
+
+        <!-- Right Column: Knowledge Points + Labs & Jerry Results -->
+        <div class="lg:col-span-7 space-y-4">
+          <!-- Quadrant 2: Knowledge Points -->
+          <div class="deck-card p-4 space-y-2.5">
+            <div class="text-xs font-bold text-[var(--foreground)]">📚 章節核心知識點</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              ${cfg.knowledge.map(k => `
+                <div class="p-2.5 rounded-xl bg-[var(--content)] border border-[var(--border)]">
+                  <div class="text-xs font-bold text-[var(--primary)] mb-0.5">${k.k}</div>
+                  <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">${k.v}</p>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- Quadrant 4: Labs & Jerry Evidence -->
+          <div class="deck-card p-4 space-y-2.5">
+            <div class="text-xs font-bold text-[var(--foreground)]">🧪 LAB 題目 × Jerry 實作成果實證</div>
+            <div class="space-y-2">
+              ${cfg.labsHtml}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+// ============================================================
+// INTERACTIVE STATE & NAVIGATION
+// ============================================================
+let currentSlide = 0;
+let currentLabFilter = 'all';
+
+function initDeck() {
+  const sel = document.getElementById('slideJump');
+  sel.innerHTML = SLIDES.map((s, idx) => `<option value="${idx}">${s.navTitle}</option>`).join('');
+  sel.addEventListener('change', (e) => goToSlide(Number(e.target.value)));
+
+  document.getElementById('slideTotal').textContent = String(SLIDES.length).padStart(2, '0');
+  document.getElementById('btnPrev').addEventListener('click', () => goToSlide(currentSlide - 1));
+  document.getElementById('btnNext').addEventListener('click', () => goToSlide(currentSlide + 1));
+  document.getElementById('btnGrid').addEventListener('click', toggleGrid);
+  document.getElementById('btnCloseGrid').addEventListener('click', closeGrid);
+  document.getElementById('btnPrint').addEventListener('click', prepareAndPrint);
+
+  // Build Grid Cards
+  document.getElementById('gridCards').innerHTML = SLIDES.map((s, idx) => `
+    <button type="button" onclick="goToSlide(${idx}); closeGrid();" class="grid-thumb text-left deck-card p-4 hover:border-[var(--primary)] transition-colors space-y-1.5" data-idx="${idx}">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-mono font-bold text-[var(--primary)]">${String(idx + 1).padStart(2, '0')}</span>
+        <span class="text-xs text-[var(--muted-foreground)] truncate max-w-[160px]">${s.tag}</span>
+      </div>
+      <div class="text-xs font-bold leading-snug">${s.navTitle.replace(/^\d+｜/, '')}</div>
+    </button>
+  `).join('');
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', (e) => {
+    const tag = (e.target && e.target.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goToSlide(currentSlide + 1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); goToSlide(currentSlide - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); goToSlide(0); }
+    else if (e.key === 'End') { e.preventDefault(); goToSlide(SLIDES.length - 1); }
+    else if (e.key.toLowerCase() === 'g') { e.preventDefault(); toggleGrid(); }
+    else if (e.key === 'Escape') { closeGrid(); }
+  });
+
+  // Basic touch swipe for mobile
+  let touchX = null;
+  document.addEventListener('touchstart', (e) => { touchX = e.changedTouches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 60) {
+      if (dx < 0) goToSlide(currentSlide + 1);
+      else goToSlide(currentSlide - 1);
+    }
+    touchX = null;
+  }, { passive: true });
+
+  goToSlide(0);
+}
+
+function goToSlide(idx) {
+  if (idx < 0 || idx >= SLIDES.length) return;
+  currentSlide = idx;
+  const stage = document.getElementById('slideStage');
+  stage.classList.remove('slide-fade');
+  void stage.offsetWidth;
+  stage.innerHTML = SLIDES[idx].render();
+  stage.classList.add('slide-fade');
+
+  document.getElementById('slideNum').textContent = String(idx + 1).padStart(2, '0');
+  document.getElementById('slideJump').value = String(idx);
+  document.getElementById('btnPrev').disabled = idx === 0;
+  document.getElementById('btnNext').disabled = idx === SLIDES.length - 1;
+  document.getElementById('topProgress').style.width = `${((idx + 1) / SLIDES.length) * 100}%`;
+
+  // Highlight active grid card
+  document.querySelectorAll('.grid-thumb').forEach(el => {
+    const active = Number(el.dataset.idx) === idx;
+    el.style.borderColor = active ? 'var(--primary)' : '';
+  });
+
+  if (SLIDES[idx].id === 'portfolio') {
+    setLabFilter(currentLabFilter);
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleGrid() {
+  document.getElementById('gridModal').classList.toggle('hidden');
+}
+function closeGrid() {
+  document.getElementById('gridModal').classList.add('hidden');
+}
+
+function setLabFilter(key) {
+  currentLabFilter = key;
+  document.querySelectorAll('.lab-filter-btn').forEach(btn => {
+    const active = btn.dataset.filter === key;
+    if (active) {
+      btn.classList.add('bg-[var(--primary)]', 'text-[var(--primary-foreground)]', 'border-[var(--primary)]');
+      btn.classList.remove('bg-[var(--content)]');
+    } else {
+      btn.classList.remove('bg-[var(--primary)]', 'text-[var(--primary-foreground)]', 'border-[var(--primary)]');
+      btn.classList.add('bg-[var(--content)]');
+    }
+  });
+  renderLabTable();
+}
+
+function renderLabTable() {
+  const tbody = document.getElementById('labTableBody');
+  if (!tbody) return;
+  const q = (document.getElementById('labSearch')?.value || '').trim().toLowerCase();
+
+  const rows = LABS_DATA.filter(item => {
+    if (currentLabFilter === 'done' && !item.done) return false;
+    if (currentLabFilter === 'todo' && item.done) return false;
+    if (currentLabFilter === 'highlight' && !item.highlight) return false;
+    if (currentLabFilter.startsWith('Day ') && item.day !== currentLabFilter) return false;
+    if (q) {
+      const hay = `${item.id} ${item.ch} ${item.day} ${item.title} ${item.note}`.toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-[var(--muted-foreground)]">查無符合條件的 Lab 項目</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = rows.map(r => `
+    <tr class="hover:bg-[var(--content)]/60 transition-colors">
+      <td class="py-2.5 px-3 font-mono font-bold whitespace-nowrap ${r.done ? 'text-[var(--primary)]' : 'text-[var(--muted-foreground)]'}">${r.id}</td>
+      <td class="py-2.5 px-3 whitespace-nowrap"><span class="px-2 py-0.5 rounded-md badge-soft-muted">${r.ch}</span></td>
+      <td class="py-2.5 px-3 whitespace-nowrap text-[var(--muted-foreground)]">${r.day}${r.date !== '-' ? '<br/><span class="font-mono">' + r.date.slice(5) + '</span>' : ''}</td>
+      <td class="py-2.5 px-3">
+        <div class="font-semibold text-[var(--foreground)]">${r.title}</div>
+        <div class="text-[var(--muted-foreground)] mt-0.5">${r.note}</div>
+      </td>
+      <td class="py-2.5 px-3 text-center whitespace-nowrap font-mono">
+        <span class="${r.classDone === 10 ? 'text-[var(--warning)] font-bold' : 'text-[var(--muted-foreground)]'}">${r.classDone}/11</span>
+      </td>
+      <td class="py-2.5 px-3 text-right whitespace-nowrap">
+        ${r.done
+          ? `<div class="flex flex-col items-end gap-1">
+               <span class="px-2 py-0.5 rounded-full font-semibold badge-soft-success">${r.classDone === 10 ? '🏆 攻克' : '✅ 完成'}</span>
+               <a href="${r.url}" target="_blank" rel="noopener noreferrer" class="text-[var(--link)] hover:underline">查看截圖 ↗</a>
+             </div>`
+          : `<span class="px-2 py-0.5 rounded-full badge-soft-muted">${r.day}</span>`
+        }
+      </td>
+    </tr>
+  `).join('');
+}
+
+function prepareAndPrint() {
+  const c = document.getElementById('printAllContainer');
+  c.innerHTML = SLIDES.map((s, idx) => `
+    <div class="print-slide">
+      <div class="text-xs font-mono text-[var(--muted-foreground)] mb-2">SLIDE ${String(idx + 1).padStart(2, '0')} / ${SLIDES.length} — ${s.navTitle}</div>
+      ${s.render()}
+    </div>
+  `).join('');
+  // Fill lab table inside print view if present
+  const printTbody = c.querySelector('#labTableBody');
+  if (printTbody) {
+    printTbody.innerHTML = LABS_DATA.map(r => `
+      <tr class="border-b border-[var(--border)]">
+        <td class="py-1.5 px-2 font-mono font-bold">${r.id}</td>
+        <td class="py-1.5 px-2">${r.ch}</td>
+        <td class="py-1.5 px-2">${r.day}</td>
+        <td class="py-1.5 px-2"><strong>${r.title}</strong> — ${r.note}</td>
+        <td class="py-1.5 px-2 text-center">${r.classDone}/11</td>
+        <td class="py-1.5 px-2 text-right">${r.done ? '✅ 完成' : r.day}</td>
+      </tr>
+    `).join('');
+  }
+  window.print();
+}
+
+
+// Standalone Light/Dark Theme Sync (shared with index.html)
+const THEME_KEY = 'az400_devops_portal_theme_v1';
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const btn = document.getElementById('btnTheme');
+  if (btn) btn.textContent = theme === 'dark' ? '淺色' : '深色';
+  try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
+}
+(function initTheme() {
+  let saved = null;
+  try { saved = localStorage.getItem(THEME_KEY); } catch (e) {}
+  if (saved === 'dark' || saved === 'light') {
+    applyTheme(saved);
+  } else {
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(prefersDark ? 'dark' : 'light');
+  }
+  const btn = document.getElementById('btnTheme');
+  if (btn) {
+    btn.addEventListener('click', () => {
+      const curr = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      applyTheme(curr === 'dark' ? 'light' : 'dark');
+    });
+  }
+})();
+
+initDeck();
+</script>
+</body>
+</html>

@@ -28,12 +28,15 @@
 ## 專案檔案結構
 
 - [`index.html`](./index.html)：新版「一章節一課堂」互動教學網站（GitHub Pages 主首頁）。
+- [`slides.html`](./slides.html)：**AZ-400 全 14 章（Ch 00–Ch 13）互動知識簡報 × Jerry 29 項 Lab 作業成果分析**（20 頁投影片、鍵盤翻頁、總覽格狀檢視、PDF 匯出與作業篩選表）。
 - [`portal.html`](./portal.html)：原版桌面零捲動五視圖知識中樞（保留供快速對照與 SVG DAG 檢視）。
-- [`docs/az400_devops_curriculum_notes.md`](./docs/az400_devops_curriculum_notes.md)：完整 Markdown 版分章節知識筆記、DevOps 階段對照總表與 Mermaid 相依性圖表。
+- [`docs/az400_complete_analysis_report.md`](./docs/az400_complete_analysis_report.md)：全 14 章節（含 Git Hook、容器化、App Insights 監控與 Load Testing）主旨、目標、知識點、避坑與 Jerry 29 題作業成果分析報告。
+- [`docs/az400_devops_curriculum_notes.md`](./docs/az400_devops_curriculum_notes.md)：原版分章節知識筆記、DevOps 階段對照總表與 Mermaid 相依性圖表。
 
 ---
 
 ## GitHub Pages 線上瀏覽
 
 - **新版章節教學網站**：`https://childkuo.github.io/az400LL/`
+- **14 章知識簡報 × Jerry Lab 成果**：`https://childkuo.github.io/az400LL/slides.html`
 - **原版零捲動知識中樞**：`https://childkuo.github.io/az400LL/portal.html`
